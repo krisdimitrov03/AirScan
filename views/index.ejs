@@ -4,7 +4,32 @@
     <title><%= title %></title>
   </head>
   <body>
-    <h1>Welcome to the Airline Dashboard</h1>
-    <p>This is the starting point. Future steps: read and display data, charts, and insights.</p>
+    <h1><%= title %></h1>
+    <% if (flights) { %>
+    <table border="1">
+      <tr>
+        <th>Flight ID</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Direct/Indirect</th>
+        <th>Return</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+      </tr>
+      <% flights.forEach(f => { %>
+      <tr>
+        <td><%= f.flight_id %></td>
+        <td><%= f.origin_airport_code %></td>
+        <td><%= f.destination_airport_code %></td>
+        <td><%= f.direct_indirect_flag %></td>
+        <td><%= f.return_option_flag %></td>
+        <td><%= f.scheduled_departure %></td>
+        <td><%= f.scheduled_arrival %></td>
+      </tr>
+      <% }) %>
+    </table>
+    <% } else { %>
+    <p>No flight data</p>
+    <% } %>
   </body>
 </html>
