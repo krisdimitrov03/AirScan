@@ -5,6 +5,7 @@ const {
   validateAirportSlotCapacityIsPositive,
   hasConflictOrOverlappingAirportSlots,
 } = require("../services/validator");
+const { verifyToken, authorizeRoles } = require("../middlewares/authMiddleware");
 
 router.get("/", async (_, res, next) => {
   try {
@@ -15,11 +16,11 @@ router.get("/", async (_, res, next) => {
   }
 });
 
-router.get("/new", (_, res) => {
+router.get("/new", verifyToken, authorizeRoles(["analyst"]), (req, res) => {
   res.render("airportSlots/new");
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", verifyToken, authorizeRoles(["analyst"]), async (req, res, next) => {
   try {
     const {
       airport_code,
@@ -70,7 +71,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id/edit", async (req, res, next) => {
+router.get("/:id/edit", verifyToken, authorizeRoles(["analyst"]), async (req, res, next) => {
   try {
     const slotId = parseInt(req.params.id, 10);
     const airportSlot = await airportSlotService.getSlotById(slotId);
@@ -85,7 +86,7 @@ router.get("/:id/edit", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/:id", verifyToken, authorizeRoles(["analyst"]), async (req, res, next) => {
   try {
     const slotId = parseInt(req.params.id, 10);
     const {
@@ -126,7 +127,7 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/:id", verifyToken, authorizeRoles(["analyst"]), async (req, res, next) => {
   try {
     const slotId = parseInt(req.params.id, 10);
     const result = await airportSlotService.deleteSlot(slotId);
