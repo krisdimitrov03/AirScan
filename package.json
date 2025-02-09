@@ -1,7 +1,7 @@
 {
   "name": "AirScan",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "An intelligent airport slot management and flight demand forecasting system with dynamic pricing optimization based on historical data and event-driven demand analysis.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
