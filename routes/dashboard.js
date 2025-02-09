@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const { verifyToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { verifyToken } = require('../middlewares/authMiddleware');
 
-router.get('/', verifyToken, authorizeRoles(['analyst']), (req, res) => {
-  res.json({ message: 'Welcome to analyst dashboard' });
+router.get('/', verifyToken, (req, res) => {
+  res.render('analyst/dashboard', { title: 'Dashboard', user: req.user });
 });
 
 module.exports = router;
