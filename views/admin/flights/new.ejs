@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1><%= title %></h1>
+
+  <% if (error) { %>
+    <div style="color: red;"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/admin/flights/new">
+    <label>Origin Airport Code:
+      <input type="text" name="origin_airport_code" required>
+    </label><br>
+
+    <label>Destination Airport Code:
+      <input type="text" name="destination_airport_code" required>
+    </label><br>
+
+    <label>Flight Type:
+      <select name="direct_indirect_flag" required>
+        <option value="direct">Direct</option>
+        <option value="indirect">Indirect</option>
+      </select>
+    </label><br>
+
+    <label>Return Option:
+      <select name="return_option_flag" required>
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+      </select>
+    </label><br>
+
+    <label>Scheduled Departure:
+      <input type="datetime-local" name="scheduled_departure" required>
+    </label><br>
+
+    <label>Scheduled Arrival:
+      <input type="datetime-local" name="scheduled_arrival" required>
+    </label><br>
+
+    <button type="submit">Create Flight</button>
+  </form>
+
+  <p><a href="/admin/flights">Back to Flights</a></p>
+</body>
+</html>
