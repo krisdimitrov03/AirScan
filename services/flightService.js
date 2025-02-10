@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 const Flight = require('../models/Flight');
 
+
 function airportCodeToNumberString(code) {
   code = code.toUpperCase();
   let result = "";

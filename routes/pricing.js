@@ -1,7 +1,16 @@
 const router = require("express").Router();
-const { authorizeRoles } = require("../middlewares/authMiddleware");
+const {
+  verifyToken,
+  authorizeRoles,
+} = require("../middlewares/authMiddleware");
 const pricingService = require("../services/pricingService");
 const flightService = require("../services/flightService");
+const roles = require("../constants/roles");
+
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
+);
 
 router.get("/", async (_, res) => {
   try {
@@ -75,7 +84,5 @@ router.delete("/:id", async (req, res) => {
     res.status(500).send("Error deleting pricing record.");
   }
 });
-
-router.use(authorizeRoles(["Administrator", "Manager"]));
 
 module.exports = router;
