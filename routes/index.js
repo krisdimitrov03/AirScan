@@ -8,7 +8,7 @@ const flightRouter = require("./flights");
 const adminRouter = require("./admin");
 const pricingRouter = require("./pricing");
 
-router.get("/", (_, res) => {
+router.get("/", (req, res) => {
   res.render("index", { title: "Home Page" });
 });
 
