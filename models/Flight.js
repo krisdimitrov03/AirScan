@@ -6,7 +6,8 @@ function airportCodeToNumberString(code) {
   let result = "";
   for (let i = 0; i < code.length; i++) {
     let index = code.charCodeAt(i) - 65;
-    if (index >= 0 && index < 26) result += index;
+    if (index >= 0 && index < 10) result += "0" + index;
+    if (index >= 10 && index < 26) result += index;
   }
   return result;
 }
@@ -14,7 +15,7 @@ function airportCodeToNumberString(code) {
 function generateFlightNumber(origin, destination) {
   const originDigits = airportCodeToNumberString(origin);
   const destinationDigits = airportCodeToNumberString(destination);
-  return "AS" + originDigits + "-" + destinationDigits;
+  return "AS" + originDigits + destinationDigits;
 }
 
 const Flight = sequelize.define("Flight", {

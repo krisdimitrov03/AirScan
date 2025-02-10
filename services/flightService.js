@@ -6,12 +6,14 @@ function airportCodeToNumberString(code) {
   let result = "";
   for (let i = 0; i < code.length; i++) {
     let index = code.charCodeAt(i) - 65;
-    if (index >= 0 && index < 26) result += index;
+    if (index >= 0 && index < 10) result += "0" + index;
+    if (index >= 10 && index < 26) result += index;
   }
   return result;
 }
+
 function generateFlightNumber(origin, destination) {
-  return "AS" + airportCodeToNumberString(origin) + "-" + airportCodeToNumberString(destination);
+  return "AS" + airportCodeToNumberString(origin) + airportCodeToNumberString(destination);
 }
 
 async function getAllFlights(){
