@@ -1,7 +1,7 @@
 [
   {
     "username": "admin",
-    "password_hash": "$10$V4aGh/5FQ6i4ndUjQkGXueG/Our/y50ONs1jlR.GaAtpTVFv/cR6e",
+    "password_hash": "$2b$10$WWtsu3kNuX22V7HnAe7oLu3Mp03fBKnlFXNJvsutrTLsJma/sDPFe",
     "email": "admin@example.com",
     "role_id": 1
   },
