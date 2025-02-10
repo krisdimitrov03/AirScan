@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Edit Pricing</title>
+  </head>
+  <body>
+    <h1>Edit Pricing (ID: <%= pricing.pricing_id %>)</h1>
+
+    <% if (error) { %>
+    <p style="color: red"><%= error %></p>
+    <% } %>
+
+    <form action="/pricing/<%= pricing.pricing_id %>?_method=PUT" method="POST">
+      <label for="effective_date_range_start">Effective Start Date:</label>
+      <input
+        type="date"
+        name="effective_date_range_start"
+        id="effective_date_range_start"
+        value="<%= pricing.effective_date_range_start %>"
+        required
+      /><br /><br />
+
+      <label for="effective_date_range_end">Effective End Date:</label>
+      <input
+        type="date"
+        name="effective_date_range_end"
+        id="effective_date_range_end"
+        value="<%= pricing.effective_date_range_end %>"
+        required
+      /><br /><br />
+
+      <label for="base_price">Base Price:</label>
+      <input
+        type="number"
+        step="0.01"
+        name="base_price"
+        id="base_price"
+        value="<%= pricing.base_price %>"
+      /><br /><br />
+
+      <label for="discounts_offered">Discounts Offered:</label>
+      <input
+        type="number"
+        step="0.01"
+        name="discounts_offered"
+        id="discounts_offered"
+        value="<%= pricing.discounts_offered %>"
+      /><br /><br />
+
+      <label for="peak_season_surcharge">Peak Season Surcharge:</label>
+      <input
+        type="number"
+        step="0.01"
+        name="peak_season_surcharge"
+        id="peak_season_surcharge"
+        value="<%= pricing.peak_season_surcharge %>"
+      /><br /><br />
+
+      <button type="submit">Update</button>
+    </form>
+
+    <hr />
+    <a href="/pricing">Back to Pricing List</a>
+  </body>
+</html>
