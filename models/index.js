@@ -8,8 +8,8 @@ const DemandHistory = require('./DemandHistory');
 const Pricing = require('./Pricing');
 
 User.belongsTo(Role, { foreignKey: 'role_id' });
-DemandHistory.belongsTo(Flight, { foreignKey: 'flight_id' });
-Pricing.belongsTo(Flight, { foreignKey: 'flight_id' });
+DemandHistory.belongsTo(Flight, { foreignKey: 'flight_uuid' });
+Pricing.belongsTo(Flight, { foreignKey: 'flight_uuid' });
 
 const syncDatabase = async () => {
     try {

@@ -10,9 +10,9 @@ const DemandHistory = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    flight_id: {
-      type: DataTypes.STRING(50),
-      references: { model: Flight, key: "flight_id" },
+    flight_uuid: {
+      type: DataTypes.UUID,
+      references: { model: Flight, key: "flight_uuid" },
       allowNull: false,
     },
     date: { type: DataTypes.DATEONLY, allowNull: false },
