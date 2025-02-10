@@ -9,6 +9,7 @@
   <table border="1">
     <thead>
       <tr>
+        <th>Flight Number</th>
         <th>Flight ID</th>
         <th>Origin</th>
         <th>Destination</th>
@@ -22,6 +23,7 @@
     <tbody>
       <% flights.forEach(flight => { %>
       <tr>
+        <td><%= flight.flight_number %></td>
         <td><%= flight.flight_id %></td>
         <td><%= flight.origin_airport_code %></td>
         <td><%= flight.destination_airport_code %></td>

@@ -11,7 +11,7 @@ const Pricing = sequelize.define(
       primaryKey: true,
     },
     flight_id: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.UUID,
       references: { model: Flight, key: "flight_id" },
       allowNull: false,
     },
