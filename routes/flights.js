@@ -10,11 +10,11 @@ router.get('/', async(req,res,next)=>{
   }catch(e){next(e);}
 });
 
-router.get('/new', verifyToken, authorizeRoles(['analyst']),(req,res)=>{
+router.get('/new', verifyToken, authorizeRoles(['analyst', "admin"]),(req,res)=>{
   res.render('flights/new');
 });
 
-router.post('/', verifyToken, authorizeRoles(['analyst']), async(req,res,next)=>{
+router.post('/', verifyToken, authorizeRoles(['analyst', "admin"]), async(req,res,next)=>{
   try{
     const {origin_airport_code,destination_airport_code,direct_indirect_flag,return_option_flag,scheduled_departure,scheduled_arrival}=req.body;
     await flightService.createFlight({
@@ -34,7 +34,7 @@ router.post('/', verifyToken, authorizeRoles(['analyst']), async(req,res,next)=>
   }
 });
 
-router.get('/:uuid/edit', verifyToken, authorizeRoles(['analyst']), async(req,res,next)=>{
+router.get('/:uuid/edit', verifyToken, authorizeRoles(['analyst', "admin"]), async(req,res,next)=>{
   try {
     const flight = await flightService.getFlightByUUID(req.params.uuid);
     if (!flight) return res.status(404).send('Flight not found.');
@@ -44,7 +44,7 @@ router.get('/:uuid/edit', verifyToken, authorizeRoles(['analyst']), async(req,re
   }
 });
 
-router.put('/:uuid', verifyToken, authorizeRoles(['analyst']), async(req,res,next)=>{
+router.put('/:uuid', verifyToken, authorizeRoles(['analyst', "admin"]), async(req,res,next)=>{
   try{
     const updated=await flightService.updateFlight(req.params.uuid,req.body);
     if(!updated)return res.status(404).send('Flight update failed.');
@@ -57,7 +57,7 @@ router.put('/:uuid', verifyToken, authorizeRoles(['analyst']), async(req,res,nex
   }
 });
 
-router.delete('/:uuid', verifyToken, authorizeRoles(['analyst']), async(req,res,next)=>{
+router.delete('/:uuid', verifyToken, authorizeRoles(['analyst', "admin"]), async(req,res,next)=>{
   try{
     const result=await flightService.deleteFlight(req.params.uuid);
     if(!result)return res.status(404).send('Flight could not be deleted.');
