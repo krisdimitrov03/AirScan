@@ -6,7 +6,6 @@
 <body>
   <h1><%= title %></h1>
 
-  <!-- Simple search form -->
   <form method="GET" action="/admin/flights">
     <input type="text" name="search" placeholder="Search flights..." value="<%= search %>">
     <button type="submit">Search</button>
@@ -50,7 +49,6 @@
     </tbody>
   </table>
 
-  <!-- Pagination -->
   <% if (totalPages > 1) { %>
     <div>
       <% for (let p = 1; p <= totalPages; p++) { %>

@@ -421,4 +421,60 @@ router.post("/airport-slots/:id/delete", async (req, res, next) => {
   }
 });
 
+// ----------------- DEMAND HISTORY -----------------
+router.get("/demand-history", async (req, res, next) => {
+  try {
+    const demandHistory = await demandHistoryService.getAllDemandHistory();
+    res.render("admin/demandHistory/index", { title: "Demand History", demandHistory });
+  } catch(err) {
+    next(err);
+  }
+});
+
+router.get("/demand-history/new", (req, res) => {
+  res.render("admin/demandHistory/new", { title: "Create Demand History", error: null });
+});
+
+router.post("/demand-history", async (req, res, next) => {
+  try {
+    await demandHistoryService.createDemandHistory(req.body);
+    res.redirect("/admin/demand-history");
+  } catch (err) {
+    res.render("admin/demandHistory/new", { title: "Create Demand History", error: err.message });
+  }
+});
+
+router.get("/demand-history/:id/edit", async (req, res, next) => {
+  try {
+    const recordId = parseInt(req.params.id, 10);
+    const dh = await demandHistoryService.getDemandHistoryById(recordId);
+    if (!dh) return res.status(404).send("Demand history record not found.");
+    res.render("admin/demandHistory/edit", { title: "Edit Demand History", dh, error: null });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/demand-history/:id/edit", async (req, res, next) => {
+  try {
+    const recordId = parseInt(req.params.id, 10);
+    const updated = await demandHistoryService.updateDemandHistory(recordId, req.body);
+    if (!updated) return res.status(404).send("Update failed; record not found.");
+    res.redirect("/admin/demand-history");
+  } catch (err) {
+    res.render("admin/demand-history/edit", { title: "Edit Demand History", dh: { ...req.body, record_id: req.params.id }, error: err.message });
+  }
+});
+
+router.post("/demand-history/:id/delete", async (req, res, next) => {
+  try {
+    const recordId = parseInt(req.params.id, 10);
+    const deleted = await demandHistoryService.deleteDemandHistory(recordId);
+    if (!deleted) return res.status(404).send("Could not delete record; not found.");
+    res.redirect("/admin/demand-history");
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

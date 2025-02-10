@@ -7,6 +7,7 @@ const profileRouter = require("./profile");
 const flightRouter = require("./flights");
 const adminRouter = require("./admin");
 const pricingRouter = require("./pricing");
+const demandHistoryRouter = require("./demandHistory");
 
 router.get("/", (req, res) => {
   res.render("index", { title: "Home Page" });
@@ -19,5 +20,6 @@ router.use("/airport-slots", airportSlotsRouter);
 router.use("/flights", flightRouter);
 router.use("/admin", adminRouter);
 router.use("/pricing", pricingRouter);
+router.use("/demand-history", demandHistoryRouter);
 
 module.exports = router;

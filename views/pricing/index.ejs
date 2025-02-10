@@ -32,10 +32,8 @@
           <td><%= pricing.discounts_offered %></td>
           <td><%= pricing.peak_season_surcharge %></td>
           <td>
-            <!-- Edit link -->
             <a href="/pricing/<%= pricing.pricing_id %>/edit">Edit</a>
 
-            <!-- Delete form (requires method-override) -->
             <form
               action="/pricing/<%= pricing.pricing_id %>?_method=DELETE"
               method="POST"

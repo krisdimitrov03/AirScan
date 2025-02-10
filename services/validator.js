@@ -30,8 +30,27 @@ const validatePricingData = (pricingData) => {
   }
 };
 
+function validateDemandHistoryData(dh) {
+  if (dh.historical_tickets_sold !== undefined) {
+    const tickets = parseInt(dh.historical_tickets_sold, 10);
+    if (isNaN(tickets) || tickets < 0) {
+      throw new Error("historical_tickets_sold must be a non-negative integer.");
+    }
+  }
+
+  if (dh.historical_load_factor !== undefined) {
+    const loadFactor = parseFloat(dh.historical_load_factor);
+    if (isNaN(loadFactor) || loadFactor < 0 || loadFactor > 1) {
+      throw new Error("historical_load_factor must be a decimal between 0 and 1.");
+    }
+  }
+
+}
+
+
 module.exports = {
   validateAirportSlotCapacityIsPositive,
   hasConflictOrOverlappingAirportSlots,
-  validatePricingData
+  validatePricingData,
+  validateDemandHistoryData,
 };
