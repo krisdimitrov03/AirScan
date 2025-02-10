@@ -5,7 +5,7 @@ function airportCodeToNumberString(code) {
   code = code.toUpperCase();
   let result = "";
   for (let i = 0; i < code.length; i++) {
-    let index = code.charCodeAt(i) - 65;
+    let index = code.charCodeAt(i) - 65 + 1; // A = 1
     if (index >= 0 && index < 10) result += "0" + index;
     if (index >= 10 && index < 26) result += index;
   }
