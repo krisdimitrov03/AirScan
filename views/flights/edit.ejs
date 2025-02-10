@@ -5,7 +5,7 @@
 </head>
 <body>
   <h1>Edit Flight</h1>
-  <form action="/flights/<%= flight.flight_uuid %>?_method=PUT" method="post">
+  <form action="/flights/<%= flight.flight_id %>?_method=PUT" method="post">
     <label>Origin Airport Code: <input type="text" name="origin_airport_code" value="<%= flight.origin_airport_code %>" required></label><br>
     <label>Destination Airport Code: <input type="text" name="destination_airport_code" value="<%= flight.destination_airport_code %>" required></label><br>
     <label>Flight Type:

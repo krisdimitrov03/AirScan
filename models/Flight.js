@@ -19,7 +19,7 @@ function generateFlightNumber(origin, destination) {
 }
 
 const Flight = sequelize.define("Flight", {
-  flight_uuid: {
+  flight_id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true

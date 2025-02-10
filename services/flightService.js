@@ -49,7 +49,7 @@ async function updateFlight(uuid, data) {
   const overlapping = await Flight.findOne({
     where: {
       flight_number: newFlightNumber,
-      flight_uuid: { [Op.ne]: uuid },
+      flight_id: { [Op.ne]: uuid },
       scheduled_departure: { [Op.lt]: newArrival },
       scheduled_arrival: { [Op.gt]: newDeparture }
     }
@@ -61,7 +61,7 @@ async function updateFlight(uuid, data) {
 }
 
 async function deleteFlight(uuid) {
-  const deletedCount = await Flight.destroy({ where: { flight_uuid: uuid } });
+  const deletedCount = await Flight.destroy({ where: { flight_id: uuid } });
   return deletedCount === 1;
 }
 

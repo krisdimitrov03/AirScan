@@ -8,12 +8,12 @@ const DemandHistory = require('./DemandHistory');
 const Pricing = require('./Pricing');
 
 User.belongsTo(Role, { foreignKey: 'role_id' });
-DemandHistory.belongsTo(Flight, { foreignKey: 'flight_uuid' });
-Pricing.belongsTo(Flight, { foreignKey: 'flight_uuid' });
+DemandHistory.belongsTo(Flight, { foreignKey: 'flight_id' });
+Pricing.belongsTo(Flight, { foreignKey: 'flight_id' });
 
 const syncDatabase = async () => {
     try {
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ force: true });
         console.log('✅ All models were synchronized successfully.');
     } catch (error) {
         console.error('❌ Error syncing models:', error);

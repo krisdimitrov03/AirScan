@@ -10,9 +10,9 @@ const Pricing = sequelize.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    flight_uuid: {
+    flight_id: {
       type: DataTypes.UUID,
-      references: { model: Flight, key: "flight_uuid" },
+      references: { model: Flight, key: "flight_id" },
       allowNull: false,
     },
     effective_date_range_start: { type: DataTypes.DATEONLY, allowNull: false },
