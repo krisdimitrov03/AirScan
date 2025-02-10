@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New Flight</title>
+</head>
+<body>
+  <h1>Create New Flight</h1>
+  <form action="/flights" method="post">
+    <label>Flight ID: <input type="text" name="flight_id" required></label><br>
+    <label>Origin Airport Code: <input type="text" name="origin_airport_code" required></label><br>
+    <label>Destination Airport Code: <input type="text" name="destination_airport_code" required></label><br>
+    <label>Flight Type:
+      <select name="direct_indirect_flag" required>
+        <option value="direct">Direct</option>
+        <option value="indirect">Indirect</option>
+      </select>
+    </label><br>
+    <label>Return Option:
+      <select name="return_option_flag" required>
+        <option value="false">No</option>
+        <option value="true">Yes</option>
+      </select>
+    </label><br>
+    <label>Scheduled Departure: <input type="datetime-local" name="scheduled_departure" required></label><br>
+    <label>Scheduled Arrival: <input type="datetime-local" name="scheduled_arrival" required></label><br>
+    <button type="submit">Create Flight</button>
+  </form>
+  <a href="/flights">Back to Flights</a>
+</body>
+</html>

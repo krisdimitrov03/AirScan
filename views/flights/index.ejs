@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Flights</title>
+</head>
+<body>
+  <h1>Flights</h1>
+  <a href="/flights/new">Create New Flight</a>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Flight ID</th>
+        <th>Origin</th>
+        <th>Destination</th>
+        <th>Type</th>
+        <th>Return Option</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% flights.forEach(flight => { %>
+      <tr>
+        <td><%= flight.flight_id %></td>
+        <td><%= flight.origin_airport_code %></td>
+        <td><%= flight.destination_airport_code %></td>
+        <td><%= flight.direct_indirect_flag %></td>
+        <td><%= flight.return_option_flag ? 'Yes' : 'No' %></td>
+        <td><%= flight.scheduled_departure %></td>
+        <td><%= flight.scheduled_arrival %></td>
+        <td>
+          <a href="/flights/<%= flight.flight_id %>/edit">Edit</a>
+          <form action="/flights/<%= flight.flight_id %>?_method=DELETE" method="post" style="display:inline">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</body>
+</html>
