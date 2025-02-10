@@ -1,0 +1,82 @@
+[
+  {
+    "flight_id": "FL001",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 300.0,
+    "discounts_offered": 50.0,
+    "peak_season_surcharge": 20.0
+  },
+  {
+    "flight_id": "FL002",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 320.0,
+    "discounts_offered": 30.0,
+    "peak_season_surcharge": 15.0
+  },
+  {
+    "flight_id": "FL003",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 200.0,
+    "discounts_offered": 25.0,
+    "peak_season_surcharge": 10.0
+  },
+  {
+    "flight_id": "FL004",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 220.0,
+    "discounts_offered": 20.0,
+    "peak_season_surcharge": 15.0
+  },
+  {
+    "flight_id": "FL005",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 250.0,
+    "discounts_offered": 30.0,
+    "peak_season_surcharge": 20.0
+  },
+  {
+    "flight_id": "FL006",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 260.0,
+    "discounts_offered": 40.0,
+    "peak_season_surcharge": 25.0
+  },
+  {
+    "flight_id": "FL007",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 280.0,
+    "discounts_offered": 0.0,
+    "peak_season_surcharge": 10.0
+  },
+  {
+    "flight_id": "FL008",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 290.0,
+    "discounts_offered": 10.0,
+    "peak_season_surcharge": 15.0
+  },
+  {
+    "flight_id": "FL009",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 310.0,
+    "discounts_offered": 20.0,
+    "peak_season_surcharge": 20.0
+  },
+  {
+    "flight_id": "FL010",
+    "effective_date_range_start": "2025-02-01",
+    "effective_date_range_end": "2025-02-28",
+    "base_price": 330.0,
+    "discounts_offered": 30.0,
+    "peak_season_surcharge": 25.0
+  }
+]

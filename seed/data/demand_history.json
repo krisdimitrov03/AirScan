@@ -1,0 +1,72 @@
+[
+  {
+    "flight_id": "FL001",
+    "date": "2025-02-01",
+    "historical_tickets_sold": 150,
+    "historical_load_factor": 0.75,
+    "customer_segment_distribution": "{ business: 50, economy: 100 }"
+  },
+  {
+    "flight_id": "FL002",
+    "date": "2025-02-02",
+    "historical_tickets_sold": 140,
+    "historical_load_factor": 0.7,
+    "customer_segment_distribution": "{ business: 40, economy: 100 }"
+  },
+  {
+    "flight_id": "FL003",
+    "date": "2025-02-03",
+    "historical_tickets_sold": 130,
+    "historical_load_factor": 0.65,
+    "customer_segment_distribution": "{ business: 45, economy: 85 }"
+  },
+  {
+    "flight_id": "FL004",
+    "date": "2025-02-04",
+    "historical_tickets_sold": 120,
+    "historical_load_factor": 0.6,
+    "customer_segment_distribution": "{ business: 35, economy: 85 }"
+  },
+  {
+    "flight_id": "FL005",
+    "date": "2025-02-05",
+    "historical_tickets_sold": 110,
+    "historical_load_factor": 0.55,
+    "customer_segment_distribution": "{ business: 30, economy: 80 }"
+  },
+  {
+    "flight_id": "FL006",
+    "date": "2025-02-06",
+    "historical_tickets_sold": 160,
+    "historical_load_factor": 0.8,
+    "customer_segment_distribution": "{ business: 60, economy: 100 }"
+  },
+  {
+    "flight_id": "FL007",
+    "date": "2025-02-07",
+    "historical_tickets_sold": 90,
+    "historical_load_factor": 0.45,
+    "customer_segment_distribution": "{ business: 20, economy: 70 }"
+  },
+  {
+    "flight_id": "FL008",
+    "date": "2025-02-08",
+    "historical_tickets_sold": 100,
+    "historical_load_factor": 0.5,
+    "customer_segment_distribution": "{ business: 25, economy: 75 }"
+  },
+  {
+    "flight_id": "FL009",
+    "date": "2025-02-09",
+    "historical_tickets_sold": 170,
+    "historical_load_factor": 0.85,
+    "customer_segment_distribution": "{ business: 70, economy: 100 }"
+  },
+  {
+    "flight_id": "FL010",
+    "date": "2025-02-10",
+    "historical_tickets_sold": 180,
+    "historical_load_factor": 0.9,
+    "customer_segment_distribution": "{ business: 80, economy: 100 }"
+  }
+]
