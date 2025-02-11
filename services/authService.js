@@ -19,7 +19,7 @@ async function registerUser(username, password, roleName, email) {
     role_id: role.role_id
   });
 
-  console.log(`User ${username} created with role ${roleName}`);
+  console.log(`User ${username} created with role ${role}`);
 
 
   return newUser;
