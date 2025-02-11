@@ -48,9 +48,10 @@
       args:
         chdir: "{{ app_dir }}"
       environment:
-        PORT: "{{ port }}"
+        APP_PORT: "{{ app_port }}"
         DB_USER: "{{ db_user }}"
         DB_PASS: "{{ db_pass }}"
         DB_NAME: "{{ db_name }}"
         DB_PORT: "{{ db_port }}"
         DB_ROOT_PASS: "{{ db_root_pass }}"
+
