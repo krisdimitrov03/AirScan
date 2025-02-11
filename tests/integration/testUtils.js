@@ -7,6 +7,7 @@ function requestAgent() {
 
 async function loginAsRole(username, password, roleName, email) {
   const agent = requestAgent();
+  console.log("AGGENT", agent)
   await agent
     .post("/auth/signup")
     .send({ username, password, roleName, email })
