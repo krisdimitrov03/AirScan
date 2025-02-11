@@ -45,6 +45,12 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: node seed/seedDatabase.js
+      - name: Show all tables in the database
+        env:
+            DB_USER: ${{ secrets.DB_USER }}
+            DB_PASS: ${{ secrets.DB_PASS }}
+        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS ${{ secrets.DB_NAME }} -e "SHOW TABLES;"
+
       - name: Show Users table
         env:
           DB_USER: ${{ secrets.DB_USER }}
