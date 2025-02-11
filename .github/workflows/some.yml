@@ -1,4 +1,4 @@
-name: Show Database Tables
+name: Show Database Tables with Seeding
 
 on:
   push:
@@ -27,7 +27,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install MySQL client
-        run: sudo apt-get update && sudo apt-get install -y mysql-client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
 
       - name: Wait for MySQL to be ready
         run: |
@@ -36,9 +38,25 @@ jobs:
             sleep 3
           done
 
-      - name: Create test database (if needed)
+      - name: Create test database
         run: |
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
+
+      - name: Seed the database
+        env:
+          # These environment variables will be picked up by your models/config if you use process.env
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          echo "Seeding the database..."
+          # Option 1: If your seed/seedDatabase.js is set to execute when run directly:
+          
+          # Option 2: If not, you can execute the exported function inline:
+          node -e "require('./seed/seedDatabase')().then(() => { console.log('Seeding complete') }).catch(err => { console.error(err); process.exit(1); })"
 
       - name: Show Tables in the Database
         run: |
