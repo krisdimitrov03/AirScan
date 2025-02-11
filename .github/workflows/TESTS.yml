@@ -14,6 +14,6 @@ jobs:
           sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$MYSQL_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
           sudo systemctl restart mysql
       - name: Create database
-        run: sudo mysql -e "CREATE DATABASE IF NOT EXISTS airscan_db;"
+        run: sudo mysql -e "CREATE DATABASE IF NOT EXISTS airscan_dbb;"
       - name: Show databases
         run: mysql -h 127.0.0.1 -u root -p"$MYSQL_ROOT_PASSWORD" -e "SHOW DATABASES;"
