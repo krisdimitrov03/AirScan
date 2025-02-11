@@ -36,32 +36,27 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mysql-client
           # Loop until we can successfully connect
-          until mysql -h 127.0.0.1 -u root -padmin123 -e "SELECT 1"; do
+          until mysql -h 127.0.0.1 -u root -p{{ secrets.DB_PASS }} -e "SELECT 1"; do
             echo "Waiting for MySQL to be ready..."
             sleep 3
           done
 
       - name: Create test database
         run: |
-          mysql -h 127.0.0.1 -u root -padmin123 -e "CREATE DATABASE IF NOT EXISTS airscan_db;"
+          mysql -h 127.0.0.1 -u root -p{{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
 
       - name: Install dependencies
         run: npm install
-
-      # If you have any build step (e.g. React front-end), add it here
-      # - name: Build
-      #   run: npm run build
-
+        
       - name: Run integration tests
-        # Provide environment variables that your code expects
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: root
-          DB_PASS: admin123
+          DB_PASS: ${{ secrets.DB_PASS }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: ${{ secrets.PORT }}  # or whatever port you want your app to run on
+          PORT: ${{ secrets.PORT }}
         run: |
           # The following will:
           # 1) Connect to MySQL at 127.0.0.1 with the given user/password
