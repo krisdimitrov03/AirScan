@@ -1,0 +1,38 @@
+name: Deploy App to AWS
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.AWS_SSH_KEY }}
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+
+      - name: Create Ansible Inventory File
+        run: |
+          echo "[aws_instance]" > inventory.ini
+          echo "${{ secrets.AWS_HOST }} ansible_user=${{ secrets.AWS_USER }} ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory.ini
+
+      - name: Run Ansible Playbook to Deploy App
+        run: |
+          ansible-playbook -i inventory.ini deploy_app.yml \
+            -e "port=${{ secrets.PORT }}" \
+            -e "db_user=${{ secrets.DB_USER }}" \
+            -e "db_pass=${{ secrets.DB_PASS }}" \
+            -e "db_name=${{ secrets.DB_NAME }}" \
+            -e "db_port=${{ secrets.DB_PORT }}" \
+            -e "db_root_pass=${{ secrets.DB_ROOT_PASS }}"

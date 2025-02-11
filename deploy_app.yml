@@ -1,0 +1,53 @@
+---
+- name: Deploy app using Docker Compose
+  hosts: aws_instance
+  become: yes
+  vars:
+    app_dir: /opt/airscan
+  tasks:
+    - name: Update apt cache (Debian/Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (Debian/Ubuntu)
+      apt:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker Compose (Debian/Ubuntu)
+      apt:
+        name: docker-compose
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Docker service is running and enabled
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy docker-compose.yml to the server
+      copy:
+        src: docker-compose.yml
+        dest: "{{ app_dir }}/docker-compose.yml"
+        mode: "0644"
+
+    - name: Deploy Docker containers (build if necessary)
+      command: docker-compose up -d --build
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        PORT: "{{ port }}"
+        DB_USER: "{{ db_user }}"
+        DB_PASS: "{{ db_pass }}"
+        DB_NAME: "{{ db_name }}"
+        DB_PORT: "{{ db_port }}"
+        DB_ROOT_PASS: "{{ db_root_pass }}"
