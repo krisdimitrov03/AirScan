@@ -15,6 +15,8 @@ async function loginAsRole(username, password, roleName, email) {
   
   // check to see if the user is logged in
   const res = await agent.get("/auth/logged-in");
+  console.log("res", res);
+
   return agent;
 }
 
