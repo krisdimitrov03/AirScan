@@ -1,72 +1,17 @@
-name: CI
-
-on:
-  push:
-    branches:
-    - main
-  pull_request:
-
+name: MySQL Workflow
+on: [push]
 jobs:
-  test:
+  mysql_job:
     runs-on: ubuntu-latest
-    
-    # Define a MySQL service so your integration tests have a real DB to connect to
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_DATABASE: airscan_db
-          MYSQL_USER: admin
-          MYSQL_PASSWORD: admin123
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        # Health check so Actions knows when MySQL is ready
-        options: >-
-          --health-cmd "mysqladmin ping -h localhost --silent"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 3
-
-    # Make sure the environment variables used by your app point to the MySQL container
-    env:
-      DB_NAME: airscan_db
-      DB_USER: admin
-      DB_PASS: admin123
-      DB_HOST: mysql
-      DB_PORT: 3306
-      # This comes from your GitHub repository's "Settings" -> "Secrets and variables" -> "Actions"
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}  
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      # OPTIONAL but recommended: Wait for MySQL to be up-and-running
-      - name: Wait for MySQL
+      - name: Install MySQL and configure root
         run: |
-          for i in {1..30}; do
-            if mysqladmin ping -h"mysql" --silent; then
-              echo "MySQL is up!"
-              break
-            fi
-            echo "Waiting for MySQL... ($i/30)"
-            sleep 3
-          done
-
-      - name: Run tests with coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
+          sudo apt-get update
+          sudo apt-get install -y mysql-server
+          sudo systemctl start mysql
+          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root123'; FLUSH PRIVILEGES;"
+          sudo systemctl restart mysql
+      - name: Create database
+        run: sudo mysql -e "CREATE DATABASE IF NOT EXISTS airscan_db;"
+      - name: Show databases
+        run: mysql -h 127.0.0.1 -u root -proot123 -e "SHOW DATABASES;"
