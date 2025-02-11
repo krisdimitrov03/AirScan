@@ -43,7 +43,7 @@ jobs:
 
       - name: Create test database
         run: |
-          mysql -h 127.0.0.1 -u root -padmin123 -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
+          mysql -h 127.0.0.1 -u root -p${{secrets.DB_PASS}} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
 
       - name: Install dependencies
         run: npm install
