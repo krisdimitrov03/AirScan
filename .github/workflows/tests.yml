@@ -49,4 +49,4 @@ jobs:
         env:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
-        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS ${{ secrets.DB_NAME }} -e "SELECT * FROM Users LIMIT 3;"
+        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS ${{ secrets.DB_NAME }} -e "SELECT * FROM users LIMIT 3;"
