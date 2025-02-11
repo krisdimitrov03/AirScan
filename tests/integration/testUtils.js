@@ -11,7 +11,7 @@ async function loginAsRole(username, password, roleName, email) {
     .post("/auth/signup")
     .send({ username, password, roleName, email })
     .catch(() => {});
-  await agent.post("/auth/login").send({ username, password });
+  await agent.post("/auth/login").send({ username, password }).redirects(1);
   return agent;
 }
 
