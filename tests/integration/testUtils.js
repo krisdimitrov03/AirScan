@@ -1,6 +1,15 @@
 const request = require("supertest");
 const app = require("../../app");
 
+const { connectDB } = require('../../config/db');
+const { syncDatabase } = require('../../models');
+const seedDatabase = require('../../seed/seedDatabase');
+
+beforeAll(async () => {
+  await syncDatabase();
+  await seedDatabase();
+});
+
 function requestAgent() {
   return request.agent(app);
 }
