@@ -15,7 +15,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}
         ports:
-          - 3306:3306
+          - 3306:${{ secrets.DB_PORT }}
         options: >-
           --health-cmd "mysqladmin ping --silent"
           --health-interval 5s
@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Run integration tests
+      - name: Run test coverage
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: root
@@ -62,4 +62,10 @@ jobs:
           # 1) Connect to MySQL at 127.0.0.1 with the given user/password
           # 2) syncDatabase() or seed if your startup logic does that automatically
           # 3) Then run the tests
-          npm test
+          npm run test:coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
