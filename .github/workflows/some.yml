@@ -1,0 +1,46 @@
+name: Show Database Tables
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  show-tables:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1"; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 3
+          done
+
+      - name: Create test database (if needed)
+        run: |
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
+
+      - name: Show Tables in the Database
+        run: |
+          echo "Tables in database '${{ secrets.DB_NAME }}':"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SHOW TABLES;" ${{ secrets.DB_NAME }}
