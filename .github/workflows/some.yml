@@ -42,9 +42,20 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
 
+      - name: Synchronize database tables
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          echo "Synchronizing database tables..."
+          npm i
+          node -e "require('./models').syncDatabase().then(() => { console.log('Database sync complete'); process.exit(0); }).catch(err => { console.error(err); process.exit(1); })"
+
       - name: Seed the database
         env:
-          # These environment variables will be picked up by your models/config if you use process.env
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
@@ -53,10 +64,10 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           echo "Seeding the database..."
-          # Option 1: If your seed/seedDatabase.js is set to execute when run directly:
-          npm i
-          # Option 2: If not, you can execute the exported function inline:
-          node -e "require('./seed/seedDatabase')().then(() => { console.log('Seeding complete') }).catch(err => { console.error(err); process.exit(1); })"
+          # This runs your seedDatabase function.  
+          # Ensure that seed/seedDatabase.js either auto‑executes when run directly or use the inline method below.
+          # Alternatively, you could run:
+          node -e "require('./seed/seedDatabase')().then(() => { console.log('Seeding complete'); process.exit(0); }).catch(err => { console.error(err); process.exit(1); })"
 
       - name: Show Tables in the Database
         run: |
