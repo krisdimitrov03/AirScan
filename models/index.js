@@ -13,7 +13,7 @@ Pricing.belongsTo(Flight, { foreignKey: 'flight_id' });
 
 const syncDatabase = async () => {
     try {
-        await sequelize.sync({ alter: true });
+        await sequelize.sync({ true: true });
         console.log('✅ All models were synchronized successfully.');
     } catch (error) {
         console.error('❌ Error syncing models:', error);
