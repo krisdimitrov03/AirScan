@@ -7,19 +7,17 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    
+
     services:
       mysql:
-        # Spin up a MySQL 8 container
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: admin123
           MYSQL_DATABASE: airscan_db
           MYSQL_USER: admin
           MYSQL_PASSWORD: admin123
         ports:
           - 3306:3306
-        # Health checks so that Actions knows when MySQL is ready
         options: >-
           --health-cmd="mysqladmin ping --silent"
           --health-interval=5s
@@ -27,20 +25,20 @@ jobs:
           --health-retries=5
 
     env:
-      # We'll feed these into your Sequelize config:
       DB_NAME: airscan_db
       DB_USER: admin
       DB_PASS: admin123
+      # Use 127.0.0.1 to connect from the job container to the MySQL service
       DB_HOST: 127.0.0.1
       DB_PORT: 3306
-      # Pull the JWT secret from your GitHub secret
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      PORT: 80
+      JWT_SECRET: 51c941cdbeeaag3f2cc1e5d6e4b2ae5129951b2b354b75db6feb979303c85f4e992d0b4220cf32a58a698b3d96081149712842cf4e4c12754300de7d5b0d4d887b6e8d977987487d1c7355cc2336020b46aee948bfa4f84067c30be127fb7e88679f984c7691f8853d2622b9b1a27e1ba9d9ef1eae58d1761c88b00756448fa66655dfc19ffd430cbf11fc49674a18877f532a00fb34a5be2b5a9482bb9c0863186157332a5d00d837a829339ed2d0421ad1a358b9be021228e945c6cf4696f5e29a756e675832bf26043bb9330ccdd2d60454588efb32eeb9989bc305ed64b877f4dfdab6552b76074e514c5b4c7f51bea490a6499f366a7fd5f15a84ee8f217
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
@@ -50,23 +48,19 @@ jobs:
 
       - name: Wait for MySQL to be ready
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
           for i in {1..30}; do
             if mysql -h 127.0.0.1 -uadmin -padmin123 -e "SELECT 1" airscan_db &> /dev/null; then
-              echo "MySQL is up!"
+              echo "MySQL is ready!"
               break
             fi
-            echo "MySQL is unavailable - sleeping"
+            echo "Waiting for MySQL..."
             sleep 2
           done
 
       - name: Run tests with coverage
-        # If your package.json has "test:coverage" that includes unit + integration
-        # otherwise just `npm test` or whatever script does your integration tests
         run: npm run test:coverage
 
-      - name: Upload coverage report artifact
+      - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
