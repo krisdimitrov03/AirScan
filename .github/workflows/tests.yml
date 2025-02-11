@@ -20,6 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        
+      - name: Verify JWT_SECRET is set
+        run: test -n "$JWT_SECRET"
 
       - name: Run tests with coverage
         run: npm run test:coverage
