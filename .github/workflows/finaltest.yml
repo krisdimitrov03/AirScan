@@ -1,0 +1,31 @@
+name: MYSQL setup 
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 80:3306
+        env:
+          MYSQL_DATABASE: airscan_db
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: admin123
+          MYSQL_ROOT_PASSWORD: admin123
+        options: >-
+          --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Install mysql client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysql -h 127.0.0.1 -P 80 -u admin -p admin123 -e "select 1" >/dev/null 2>&1; then
+              break
+            fi
+            sleep 1
+          done
+      - name: Show databases
+        run: mysql -h 127.0.0.1 -P 80 -u admin -p admin123 -e "SHOW DATABASES;"
