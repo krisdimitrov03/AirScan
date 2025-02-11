@@ -10,15 +10,15 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: root123
-          MYSQL_DATABASE: airscan_dbb   # The database name you want to use
+          MYSQL_DATABASE: airscan_dbb
         ports:
           - 3306:3306
-        options: >
+        options: >-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot123"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-          
+
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
