@@ -54,7 +54,7 @@ jobs:
         run: |
           echo "Seeding the database..."
           # Option 1: If your seed/seedDatabase.js is set to execute when run directly:
-          
+          npm i
           # Option 2: If not, you can execute the exported function inline:
           node -e "require('./seed/seedDatabase')().then(() => { console.log('Seeding complete') }).catch(err => { console.error(err); process.exit(1); })"
 
