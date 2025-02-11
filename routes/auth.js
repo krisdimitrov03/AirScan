@@ -12,6 +12,9 @@ router.get("/signup", (req, res) => {
 router.post("/signup", async (req, res) => {
   try {
     const { username, password, roleName, email } = req.body;
+    console.log("username: ", username);
+    console.log("password: ", password);
+    console.log("roleName: ", roleName);
     await registerUser(username, password, roleName, email);
     res.render("auth/login", {
       title: "Login",
