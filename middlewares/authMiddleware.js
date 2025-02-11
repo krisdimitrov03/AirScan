@@ -3,6 +3,7 @@ require("dotenv").config();
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization || req.cookies?.token;
+  console.log("authHeader", authHeader);
 
   if (!authHeader)
     return res.status(401).json({ message: "No token provided" });
