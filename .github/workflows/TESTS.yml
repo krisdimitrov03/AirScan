@@ -1,27 +1,15 @@
-name: MySQL Workflow
+name: MySQL Service Workflow
 on: [push]
 jobs:
-  mysql_job:
+  test:
     runs-on: ubuntu-latest
-    env:
-      MYSQL_ROOT_PASSWORD: root123
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root123
+          MYSQL_DATABASE: airscan_dbb
+        ports:
+          - 3306:3306
     steps:
-      - name: Install MySQL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-server
-          sudo systemctl start mysql
-
-      - name: Change root to password authentication
-        run: |
-          # This uses "socket" authentication just once, so no password is required here
-          sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '${MYSQL_ROOT_PASSWORD}'; FLUSH PRIVILEGES;"
-      
-      - name: Create database
-        run: |
-          # Now that we've switched to password auth, we must use -p${MYSQL_ROOT_PASSWORD}
-          mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "CREATE DATABASE IF NOT EXISTS airscan_dbb;"
-      
-      - name: Show databases
-        run: |
-          mysql -u root -p${MYSQL_ROOT_PASSWORD} -e "SHOW DATABASES;"
+      - run: mysql -h127.0.0.1 -uroot -proot123 -e "SHOW DATABASES;"
