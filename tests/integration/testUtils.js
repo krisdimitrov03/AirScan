@@ -20,6 +20,7 @@ async function loginAsRole(username, password, roleName, email) {
     .post("/auth/signup")
     .send({ username, password, roleName, email })
     .catch(() => {});
+  console.log("Logging in as", { username, password });
   await agent.post("/auth/login").send({ username, password });
   return agent;
 }
