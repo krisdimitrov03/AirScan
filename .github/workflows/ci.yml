@@ -36,14 +36,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y mysql-client
           # Loop until we can successfully connect
-          until mysql -h 127.0.0.1 -u root -padmin123 -e "SELECT 1"; do
+          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1"; do
             echo "Waiting for MySQL to be ready..."
             sleep 3
           done
 
       - name: Create test database
         run: |
-          mysql -h 127.0.0.1 -u root -p${{secrets.DB_PASS}} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
 
       - name: Install dependencies
         run: npm install
