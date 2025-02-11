@@ -4,15 +4,27 @@ require("dotenv").config();
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization || req.cookies?.token;
 
-  if (!authHeader)
-    return res.status(401).json({ message: "No token provided" });
+  if (!authHeader) return res.redirect("/auth/login");
 
-  const token = authHeader.split(" ")[1] || authHeader; // if there is a Bearer token, extract it
+  const token = authHeader.split(" ")[1] || authHeader;
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err)
       return res.status(403).json({ message: "Failed to authenticate token" });
     req.user = decoded;
     next();
+  });
+};
+
+const verifyNoToken = (req, res, next) => {
+  const authHeader = req.headers.authorization || req.cookies?.token;
+
+  if (!authHeader) return next();
+
+  const token = authHeader.split(" ")[1] || authHeader;
+  jwt.verify(token, process.env.JWT_SECRET, (err, _) => {
+    if (err) return next();
+
+    res.redirect("/dashboard");
   });
 };
 
@@ -30,4 +42,4 @@ const authorizeRoles = (allowedRoles) => {
   };
 };
 
-module.exports = { verifyToken, authorizeRoles };
+module.exports = { verifyToken, verifyNoToken, authorizeRoles };
