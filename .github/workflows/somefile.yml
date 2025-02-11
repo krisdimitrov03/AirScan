@@ -1,0 +1,97 @@
+name: CI/CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Wait for MySQL to be ready
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+          # Loop until we can successfully connect
+          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1"; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 3
+          done
+      - name: Create test database
+        run: |
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
+      - name: Synchronize database tables
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+        run: |
+          echo "Synchronizing database tables..."
+          npm i
+          node -e "require('./models').syncDatabase().then(() => { console.log('Database sync complete'); process.exit(0); }).catch(err => { console.error(err); process.exit(1); })"
+      - name: Seed the database
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          echo "Seeding the database..."
+          # This runs your seeding function. Ensure that seed/seedDatabase.js either auto‑executes when run directly
+          # (using "if (require.main === module) { … }") or use the inline invocation below.
+          node seed/seedDatabase.js
+          # Alternatively, uncomment the next lines if needed:
+          # node -e "require('./seed/seedDatabase')().then(() => { console.log('Seeding complete'); process.exit(0); }).catch(err => { console.error(err); process.exit(1); })"
+      - name: Show Tables in the Database
+        run: |
+          echo "Tables in database '${{ secrets.DB_NAME }}':"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SHOW TABLES;" ${{ secrets.DB_NAME }}
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run test coverage
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: root
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
+        run: |
+          # The following will:
+          # 1) Connect to MySQL at 127.0.0.1 with the given credentials
+          # 2) Ensure your application synchronizes & seeds the database (via your startup logic or the above steps)
+          # 3) Then run the tests with coverage
+          npm run test:coverage
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
