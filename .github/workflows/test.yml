@@ -1,0 +1,27 @@
+name: Print Env Var SHA256 Hashes
+
+on: [push, pull_request]
+
+jobs:
+  print-hashes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Print SHA256 hashes of environment variables
+        run: |
+          for var in DB_NAME DB_USER DB_PASS DB_HOST DB_PORT PORT JWT_SECRET; do
+            value="${!var}"
+            hash=$(echo -n "$value" | sha256sum | awk '{print $1}')
+            echo "$var: $hash"
+          done
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          PORT: ${{ secrets.PORT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
