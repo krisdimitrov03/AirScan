@@ -14,7 +14,7 @@ async function loginAsRole(username, password, roleName, email) {
     .catch(() => {});
   await agent.post("/auth/login").send({ username, password });
 
-  console.log({username, password})
+  console.log({username, password, roleName, email})
   // check to see if the user is logged in
   const res = await agent.get("/flights");
   console.log("res", res.statusCode);
