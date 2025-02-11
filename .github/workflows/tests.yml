@@ -8,7 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      JWT_SECRET: ${{ secrets.JWT_SECRET || 'my_test_jwt_secret' }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -20,9 +20,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Verify JWT_SECRET is set
-        run: test -n "$JWT_SECRET"
 
       - name: Run tests with coverage
         run: npm run test:coverage
