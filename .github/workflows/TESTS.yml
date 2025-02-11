@@ -8,7 +8,7 @@ jobs:
         image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: root123
-          MYSQL_DATABASE: airscan_dbb
+          MYSQL_DATABASE: airscan_d
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping -uroot -proot123" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -20,5 +20,3 @@ jobs:
           done
       - name: Show databases
         run: mysql -h127.0.0.1 -uroot -proot123 -e "SHOW DATABASES;"
-      - name: Display debian.cnf
-        run: sudo cat /etc/mysql/debian.cnf
