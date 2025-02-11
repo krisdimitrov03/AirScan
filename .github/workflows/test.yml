@@ -1,33 +1,32 @@
-name: CI
+name: CII
 
 on: [push, pull_request]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASS: ${{ secrets.DB_PASS }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      PORT: ${{ secrets.PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     services:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
-          MYSQL_USER: ${{ secrets.DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASS }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_DATABASE: ${{ env.DB_NAME }}
+          MYSQL_USER: ${{ env.DB_USER }}
+          MYSQL_PASSWORD: ${{ env.DB_PASS }}
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_PASS }}
         ports:
-          - ${{ secrets.DB_PORT }}:3306
+          - ${{ env.DB_PORT }}:3306
         options: >-
           --health-cmd "mysqladmin ping --silent" 
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 3
-    env:
-      DB_NAME: ${{ secrets.DB_NAME }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASS: ${{ secrets.DB_PASS }}
-      DB_HOST: 127.0.0.1
-      DB_PORT: ${{ secrets.DB_PORT }}
-      PORT: ${{ secrets.PORT }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -43,7 +42,7 @@ jobs:
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..30}; do
-            mysqladmin ping -h 127.0.0.1 -P ${{ secrets.DB_PORT }} --silent && break || sleep 2;
+            mysqladmin ping -h 127.0.0.1 -P ${{ env.DB_PORT }} --silent && break || sleep 2;
           done
 
       - name: Run migrations and seed database
