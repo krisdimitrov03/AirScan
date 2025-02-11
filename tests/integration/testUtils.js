@@ -6,8 +6,13 @@ const { syncDatabase } = require('../../models');
 const seedDatabase = require('../../seed/seedDatabase');
 
 beforeAll(async () => {
-  await syncDatabase();
-  await seedDatabase();
+  connectDB().then(async () => {
+    await syncDatabase();
+    await seedDatabase();
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  });
 });
 
 function requestAgent() {
