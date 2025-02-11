@@ -3,4 +3,3 @@ module.exports = {
     MANAGER: "Manager",
     ANALYST: "Analyst",
 };
-
