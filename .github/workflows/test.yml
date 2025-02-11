@@ -11,18 +11,22 @@ jobs:
       mysql:
         image: mysql:8
         ports:
-          - ${{ secrets.DB_PORT }}:3306
+          - 3306:3306
         env:
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}
           MYSQL_USER: ${{ secrets.DB_USER }}
           MYSQL_PASSWORD: ${{ secrets.DB_PASS }}
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
-        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
     env:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASS: ${{ secrets.DB_PASS }}
-      DB_HOST: ${{ secrets.DB_HOST }}  # e.g. "127.0.0.1" if MySQL is running as a service
+      DB_HOST: ${{ secrets.DB_HOST }}
       DB_PORT: ${{ secrets.DB_PORT }}
       PORT: ${{ secrets.PORT }}
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -35,17 +39,17 @@ jobs:
         run: npm install
       - name: Create .env file
         run: |
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "DB_NAME=$DB_NAME" >> .env
+          echo "DB_USER=$DB_USER" >> .env
+          echo "DB_PASS=$DB_PASS" >> .env
+          echo "DB_HOST=$DB_HOST" >> .env
+          echo "DB_PORT=$DB_PORT" >> .env
+          echo "PORT=$PORT" >> .env
+          echo "JWT_SECRET=$JWT_SECRET" >> .env
       - name: Wait for MySQL to be ready
         run: |
           for i in {1..10}; do
-            mysqladmin ping -h "${{ secrets.DB_HOST }}" -P "${{ secrets.DB_PORT }}" --silent && break || sleep 5;
+            mysqladmin ping -h "$DB_HOST" -P "$DB_PORT" --silent && break || sleep 5;
           done
       - name: Run tests with coverage
         run: npm run test:coverage
