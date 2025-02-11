@@ -34,11 +34,14 @@
         state: directory
         mode: "0755"
 
-    - name: Copy application code to the server
-      copy:
+    - name: Synchronize application code to the server
+      synchronize:
         src: "./"
         dest: "{{ app_dir }}/"
-        mode: "0755"
+        recursive: yes
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=node_modules"
 
     - name: Deploy Docker containers (build if necessary)
       command: docker-compose up -d --build
