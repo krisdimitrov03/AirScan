@@ -1,3 +1,313 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+:root {
+  --primary-color: #004085;
+  --secondary-color: #ffffff;
+  --accent-color: #ffc107;
+  --background-color: #f7f9fb;
+  --text-color: #333333;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    background-color: #f8f9fa;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Header & Navigation */
+header {
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 1rem;
+}
+
+header h1 {
+  margin-bottom: 0.5rem;
+}
+
+nav a {
+  color: var(--secondary-color);
+  margin-right: 1rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: var(--accent-color);
+}
+
+/* Main Layout Container */
+main,
+section {
+  max-width: 1200px;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background-color: var(--secondary-color);
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1,
+h2,
+h3 {
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Forms */
+form {
+  margin-top: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons */
+button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #00306b;
+}
+
+/* Alerts & Errors */
+.alert-error {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+thead {
+  background-color: #e8f0fb;
+}
+
+th,
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+/* Pagination */
+.pagination {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.pagination a,
+.pagination strong {
+  margin: 0 0.3rem;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+.mt-1 {
+  margin-top: 1rem;
+}
+
+/* NAVBAR */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.75rem 1rem;
+}
+.navbar-brand {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+.navbar-brand span {
+  margin-left: 0.5rem;
+}
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+.nav-links li {
+  margin-left: 1.5rem;
+  position: relative;
+}
+.nav-links li a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.nav-links li a:hover {
+  color: var(--accent-color);
+}
+
+/* Profile / Dropdown (click to show) */
+.profile {
+  position: relative;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+.profile-menu {
+  display: none; /* Hidden by default */
+  position: absolute;
+  right: 0;
+  top: 2.2rem;
+  background-color: var(--secondary-color);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: var(--text-color);
+  border-radius: 4px;
+  min-width: 150px;
+  z-index: 99;
+}
+/* We'll toggle this 'show' class via JS */
+.profile-menu.show {
+  display: block;
+}
+.profile-menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s;
+}
+.profile-menu a:hover {
+  background-color: #f2f2f2;
+}
+
+/* Basic responsiveness (optional) */
+@media (max-width: 600px) {
+  .nav-links {
+    display: none; /* Typically replaced by a hamburger menu */
+  }
+}
+
+/* Give extra space above/below the heading */
+h1 {
+  margin: 2rem 0 1rem;
+  /* optional: text-align: center; */
+}
+
+/* Add margin around the table, ensure border collapse, etc. */
+table {
+  margin: 1.5rem auto; /* center the table horizontally & add vertical margin */
+  border-collapse: collapse;
+  width: 90%; /* optional: narrower table, so it doesn't span full width */
+}
+
+/* Default table styling (remove HTML's border=1 quirk, rely on CSS border) */
+table,
+th,
+td {
+  border: 1px solid #ccc;
+}
+th,
+td {
+  padding: 0.75rem;
+  text-align: left;
+}
+
+/* Style the "Create New Event" link as a large green button */
+p > a[href="/events/new"] {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem; /* space below this button */
+  background-color: #28a745;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  font-weight: 500;
+}
+p > a[href="/events/new"]:hover {
+  background-color: #218838;
+}
+
+/* Style the "Edit" link like a blue button; ensure same line-height/size as Delete */
+td a[href*="/edit"] {
+  display: inline-block;
+  padding: 0.45rem 0.8rem;
+  margin-right: 0.5rem; /* small gap before Delete button */
+  background-color: #007bff;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  line-height: 1.2; /* consistent line-height with Delete button */
+  transition: background-color 0.3s;
+}
+td a[href*="/edit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Style the "Delete" button; match Edit’s height & spacing */
+td form[action*="?_method=DELETE"] button {
+  display: inline-block;
+  padding: 0.45rem 0.8rem;
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: 1.2; /* matches the Edit link */
+  transition: background-color 0.3s;
+}
+td form[action*="?_method=DELETE"] button:hover {
+  background-color: #c82333;
 }

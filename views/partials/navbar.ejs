@@ -1,0 +1,89 @@
+<nav class="navbar">
+  <div class="navbar-brand">✈️ <span>AirScan</span></div>
+
+  <ul class="nav-links">
+    <% if (user.role_name === 'Administrator') { %>
+    <li>
+      <a href="/admin/users"> <i class="icon-users"></i> Users </a>
+    </li>
+    <li>
+      <a href="/admin/roles"> <i class="icon-roles"></i> Roles </a>
+    </li>
+    <li>
+      <a href="/admin/flights"> <i class="icon-flights"></i> Flights </a>
+    </li>
+    <li>
+      <a href="/admin/airport-slots">
+        <i class="icon-airport"></i> Airport slots
+      </a>
+    </li>
+    <li>
+      <a href="/admin/demand-history">
+        <i class="icon-demand"></i> Demand history
+      </a>
+    </li>
+    <li>
+      <a href="/admin/pricing"> <i class="icon-pricing"></i> Pricing </a>
+    </li>
+    <li>
+      <a href="/admin/events"> <i class="icon-events"></i> Events </a>
+    </li>
+    <% } %> <% if ( user.role_name === 'Manager' || user.role_name === 'Analyst'
+    ) { %>
+    <li>
+      <a href="/flights"> <i class="icon-flights"></i> Flights </a>
+    </li>
+    <li>
+      <a href="/airport-slots"> <i class="icon-airport"></i> Airport slots </a>
+    </li>
+    <li>
+      <a href="/demand-history"> <i class="icon-demand"></i> Demand history </a>
+    </li>
+    <li>
+      <a href="/pricing"> <i class="icon-pricing"></i> Pricing </a>
+    </li>
+    <li>
+      <a href="/events"> <i class="icon-events"></i> Events </a>
+    </li>
+    <% } %>
+  </ul>
+
+  <div class="profile">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="30"
+      height="30"
+      fill="currentColor"
+      class="bi bi-person-circle"
+      viewBox="0 0 16 16"
+    >
+      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+      <path
+        fill-rule="evenodd"
+        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"
+      />
+    </svg>
+    <div class="profile-menu">
+      <a href="/profile">Profile</a>
+      <a href="/auth/logout">Sign out</a>
+    </div>
+  </div>
+</nav>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const profileEl = document.querySelector(".profile");
+    const profileMenu = document.querySelector(".profile-menu");
+
+    // Toggle on click
+    profileEl.addEventListener("click", (event) => {
+      // Prevent the click from bubbling to document
+      event.stopPropagation();
+      profileMenu.classList.toggle("show");
+    });
+
+    // Close the menu if clicking anywhere else on the page
+    document.addEventListener("click", () => {
+      profileMenu.classList.remove("show");
+    });
+  });
+</script>
