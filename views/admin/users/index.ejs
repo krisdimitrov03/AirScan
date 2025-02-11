@@ -46,8 +46,6 @@
     
           <% if (!isSelf) { %>
             <% if (isAdmin && adminCount === 1) { %>
-              <!-- Only admin in the system - hide delete button -->
-              <!-- Optionally show a disabled button or hint -->
               <button disabled title="Cannot delete the last remaining admin">Delete</button>
             <% } else { %>
               <form method="POST" action="/admin/users/<%= user.user_id %>/delete" style="display:inline;">

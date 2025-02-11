@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - Demand History</title>
+</head>
+<body>
+  <h1>Admin - Demand History Records</h1>
+  <a href="/admin/demand-history/new">Create New Record</a>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Flight ID</th>
+        <th>Date</th>
+        <th>Tickets Sold</th>
+        <th>Load Factor</th>
+        <th>Segment Distribution</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% demandHistory.forEach(function(record){ %>
+      <tr>
+        <td><%= record.record_id %></td>
+        <td><%= record.flight_id %></td>
+        <td><%= record.date %></td>
+        <td><%= record.historical_tickets_sold %></td>
+        <td><%= record.historical_load_factor %></td>
+        <td><%= record.customer_segment_distribution %></td>
+        <td>
+          <a href="/admin/demand-history/<%= record.record_id %>/edit">Edit</a>
+          <form action="/admin/demand-history/<%= record.record_id %>?_method=DELETE" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <a href="/admin">Back to Admin Dashboard</a>
+</body>
+</html>
