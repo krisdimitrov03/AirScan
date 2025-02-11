@@ -12,8 +12,8 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: admin123
-          MYSQL_DATABASE: airscan_db
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}         # admin123
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}                # airscan_db
         ports:
           - 3306:3306
         options: >-
@@ -35,36 +35,34 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y mysql-client
-          # Loop until we can successfully connect
-          until mysql -h 127.0.0.1 -u root -padmin123 -e "SELECT 1"; do
+          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1" ; do
             echo "Waiting for MySQL to be ready..."
             sleep 3
           done
 
       - name: Create test database
         run: |
-          mysql -h 127.0.0.1 -u root -padmin123 -e "CREATE DATABASE IF NOT EXISTS airscan_db;"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
 
       - name: Install dependencies
         run: npm install
 
-      # If you have any build step (e.g. React front-end), add it here
+      # If you have a build step (for example, building a React front-end), add it here.
       # - name: Build
       #   run: npm run build
 
       - name: Run integration tests
-        # Provide environment variables that your code expects
         env:
-          DB_NAME: airscan_db
-          DB_USER: root
-          DB_PASS: admin123
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          JWT_SECRET: some_test_jwt_secret_key
-          PORT: 3000  # or whatever port you want your app to run on
+          DB_NAME: ${{ secrets.DB_NAME }}        # airscan_db
+          DB_USER: ${{ secrets.DB_USER }}        # admin
+          DB_PASS: ${{ secrets.DB_PASS }}        # admin123
+          DB_HOST: ${{ secrets.DB_HOST }}        # localhost
+          DB_PORT: ${{ secrets.DB_PORT }}        # 3306
+          PORT: ${{ secrets.PORT }}              # 80
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}  # (your long secret key)
         run: |
-          # The following will:
-          # 1) Connect to MySQL at 127.0.0.1 with the given user/password
-          # 2) syncDatabase() or seed if your startup logic does that automatically
-          # 3) Then run the tests
+          # This step will:
+          # 1) Connect to MySQL with the provided credentials.
+          # 2) (Your server’s startup logic—via syncDatabase() and seedDatabase()—will create and seed tables.)
+          # 3) Run your integration tests.
           npm test
