@@ -1,58 +1,73 @@
-name: MySQL with Docker Run and Seeding
-on: [push, pull_request]
+name: UTs and ITs
+
+on:
+  push:
+  pull_request:
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        # Spin up a MySQL 8 container
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: airscan_db
+          MYSQL_USER: admin
+          MYSQL_PASSWORD: admin123
+        ports:
+          - 3306:3306
+        # Health checks so that Actions knows when MySQL is ready
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=5
+
     env:
-      DB_HOST: ${{ secrets.DB_HOST }}
+      # We'll feed these into your Sequelize config:
+      DB_NAME: airscan_db
+      DB_USER: admin
+      DB_PASS: admin123
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      # Pull the JWT secret from your GitHub secret
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
     steps:
-      - name: Checkout repository
+      - name: Check out code
         uses: actions/checkout@v3
-      - name: Start MySQL container
-        run: |
-          docker run -d --name mysql -p ${{ secrets.PORT }}:${{ secrets.DB_PORT }} \
-            -e MYSQL_DATABASE=${{ secrets.DB_NAME }} \
-            -e MYSQL_USER=${{ secrets.DB_USER }} \
-            -e MYSQL_PASSWORD=${{ secrets.DB_PASS }} \
-            -e MYSQL_ROOT_PASSWORD=${{ secrets.DB_PASS }} \
-            mysql:8.0
-      - name: Install mysql client
-        run: sudo apt-get update && sudo apt-get install -y mysql-client
-      - name: Wait for MySQL to be ready
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-        run: |
-          for i in {1..30}; do
-            if mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS -e "select 1" >/dev/null 2>&1; then break; fi; sleep 1; done
-      - name: Show databases
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS -e "SHOW DATABASES;"
-      - name: Setup Node.js
+
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 18
+
       - name: Install dependencies
         run: npm install
-      - name: Run database seeder
-        env:
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: node seed/seedDatabase.js
-      - name: Show all tables in the database
-        env:
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASS: ${{ secrets.DB_PASS }}
-        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS ${{ secrets.DB_NAME }} -e "SHOW TABLES;"
 
-      - name: Show Users table
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASS: ${{ secrets.DB_PASS }}
-        run: mysql --protocol=tcp -h $DB_HOST -P ${{ secrets.PORT }} -u $DB_USER -p$DB_PASS ${{ secrets.DB_NAME }} -e "SELECT * FROM users LIMIT 3;"
+      - name: Wait for MySQL to be ready
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+          for i in {1..30}; do
+            if mysql -h 127.0.0.1 -uadmin -padmin123 -e "SELECT 1" airscan_db &> /dev/null; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "MySQL is unavailable - sleeping"
+            sleep 2
+          done
+
+      - name: Run tests with coverage
+        # If your package.json has "test:coverage" that includes unit + integration
+        # otherwise just `npm test` or whatever script does your integration tests
+        run: npm run test:coverage
+
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage
