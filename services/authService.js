@@ -38,7 +38,7 @@ async function loginUser(username, password) {
   const tokenPayload = { user_id: user.user_id, role_id: user.role_id, role_name: user.Role?.role_name };
   const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-  console.log(`User ${username} logged in with role ${role}`);
+  console.log(`User ${username} logged in with pw ${password}`);
 
   console.log(token)
   
