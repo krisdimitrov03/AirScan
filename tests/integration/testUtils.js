@@ -12,6 +12,9 @@ async function loginAsRole(username, password, roleName, email) {
     .send({ username, password, roleName, email })
     .catch(() => {});
   await agent.post("/auth/login").send({ username, password });
+  
+  // check to see if the user is logged in
+  const res = await agent.get("/auth/logged-in");
   return agent;
 }
 
