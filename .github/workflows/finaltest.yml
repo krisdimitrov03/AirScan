@@ -1,6 +1,5 @@
-name: MYSQL setup 
+name: MySQL Service Setup
 on: [push, pull_request]
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -8,24 +7,34 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 80:3306
+          - ${{ secrets.PORT }}:${{ secrets.DB_PORT }}
         env:
-          MYSQL_DATABASE: airscan_db
-          MYSQL_USER: admin
-          MYSQL_PASSWORD: admin123
-          MYSQL_ROOT_PASSWORD: admin123
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_USER: ${{ secrets.DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
         options: >-
-          --health-cmd="mysqladmin ping --silent" --health-interval=2s --health-timeout=5s --health-retries=3
+          --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Install mysql client
         run: sudo apt-get update && sudo apt-get install -y mysql-client
       - name: Wait for MySQL to be ready
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
         run: |
           for i in {1..30}; do
-            if mysql -h 127.0.0.1 -P 80 -u admin -padmin123 -e "select 1" >/dev/null 2>&1; then
+            if mysql -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS -e "select 1" >/dev/null 2>&1; then
               break
             fi
             sleep 1
           done
       - name: Show databases
-        run: mysql -h 127.0.0.1 -P 80 -u admin -padmin123 -e "SHOW DATABASES;"
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.PORT }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+        run: mysql -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASS -e "SHOW DATABASES;"
