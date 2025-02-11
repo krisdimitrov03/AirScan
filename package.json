@@ -1,6 +1,6 @@
 {
   "name": "air_scan",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "An intelligent airport slot management and flight demand forecasting system.",
   "main": "server.js",
   "scripts": {
