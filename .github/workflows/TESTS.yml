@@ -11,5 +11,14 @@ jobs:
           MYSQL_DATABASE: airscan_dbb
         ports:
           - 3306:3306
+        options: --health-cmd="mysqladmin ping -uroot -proot123" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
-      - run: mysql -h127.0.0.1 -uroot -proot123 -e "SHOW DATABASES;"
+      - name: Wait for MySQL
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h127.0.0.1 -uroot -proot123 && break || sleep 1
+          done
+      - name: Show databases
+        run: mysql -h127.0.0.1 -uroot -proot123 -e "SHOW DATABASES;"
+      - name: Display debian.cnf
+        run: sudo cat /etc/mysql/debian.cnf
