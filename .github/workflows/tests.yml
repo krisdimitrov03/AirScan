@@ -1,40 +1,42 @@
-name: UTs and ITs
+name: CI
 
 on:
   push:
+    branches:
+    - main
   pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
     
+    # Define a MySQL service so your integration tests have a real DB to connect to
     services:
       mysql:
-        # Spin up a MySQL 8 container
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: airscan_db
           MYSQL_USER: admin
           MYSQL_PASSWORD: admin123
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
-        # Health checks so that Actions knows when MySQL is ready
+        # Health check so Actions knows when MySQL is ready
         options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=5s
-          --health-timeout=5s
-          --health-retries=5
+          --health-cmd "mysqladmin ping -h localhost --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 3
 
+    # Make sure the environment variables used by your app point to the MySQL container
     env:
-      # We'll feed these into your Sequelize config:
       DB_NAME: airscan_db
       DB_USER: admin
       DB_PASS: admin123
-      DB_HOST: 127.0.0.1
+      DB_HOST: mysql
       DB_PORT: 3306
-      # Pull the JWT secret from your GitHub secret
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      # This comes from your GitHub repository's "Settings" -> "Secrets and variables" -> "Actions"
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}  
 
     steps:
       - name: Check out code
@@ -48,22 +50,19 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Wait for MySQL to be ready
+      # OPTIONAL but recommended: Wait for MySQL to be up-and-running
+      - name: Wait for MySQL
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mysql-client
           for i in {1..30}; do
-            if mysql -h 127.0.0.1 -uadmin -padmin123 -e "SELECT 1" airscan_db &> /dev/null; then
+            if mysqladmin ping -h"mysql" --silent; then
               echo "MySQL is up!"
               break
             fi
-            echo "MySQL is unavailable - sleeping"
-            sleep 2
+            echo "Waiting for MySQL... ($i/30)"
+            sleep 3
           done
 
       - name: Run tests with coverage
-        # If your package.json has "test:coverage" that includes unit + integration
-        # otherwise just `npm test` or whatever script does your integration tests
         run: npm run test:coverage
 
       - name: Upload coverage report artifact
