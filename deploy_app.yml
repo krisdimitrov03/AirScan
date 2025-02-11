@@ -43,6 +43,22 @@
           - "--exclude=.git"
           - "--exclude=node_modules"
 
+    - name: Stop and remove any existing containers
+      command: docker-compose down
+      args:
+        chdir: "{{ app_dir }}"
+      ignore_errors: yes
+
+    - name: Show effective Docker Compose configuration (debug)
+      command: docker-compose config
+      args:
+        chdir: "{{ app_dir }}"
+      register: docker_config
+      changed_when: false
+
+    - debug:
+        var: docker_config.stdout_lines
+
     - name: Deploy Docker containers (build if necessary)
       command: docker-compose up -d --build
       args:
@@ -54,4 +70,3 @@
         DB_NAME: "{{ db_name }}"
         DB_PORT: "{{ db_port }}"
         DB_ROOT_PASS: "{{ db_root_pass }}"
-
