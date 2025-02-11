@@ -6,7 +6,7 @@ describe("Admin Flights Integration", () => {
   
   beforeAll(async () => {
     adminAgent = await loginAsRole(
-      "test_admin_flights",
+      `test_admin_flights_${Date.now()}`,
       "secret",
       "Administrator",
       "admin_flights@example.com"

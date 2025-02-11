@@ -7,7 +7,7 @@ describe("Admin Integration (Users & Roles)", () => {
 
   beforeAll(async () => {
     adminAgent = await loginAsRole(
-      "test_superadmin",
+      `test_superadmi_${Date.now()}n`,
       "pass",
       "Administrator",
       "superadmin@example.com"

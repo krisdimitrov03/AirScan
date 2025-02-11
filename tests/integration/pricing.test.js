@@ -7,7 +7,7 @@ describe("Pricing Integration", () => {
 
   beforeAll(async () => {
     pricingAgent = await loginAsRole(
-      "test_admin_pricing",
+      `test_admin_pricing_${Date.now()}`,
       "secret",
       "Administrator",
       "admin_pricing@example.com"

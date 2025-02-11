@@ -6,7 +6,7 @@ describe("Events Integration", () => {
 
   beforeAll(async () => {
     eventsAgent = await loginAsRole(
-      "test_admin_events",
+      `test_admin_events_${Date.now()}`,
       "secret",
       "Administrator",
       "admin_events@example.com"

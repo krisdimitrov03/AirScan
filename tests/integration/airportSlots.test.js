@@ -6,7 +6,7 @@ describe("Non-Admin Airport Slots Integration", () => {
 
   beforeAll(async () => {
     slotsAgent = await loginAsRole(
-      "test_slots_user",
+      `test_slots_user_${Date.now()}`,
       "secret",
       "Analyst",
       "slots_user@example.com"
