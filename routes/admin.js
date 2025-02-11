@@ -21,7 +21,7 @@ async function isLastAdmin(userId) {
   const user = await userService.getUserById(userId);
   if (!user) return false;
 
-  if (user.Role?.role_name !== "admin") return false;
+  if (user.Role?.role_name !== roles.ADMIN) return false;
 
   const adminCount = await userService.countAdmins();
   return adminCount === 1;
@@ -97,7 +97,7 @@ router.post("/users/:id/edit", async (req, res) => {
     // check if this user is the last admin
     const existingRoleName = existingUser.Role?.role_name;
     if (
-      existingRoleName === "admin" &&
+      existingRoleName === roles.ADMIN &&
       parseInt(role_id, 10) !== existingUser.role_id
     ) {
       const lastAdmin = await isLastAdmin(req.params.id);

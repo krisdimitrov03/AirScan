@@ -20,7 +20,7 @@
       <th>Actions</th>
     </tr>
     <% roles.forEach(role => { %>
-      <tr>
+      <tr data-role-id="<%= role.role_id %>">
         <td><%= role.role_id %></td>
         <td><%= role.role_name %></td>
         <td>

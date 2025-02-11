@@ -30,7 +30,7 @@
     </thead>
     <tbody>
       <% flights.forEach(flight => { %>
-        <tr>
+        <tr data-flight-id="<%= flight.flight_id %>">
           <td><%= flight.flight_id %></td>
           <td><%= flight.flight_number %></td>
           <td><%= flight.origin_airport_code %></td>

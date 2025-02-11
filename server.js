@@ -17,10 +17,15 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 app.use("/", require("./routes"));
 
-connectDB().then(async () => {
-  await syncDatabase();
-  await seedDatabase();
-  
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-});
+// only start the server if this file is the entry file
+if (require.main === module) {
+  connectDB().then(async () => {
+    await syncDatabase();
+    await seedDatabase();
+    
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+  });
+}
+
+module.exports = app;

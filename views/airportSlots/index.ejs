@@ -26,7 +26,7 @@
     <tbody>
       <% if (airportSlots && airportSlots.length) { %>
         <% airportSlots.forEach(slot => { %>
-          <tr>
+          <tr data-slot-id="<%= slot.slot_id %>">
             <td><%= slot.slot_id %></td>
             <td><%= slot.airport_code %></td>
             <td><%= slot.date %></td>

@@ -22,7 +22,7 @@
       <th>Actions</th>
     </tr>
     <% users.forEach(user => { %>
-      <tr>
+      <tr data-user-id="<%= user.user_id %>">
         <td><%= user.user_id %></td>
         <td><%= user.username %></td>
         <td><%= user.email %></td>
@@ -33,14 +33,7 @@
           <% 
             // Condition 1: Hide if it's the currently logged-in user
             const isSelf = (user.user_id === currentUserId);
-    
-            // Condition 2: Hide if user is the only admin
-            // If user’s role is admin, let's guess how many admins there are:
-            // We can either:
-            //   - do a specialized check if the user is the sole admin
-            // or 
-            //   - omit the button anyway, since the backend will block
-            // For demonstration, let's do a simple approach:
+            // Condition 2: Hide if it's the last remaining admin
             const isAdmin = (user.Role && user.Role.role_name === 'admin');
           %>
     

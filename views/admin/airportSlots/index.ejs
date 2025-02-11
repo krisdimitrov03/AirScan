@@ -27,7 +27,7 @@
     </thead>
     <tbody>
       <% slots.forEach(slot => { %>
-        <tr>
+        <tr data-slot-id="<%= slot.slot_id %>">
           <td><%= slot.slot_id %></td>
           <td><%= slot.airport_code %></td>
           <td><%= slot.date %></td>
