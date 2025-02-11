@@ -12,8 +12,8 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: admin123
-          MYSQL_DATABASE: airscan_db
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
         ports:
           - 3306:3306
         options: >-
@@ -55,7 +55,7 @@ jobs:
       - name: Run integration tests
         # Provide environment variables that your code expects
         env:
-          DB_NAME: airscan_db
+          DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: root
           DB_PASS: admin123
           DB_HOST: 127.0.0.1
