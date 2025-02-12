@@ -60,8 +60,7 @@ describe("eventService", () => {
         end_date: "2025-02-02",
         expected_additional_traffic_factor: 3,
       };
-      // mock event instance
-      const eventInstance = { 
+      const mockEventInstance = { 
         event_id: "evt1",
         event_name: "Original Event",
         start_date: "2025-01-01",
@@ -72,11 +71,11 @@ describe("eventService", () => {
           return Promise.resolve(this);
         }),
       };
-      Event.findByPk.mockResolvedValue(eventInstance);
+      Event.findByPk.mockResolvedValue(mockEventInstance);
       const result = await eventService.updateEvent("evt1", updateData);
       expect(validator.validateEventDateRange).toHaveBeenCalledWith("2025-02-01", "2025-02-02");
       expect(validator.validateExpectedAdditionalTrafficFactor).toHaveBeenCalledWith(3);
-      expect(eventInstance.update).toHaveBeenCalledWith(updateData);
+      expect(mockEventInstance.update).toHaveBeenCalledWith(updateData);
       expect(result).toMatchObject({ ...updateData, event_id: "evt1" });
     });
     it("returns null if event is not found", async () => {

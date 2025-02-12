@@ -20,7 +20,8 @@ module.exports = {
     "Charlotte": ["CLT", "JQF"],
     "Portland": ["PDX", "TTD"],
     "Honolulu": ["HNL", "HIO"],
-    // europe
+
+    // EUROPE
     "London": ["LHR", "LGW", "LCY"],
     "Paris": ["CDG", "ORY"],
     "Frankfurt": ["FRA", "HHN"],

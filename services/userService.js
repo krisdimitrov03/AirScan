@@ -25,7 +25,6 @@ async function countAdmins() {
 async function getAllUsers({ search, limit = 50, offset = 0 }) {
   let where = {};
   if (search) {
-    // username or email
     where = {
       [Op.or]: [
         { username: { [Op.like]: `%${search}%` } },
