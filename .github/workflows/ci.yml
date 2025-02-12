@@ -57,6 +57,7 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: ${{ secrets.PORT }}
+          OPENAI_SECRET: ${{ secrets.OPENAI_SECRET }}
         run: |
           # The following will:
           # 1) Connect to MySQL at 127.0.0.1 with the given user/password
