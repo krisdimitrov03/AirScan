@@ -48,7 +48,7 @@
       args:
         chdir: "{{ app_dir }}"
       environment:
-        APP_PORT: "{{ app_port }}"
+        PORT: "{{ port }}"
         DB_USER: "{{ db_user }}"
         DB_PASS: "{{ db_pass }}"
         DB_NAME: "{{ db_name }}"
@@ -61,7 +61,7 @@
       args:
         chdir: "{{ app_dir }}"
       environment:
-        APP_PORT: "{{ app_port }}"
+        PORT: "{{ port }}"
         DB_USER: "{{ db_user }}"
         DB_PASS: "{{ db_pass }}"
         DB_NAME: "{{ db_name }}"
@@ -78,7 +78,7 @@
       args:
         chdir: "{{ app_dir }}"
       environment:
-        APP_PORT: "{{ app_port }}"
+        PORT: "{{ port }}"
         DB_USER: "{{ db_user }}"
         DB_PASS: "{{ db_pass }}"
         DB_NAME: "{{ db_name }}"
