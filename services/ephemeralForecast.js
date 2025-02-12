@@ -15,16 +15,14 @@ async function forecastNewFlight({
   const daysUntilDeparture = departure.diff(now, "days");
   if (daysUntilDeparture <= 0) return 0;
 
-  // 1) Increase Base Fare and moderate discount/surcharge
-  //    (Feel free to adjust as you see fit; these are just examples)
-  const baseFare = 200 + Math.random() * 150; // Range: 200 to 350
-  const discount = 10 + Math.random() * 30; // Range: 10 to 40
-  const peakSurcharge = 10 + Math.random() * 15; // Range: 10 to 25
+  const baseFare = 200 + Math.random() * 150;
+  const discount = 10 + Math.random() * 30;
+  const peakSurcharge = 10 + Math.random() * 15;
 
-  // 2) Assume a default flight duration of 3 hours for ephemeral flights:
+  // assume a default flight duration of 3 hours for ephemeral flights:
   const arrival = moment(departure).add(3, "hours");
 
-  // 3) Check for special event in the destination around ARRIVAL date
+  // check for special event in the destination around ARRIVAL date
   let trafficBoost = 1.0;
   let matchingCity = null;
 
@@ -49,12 +47,10 @@ async function forecastNewFlight({
     }
   }
 
-  // 4) Prepare integral parameters
+  // prepare integral parameters
   const seats = { economy: 200, business: 50, first: 20 };
   const priceCoeff = 1 + peakSurcharge / 100;
 
-  // Instead of T0=25/k=3, let’s try parameters better suited
-  // for short notice so we get a sharper peak sooner:
   const priceParams = {
     B: 20, // logistic amplitude
     T_mid: 30, // shift the logistic so peak is around 30 days
@@ -79,7 +75,6 @@ async function forecastNewFlight({
 
   const margin = 0.03;
 
-  // 5) Integrate
   const totalProfit = calculateTotalExpectedWins(
     baseFare,
     seats,

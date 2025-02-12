@@ -5,19 +5,15 @@ const cityToAirports = require("../config/cityToAirports");
 const moment = require("moment");
 
 async function suggestFlights() {
-  // Select three upcoming events (here using random order for variety).
   const events = await Event.findAll({
     order: Sequelize.literal("RAND()"),
     limit: 3,
   });
 
-  // For each event, get the available airport slots in its city for 2 days before the event.
   const eventsData = await Promise.all(
     events.map(async (event) => {
       const city = event.location_city;
-      // Retrieve airport codes for this city from the config.
       const airports = cityToAirports[city] || [];
-      // Define the date range: from 2 days before the event up to the event's start date.
       const eventStart = moment(event.start_date, "YYYY-MM-DD");
       const slotStartDate = eventStart
         .clone()
@@ -25,7 +21,6 @@ async function suggestFlights() {
         .format("YYYY-MM-DD");
       const slotEndDate = eventStart.format("YYYY-MM-DD");
 
-      // Query for slots in any of the airports for this city within the given date range.
       const slots = await AirportSlot.findAll({
         where: {
           airport_code: airports,
@@ -49,7 +44,6 @@ async function suggestFlights() {
     })
   );
 
-  // Updated prompt:
   const prompt = `
 Given the following upcoming events and their available airport slots, propose up to 3 new flight schedules (origin -> destination, date/time) that might yield high demand. Each proposed flight must use valid IATA airport codes (e.g. "JFK", "LHR", etc.) for both the origin and destination—not city names. Ensure that each flight is timed to arrive at least 2 hours before the event starts.
 
@@ -83,7 +77,7 @@ Return your answer in JSON format exactly as follows:
   });
 
   let aiContent = response.choices[0].message.content;
-  // Clean up any markdown formatting.
+
   aiContent = aiContent.replace(/```/g, "").trim();
   aiContent = aiContent.replace(/^json\s*/i, "");
 

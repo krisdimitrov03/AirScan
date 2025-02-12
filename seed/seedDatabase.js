@@ -1,4 +1,3 @@
-// seed/seedDatabase.js
 const moment = require("moment");
 const { Op } = require("sequelize");
 const {
@@ -11,16 +10,9 @@ const {
   Pricing,
 } = require("../models");
 
-// Import your role constants
 const ROLE_CONSTANTS = require("../constants/roles");
 
-// ----------------------
-// Helper: Seed Roles
-// ----------------------
 async function seedRoles() {
-  // We map each constant to a fixed role_id as an example.
-  // You can omit role_id if your DB autoincrements, but
-  // then you need to check how you map them to the user seeds.
   const rolesData = [
     { role_id: 1, role_name: ROLE_CONSTANTS.ADMIN },
     { role_id: 2, role_name: ROLE_CONSTANTS.MANAGER },
@@ -35,32 +27,28 @@ async function seedRoles() {
   }
 }
 
-// ----------------------
-// Helper: Seed Users
-// ----------------------
 async function seedUsers() {
-  // Note these are the exact password_hash values you specified:
   const usersData = [
     {
       username: "admin",
       password_hash:
         "$2b$10$WWtsu3kNuX22V7HnAe7oLu3Mp03fBKnlFXNJvsutrTLsJma/sDPFe",
       email: "admin@example.com",
-      role_id: 1, // Administrator
+      role_id: 1,
     },
     {
       username: "manager",
       password_hash:
         "$2b$10$X/ANs8r18zyNTz36iLNCm.rpw8sVxiAII0FFDwcd5Q4Ygs3WELajO",
       email: "manager@example.com",
-      role_id: 2, // Manager
+      role_id: 2,
     },
     {
       username: "analyst",
       password_hash:
         "$2b$10$FGyF1W3pIDPTLzaZ4Y3u3OfQLZxJAuY2tyiti/pnfmxAeo1zDyRGC",
       email: "analyst@example.com",
-      role_id: 3, // Analyst
+      role_id: 3,
     },
   ];
 
@@ -72,9 +60,6 @@ async function seedUsers() {
   }
 }
 
-// ----------------------
-// Helper: Seed Airport Slots
-// ----------------------
 async function seedAirportSlots() {
   const cityToAirports = require("../config/cityToAirports");
   const airportSet = new Set();
@@ -83,9 +68,7 @@ async function seedAirportSlots() {
   );
   const airportCodes = Array.from(airportSet);
 
-  // Generate two slots per airport on a few different days.
   const slots = [];
-  // For example, generate slots for tomorrow and 2 days from now.
   [1, 2].forEach((offset) => {
     const date = moment().add(offset, "days").format("YYYY-MM-DD");
     airportCodes.forEach((code) => {
@@ -114,9 +97,6 @@ async function seedAirportSlots() {
   }
 }
 
-// ----------------------
-// Helper: Seed Events
-// ----------------------
 async function seedEvents() {
   const currentYear = moment().year();
   const events = [
@@ -170,9 +150,6 @@ async function seedEvents() {
   }
 }
 
-// ----------------------
-// Helpers for Flights
-// ----------------------
 function getHubs() {
   return [
     { code: "JFK", continent: "North America" },
@@ -191,7 +168,7 @@ function getHubs() {
 }
 
 function getFlightDuration(origin, destination) {
-  // If same continent:
+  //  same continent:
   if (origin.continent === destination.continent) {
     if (origin.continent === "Europe") {
       // short flights in Europe
@@ -213,11 +190,7 @@ function getFlightDuration(origin, destination) {
   return 3; // default
 }
 
-// ----------------------
-// Helper: Seed Flights
-// ----------------------
 async function seedFlights() {
-  // Only seed flights if table is empty.
   const existingCount = await Flight.count();
   if (existingCount > 0) {
     console.log("⚠️ Flights already exist, skipping seeding.");
@@ -229,13 +202,11 @@ async function seedFlights() {
   const numFlights = 10;
 
   for (let i = 0; i < numFlights; i++) {
-    // pick random origin & destination
     let origin = hubs[Math.floor(Math.random() * hubs.length)];
     let destination = hubs[Math.floor(Math.random() * hubs.length)];
     while (destination.code === origin.code) {
       destination = hubs[Math.floor(Math.random() * hubs.length)];
     }
-    // random departure date/time
     const dayOffset = Math.floor(Math.random() * 30) + 1;
     const departureDate = moment().add(dayOffset, "days");
     const departureHour = Math.floor(Math.random() * 13) + 6; // 6-18
@@ -246,13 +217,11 @@ async function seedFlights() {
       .minute(departureMinute)
       .second(0);
 
-    // flight duration
     const durationHours = getFlightDuration(origin, destination);
     const arrivalDateTime = departureDateTime
       .clone()
       .add(durationHours, "hours");
 
-    // Create flight record (uses beforeCreate hook to generate flight_number).
     const flight = await Flight.create({
       origin_airport_code: origin.code,
       destination_airport_code: destination.code,
@@ -268,9 +237,6 @@ async function seedFlights() {
   return flights;
 }
 
-// ----------------------
-// Helper: Seed Pricing
-// ----------------------
 async function seedPricing(flights) {
   if ((await Pricing.count()) > 0) {
     console.log("⚠️ Pricing already exists, skipping seeding.");
@@ -294,9 +260,6 @@ async function seedPricing(flights) {
   console.log("✅ Pricing seeded successfully.");
 }
 
-// ----------------------
-// Helper: Seed DemandHistory
-// ----------------------
 async function seedDemandHistory(flights) {
   if ((await DemandHistory.count()) > 0) {
     console.log("⚠️ Demand History already exists, skipping seeding.");
@@ -324,9 +287,6 @@ async function seedDemandHistory(flights) {
   console.log("✅ Demand History seeded successfully.");
 }
 
-// ----------------------
-// Main Seeding Function
-// ----------------------
 const seedDatabase = async () => {
   try {
     console.log("🔄 Seeding database programmatically...");

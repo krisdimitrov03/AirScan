@@ -19,16 +19,13 @@ function ticketPrice(
     randomDelta = 0.1, // ±10% random variation
   } = {}
 ) {
-  // Calculate the components:
   const logisticTrend = B / (1 + Math.exp((t - T_mid) / k));
   const escalation = A * Math.exp(-((t - mu) ** 2) / (2 * sigma ** 2));
   const lastMinuteDiscount = D * Math.exp(-(t ** 2) / (2 * delta ** 2));
 
-  // Base price + adjustments:
   let price =
     (base + logisticTrend + escalation - lastMinuteDiscount) * priceCoeff;
 
-  // Apply a small random variation:
   const randomFactor = 1 + (Math.random() - 0.5) * randomDelta;
   price *= randomFactor;
   return Math.max(0, price);
@@ -46,15 +43,12 @@ function dailyBookings(
     traffic_coeff = 1, // multiplier for events, etc.
   } = {}
 ) {
-  // Compute logistic derivative portion (peak around t = T0):
   const numerator = (C_max / k) * Math.exp((t - T0) / k);
   const denominator = Math.pow(1 + Math.exp((t - T0) / k), 2);
   const logisticD = numerator / denominator;
 
-  // Last-minute spike (big near t = 0):
   const lastMinute = L * Math.exp(-(t ** 2) / (2 * sigma_last ** 2));
 
-  // Add a baseline:
   const daily = baseline + logisticD + lastMinute;
   return daily * traffic_coeff;
 }
@@ -63,7 +57,6 @@ function expectedDailyProfit(t, priceParams = {}, bookingParams = {}) {
   return ticketPrice(t, priceParams) * dailyBookings(t, bookingParams);
 }
 
-// creates an array of linearly spaced values
 function linspace(start, stop, num) {
   const arr = [];
   const step = (stop - start) / (num - 1);
@@ -73,7 +66,6 @@ function linspace(start, stop, num) {
   return arr;
 }
 
-// integral part
 function trapz(x, y) {
   let total = 0;
   for (let i = 1; i < x.length; i++) {
@@ -85,14 +77,12 @@ function trapz(x, y) {
 function calculateTotalExpectedWins(
   baseFare,
   seats,
-  margin = 0.09,
+  margin = 0.03,
   commonPriceParams = {},
   commonBookingParams = {},
   totalDays = 160
 ) {
-  // Limit integration to at most 160 days:
   const effectiveDays = Math.min(totalDays, 160);
-  // Generate time points:
   const dayIndices = linspace(0, effectiveDays - 1, effectiveDays);
 
   const lastDayHours = linspace(effectiveDays - 1, effectiveDays, 25);
@@ -196,7 +186,7 @@ async function forecastFlight(flightId) {
     baseline: 5,
     traffic_coeff: trafficBoost,
   };
-  const margin = 0.09;
+  const margin = 0.03;
 
   const forecastedProfit = calculateTotalExpectedWins(
     baseFare,
