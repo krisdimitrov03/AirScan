@@ -1,69 +1,76 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <%- include('../partials/navbar', { user: user }) %>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/form.css">
+  </head>
+  <body>
+    <%- include('../partials/navbar', { user: user }) %>
 
-  <h1><%= title %></h1>
-  <% const s = suggested || {}; %>
-  <form action="/flights" method="post">
-    <label>Origin Airport Code:</label>
-    <input
-      type="text"
-      name="origin_airport_code"
-      value="<%= s.origin_airport_code %>"
-      required
-    />
-    <br>
-    <label>Destination Airport Code:</label>
-    <input
-      type="text"
-      name="destination_airport_code"
-      value="<%= s.destination_airport_code %>"
-      required
-    />
-    <br>
-    <label>Flight Type:</label>
-    <select name="direct_indirect_flag" required>
-      <option value="direct" <%= s.direct_indirect_flag === 'direct' ? 'selected' : '' %> >
-        Direct
-      </option>
-      <option value="indirect" <%= s.direct_indirect_flag === 'indirect' ? 'selected' : '' %> >
-        Indirect
-      </option>
-    </select>
-    <br>
-    <label>Return Option:</label>
-    <select name="return_option_flag" required>
-      <option value="false" <%= s.return_option_flag === 'false' ? 'selected' : '' %> >
-        No
-      </option>
-      <option value="true" <%= s.return_option_flag === 'true' ? 'selected' : '' %> >
-        Yes
-      </option>
-    </select>
-    <br>
-    <label>Scheduled Departure:</label>
-    <input
-      type="datetime-local"
-      name="scheduled_departure"
-      value="<%= s.scheduled_departure %>"
-      required
-    />
-    <br>
-    <label>Scheduled Arrival:</label>
-    <input
-      type="datetime-local"
-      name="scheduled_arrival"
-      value="<%= s.scheduled_arrival %>"
-      required
-    />
-    <br>
-    <button type="submit">Create Flight</button>
-  </form>
-  <p><a href="/flights">Back to Flights</a></p>
-</body>
+    <div class="form-container">
+      <h1 class="text-center"><%= title %></h1>
+      <% const s = suggested || {}; %>
+      <form action="/flights" method="post">
+        <div class="form-group">
+          <label>Origin Airport Code:</label>
+          <input
+            type="text"
+            name="origin_airport_code"
+            value="<%= s.origin_airport_code %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Destination Airport Code:</label>
+          <input
+            type="text"
+            name="destination_airport_code"
+            value="<%= s.destination_airport_code %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Flight Type:</label>
+          <select name="direct_indirect_flag" required>
+            <option value="direct" <%= s.direct_indirect_flag === 'direct' ? 'selected' : '' %>>Direct</option>
+            <option value="indirect" <%= s.direct_indirect_flag === 'indirect' ? 'selected' : '' %>>Indirect</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Return Option:</label>
+          <select name="return_option_flag" required>
+            <option value="false" <%= s.return_option_flag === 'false' ? 'selected' : '' %>>No</option>
+            <option value="true" <%= s.return_option_flag === 'true' ? 'selected' : '' %>>Yes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Scheduled Departure:</label>
+          <input
+            type="datetime-local"
+            name="scheduled_departure"
+            value="<%= s.scheduled_departure %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Scheduled Arrival:</label>
+          <input
+            type="datetime-local"
+            name="scheduled_arrival"
+            value="<%= s.scheduled_arrival %>"
+            required
+          />
+        </div>
+
+        <button type="submit">Create Flight</button>
+      </form>
+      <p class="text-center"><a class="back-link" href="/flights">Back to Flights</a></p>
+    </div>
+  </body>
 </html>

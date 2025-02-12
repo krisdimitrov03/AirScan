@@ -4,76 +4,88 @@
     <meta charset="UTF-8" />
     <title>Create New Pricing</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
     <%- include('../partials/navbar', { user: user }) %>
 
-    <h1>Create New Pricing</h1>
+    <div class="form-container">
+      <h1 class="text-center">Create New Pricing</h1>
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <form action="/pricing" method="POST">
+        <div class="form-group">
+          <label for="flight_id">Flight:</label>
+          <select name="flight_id" id="flight_id" required>
+            <option value="" disabled selected>Select a flight</option>
+            <% flights.forEach((flight) => { %>
+            <option value="<%= flight.flight_id %>">
+              <%= flight.flight_number %>: <%= flight.origin_airport_code %> -
+              <%= flight.destination_airport_code %>
+            </option>
+            <% }) %>
+          </select>
+        </div>
 
-    <% if (error) { %>
-    <p style="color: red"><%= error %></p>
-    <% } %>
+        <div class="form-group">
+          <label for="effective_date_range_start">Effective Start Date:</label>
+          <input
+            type="date"
+            name="effective_date_range_start"
+            id="effective_date_range_start"
+            required
+          />
+        </div>
 
-    <form action="/pricing" method="POST">
-      <label for="flight_id">Flight:</label>
-      <select name="flight_id" id="flight_id" required>
-        <option value="" disabled selected>Select a flight</option>
-        <% flights.forEach((flight) => { %>
-        <option value="<%= flight.flight_id %>">
-          <%= flight.flight_number %>: <%= flight.origin_airport_code %> - <%=
-          flight.destination_airport_code %>
-        </option>
-        <% }) %>
-      </select>
-      <br /><br />
+        <div class="form-group">
+          <label for="effective_date_range_end">Effective End Date:</label>
+          <input
+            type="date"
+            name="effective_date_range_end"
+            id="effective_date_range_end"
+            required
+          />
+        </div>
 
-      <label for="effective_date_range_start">Effective Start Date:</label>
-      <input
-        type="date"
-        name="effective_date_range_start"
-        id="effective_date_range_start"
-        required
-      /><br /><br />
+        <div class="form-group">
+          <label for="base_price">Base Price:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="base_price"
+            id="base_price"
+            placeholder="e.g., 129.99"
+          />
+        </div>
 
-      <label for="effective_date_range_end">Effective End Date:</label>
-      <input
-        type="date"
-        name="effective_date_range_end"
-        id="effective_date_range_end"
-        required
-      /><br /><br />
+        <div class="form-group">
+          <label for="discounts_offered">Discounts Offered:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="discounts_offered"
+            id="discounts_offered"
+            placeholder="e.g., 10.00"
+          />
+        </div>
 
-      <label for="base_price">Base Price:</label>
-      <input
-        type="number"
-        step="0.01"
-        name="base_price"
-        id="base_price"
-        placeholder="e.g., 129.99"
-      /><br /><br />
+        <div class="form-group">
+          <label for="peak_season_surcharge">Peak Season Surcharge:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="peak_season_surcharge"
+            id="peak_season_surcharge"
+            placeholder="e.g., 30.00"
+          />
+        </div>
 
-      <label for="discounts_offered">Discounts Offered:</label>
-      <input
-        type="number"
-        step="0.01"
-        name="discounts_offered"
-        id="discounts_offered"
-        placeholder="e.g., 10.00"
-      /><br /><br />
-
-      <label for="peak_season_surcharge">Peak Season Surcharge:</label>
-      <input
-        type="number"
-        step="0.01"
-        name="peak_season_surcharge"
-        id="peak_season_surcharge"
-        placeholder="e.g., 30.00"
-      /><br /><br />
-
-      <button type="submit">Save</button>
-    </form>
-
-    <hr />
-    <a href="/pricing">Back to Pricing List</a>
+        <button type="submit">Save</button>
+      </form>
+      <p class="text-center">
+        <a class="back-link" href="/pricing">Back to Pricing List</a>
+      </p>
+    </div>
   </body>
 </html>

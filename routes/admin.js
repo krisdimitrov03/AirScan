@@ -93,7 +93,7 @@ router.get("/users/:id/edit", async (req, res, next) => {
       title: "Edit User",
       user,
       error: null,
-      user: req.user,
+      auth_user: req.user,
     });
   } catch (err) {
     next(err);

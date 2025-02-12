@@ -3,61 +3,75 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
     <%- include('../../partials/navbar', { user: user }) %>
 
-    <h2><%= title %></h2>
+    <main>
+      <h1><%= title %></h1>
 
-    <form method="GET" action="/admin/roles">
-      <input
-        type="text"
-        name="search"
-        placeholder="Search..."
-        value="<%= search %>"
-      />
-      <button type="submit">Search</button>
-    </form>
+      <!-- Top Controls: Create Button & Search Form -->
+      <div class="top-controls">
+        <a href="/admin/roles/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Role
+        </a>
+        <form method="GET" action="/admin/roles" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
 
-    <a href="/admin/roles/new">Create New Role</a>
+      <!-- Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Role ID</th>
+            <th>Role Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% roles.forEach(role => { %>
+          <tr>
+            <td><%= role.role_id %></td>
+            <td><%= role.role_name %></td>
+            <td>
+              <a href="/admin/roles/<%= role.role_id %>/edit">Edit</a>
+              <form
+                method="POST"
+                action="/admin/roles/<%= role.role_id %>/delete"
+              >
+                <button
+                  type="submit"
+                  onclick="return confirm('Delete this role?');"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
 
-    <table border="1">
-      <tr>
-        <th>Role ID</th>
-        <th>Role Name</th>
-        <th>Actions</th>
-      </tr>
-      <% roles.forEach(role => { %>
-      <tr>
-        <td><%= role.role_id %></td>
-        <td><%= role.role_name %></td>
-        <td>
-          <a href="/admin/roles/<%= role.role_id %>/edit">Edit</a>
-          <form
-            method="POST"
-            action="/admin/roles/<%= role.role_id %>/delete"
-            style="display: inline"
-          >
-            <button
-              type="submit"
-              onclick="return confirm('Delete this role?');"
-            >
-              Delete
-            </button>
-          </form>
-        </td>
-      </tr>
-      <% }); %>
-    </table>
-
-    <% if(totalPages > 1) { %>
-    <div>
-      <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) { %>
-      <strong><%= p %></strong>
-      <% } else { %>
-      <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-      <% } %> <% } %>
-    </div>
-    <% } %>
+      <!-- Pagination -->
+      <% if(totalPages > 1) { %>
+      <div class="pagination">
+        <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) {
+        %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
+      <% } %>
+    </main>
   </body>
 </html>
