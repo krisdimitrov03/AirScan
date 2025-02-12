@@ -8,6 +8,9 @@
     "test:coverage": "jest --coverage --runInBand --detectOpenHandles",
     "start": "node server.js"
   },
+  "jest": {
+    "globalSetup": "./jestGlobalSetup.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
