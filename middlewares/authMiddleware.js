@@ -8,8 +8,9 @@ const verifyToken = (req, res, next) => {
 
   const token = authHeader.split(" ")[1] || authHeader;
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err)
-      return res.status(403).json({ message: "Failed to authenticate token" });
+    if (err) {
+      res.redirect("/auth/logout");
+    }
     req.user = decoded;
     next();
   });
