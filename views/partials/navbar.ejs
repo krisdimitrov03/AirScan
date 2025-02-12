@@ -49,6 +49,13 @@
   </ul>
 
   <div class="profile">
+    <span
+      class="role <%= user.role_name === 'Administrator' ? 'admin' : user.role_name === 'Manager' ? 'manager' : 'analyst' %>"
+    >
+      <%= user.role_name %>
+    </span>
+
+    <span><%= user.username %></span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="30"
@@ -74,14 +81,11 @@
     const profileEl = document.querySelector(".profile");
     const profileMenu = document.querySelector(".profile-menu");
 
-    // Toggle on click
     profileEl.addEventListener("click", (event) => {
-      // Prevent the click from bubbling to document
       event.stopPropagation();
       profileMenu.classList.toggle("show");
     });
 
-    // Close the menu if clicking anywhere else on the page
     document.addEventListener("click", () => {
       profileMenu.classList.remove("show");
     });

@@ -1,5 +1,12 @@
-const { Role } = require('../models');
-const { Op } = require('sequelize');
+const { Role } = require("../models");
+const { Op } = require("sequelize");
+
+async function bulkCreateRoles(roleArray) {
+  if (!Array.isArray(roleArray)) {
+    throw new Error("Data must be an array of role objects.");
+  }
+  return await Role.bulkCreate(roleArray, { validate: true });
+}
 
 async function getAllRoles({ search, limit = 50, offset = 0 }) {
   let where = {};
@@ -10,7 +17,7 @@ async function getAllRoles({ search, limit = 50, offset = 0 }) {
     where,
     limit,
     offset,
-    order: [['role_id', 'ASC']]
+    order: [["role_id", "ASC"]],
   });
 }
 
@@ -19,7 +26,6 @@ async function getRoleById(roleId) {
 }
 
 async function createRole(role_name) {
-  // Unique constraint handled in DB or model
   return Role.create({ role_name });
 }
 
@@ -41,5 +47,6 @@ module.exports = {
   getRoleById,
   createRole,
   updateRole,
-  deleteRole
+  deleteRole,
+  bulkCreateRoles,
 };

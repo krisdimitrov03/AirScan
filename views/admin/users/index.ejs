@@ -1,74 +1,90 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h2><%= title %></h2>
-  
-  <form method="GET" action="/admin/users">
-    <input type="text" name="search" placeholder="Search..." value="<%= search %>">
-    <button type="submit">Search</button>
-  </form>
-  
-  <a href="/admin/users/new">Create New User</a>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-  <table border="1">
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Actions</th>
-    </tr>
-    <% users.forEach(user => { %>
-      <tr>
-        <td><%= user.user_id %></td>
-        <td><%= user.username %></td>
-        <td><%= user.email %></td>
-        <td><%= user.Role ? user.Role.role_name : '' %></td>
-        <td>
-          <a href="/admin/users/<%= user.user_id %>/edit">Edit</a>
-          
-          <% 
-            // Condition 1: Hide if it's the currently logged-in user
-            const isSelf = (user.user_id === currentUserId);
-    
-            // Condition 2: Hide if user is the only admin
-            // If user’s role is admin, let's guess how many admins there are:
-            // We can either:
-            //   - do a specialized check if the user is the sole admin
-            // or 
-            //   - omit the button anyway, since the backend will block
-            // For demonstration, let's do a simple approach:
-            const isAdmin = (user.Role && user.Role.role_name === 'admin');
-          %>
-    
-          <% if (!isSelf) { %>
-            <% if (isAdmin && adminCount === 1) { %>
-              <button disabled title="Cannot delete the last remaining admin">Delete</button>
-            <% } else { %>
-              <form method="POST" action="/admin/users/<%= user.user_id %>/delete" style="display:inline;">
-                <button type="submit" onclick="return confirm('Delete this user?');">Delete</button>
+    <main>
+      <h1><%= title %></h1>
+
+      <!-- Top Controls: Create Button & Search Form -->
+      <div class="top-controls">
+        <a href="/admin/users/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New User
+        </a>
+        <form method="GET" action="/admin/users" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+
+      <!-- Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% users.forEach(user => { %>
+          <tr>
+            <td><%= user.user_id %></td>
+            <td><%= user.username %></td>
+            <td><%= user.email %></td>
+            <td><%= user.Role ? user.Role.role_name : '' %></td>
+            <td>
+              <a href="/admin/users/<%= user.user_id %>/edit">Edit</a>
+
+              <% isSelf = (user.user_id === currentUserId); const isAdmin =
+              (user.Role && user.Role.role_name === 'admin'); %> <% if (!isSelf)
+              { %> <% if (isAdmin && adminCount === 1) { %>
+              <button disabled title="Cannot delete the last remaining admin">
+                Delete
+              </button>
+              <% } else { %>
+              <form
+                method="POST"
+                action="/admin/users/<%= user.user_id %>/delete"
+              >
+                <button
+                  type="submit"
+                  onclick="return confirm('Delete this user?');"
+                >
+                  Delete
+                </button>
               </form>
-            <% } %>
-          <% } %>
-        </td>
-      </tr>
-    <% }); %>
-  </table>
+              <% } %> <% } %>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
 
-  <% if(totalPages > 1) { %>
-    <div>
-      <% for(let p = 1; p <= totalPages; p++) { %>
-        <% if(p === currentPage) { %>
-          <strong><%= p %></strong>
+      <!-- Pagination -->
+      <% if(totalPages > 1) { %>
+      <div class="pagination">
+        <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) {
+        %>
+        <strong><%= p %></strong>
         <% } else { %>
-          <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-        <% } %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
       <% } %>
-    </div>
-  <% } %>
-</body>
+    </main>
+  </body>
 </html>

@@ -2,6 +2,13 @@ const DemandHistory = require("../models/DemandHistory");
 const Flight = require("../models/Flight");
 const { validateDemandHistoryData } = require("./validator");
 
+async function bulkCreateDemandHistory(dataArray) {
+  if (!Array.isArray(dataArray)) {
+    throw new Error("Data must be an array of demand history objects.");
+  }
+  return await DemandHistory.bulkCreate(dataArray, { validate: true });
+}
+
 async function getAllDemandHistory() {
   return DemandHistory.findAll();
 }
@@ -33,7 +40,9 @@ async function updateDemandHistory(id, data) {
 }
 
 async function deleteDemandHistory(id) {
-  const deletedCount = await DemandHistory.destroy({ where: { record_id: id } });
+  const deletedCount = await DemandHistory.destroy({
+    where: { record_id: id },
+  });
   return deletedCount === 1;
 }
 
@@ -42,5 +51,6 @@ module.exports = {
   getDemandHistoryById,
   createDemandHistory,
   updateDemandHistory,
-  deleteDemandHistory
+  deleteDemandHistory,
+  bulkCreateDemandHistory,
 };

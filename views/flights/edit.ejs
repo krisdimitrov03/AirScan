@@ -1,34 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Edit Flight</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Edit Flight</h1>
-  <form action="/flights/<%= flight.flight_id %>?_method=PUT" method="post">
-    <label>Origin Airport Code: <input type="text" name="origin_airport_code" value="<%= flight.origin_airport_code %>" required></label><br>
-    <label>Destination Airport Code: <input type="text" name="destination_airport_code" value="<%= flight.destination_airport_code %>" required></label><br>
-    <label>Flight Type:
-      <select name="direct_indirect_flag" required>
-        <option value="direct" <%= flight.direct_indirect_flag==='direct' ? 'selected' : '' %>>Direct</option>
-        <option value="indirect" <%= flight.direct_indirect_flag==='indirect' ? 'selected' : '' %>>Indirect</option>
-      </select>
-    </label><br>
-    <label>Return Option:
-      <select name="return_option_flag" required>
-        <option value="false" <%= !flight.return_option_flag ? 'selected' : '' %>>No</option>
-        <option value="true" <%= flight.return_option_flag ? 'selected' : '' %>>Yes</option>
-      </select>
-    </label><br>
-    <label>Scheduled Departure:
-      <input type="datetime-local" name="scheduled_departure" value="<%= new Date(flight.scheduled_departure).toISOString().slice(0,16) %>" required>
-    </label><br>
-    <label>Scheduled Arrival:
-      <input type="datetime-local" name="scheduled_arrival" value="<%= new Date(flight.scheduled_arrival).toISOString().slice(0,16) %>" required>
-    </label><br>
-    <button type="submit">Update Flight</button>
-  </form>
-  <a href="/flights">Back to Flights</a>
-</body>
+  <head>
+    <title>Edit Flight</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/form.css">
+  </head>
+  <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
+    <div class="form-container">
+      <h1 class="text-center">Edit Flight</h1>
+      <form action="/flights/<%= flight.flight_id %>?_method=PUT" method="post">
+        <div class="form-group">
+          <label>Origin Airport Code:</label>
+          <input type="text" name="origin_airport_code" value="<%= flight.origin_airport_code %>" required>
+        </div>
+
+        <div class="form-group">
+          <label>Destination Airport Code:</label>
+          <input type="text" name="destination_airport_code" value="<%= flight.destination_airport_code %>" required>
+        </div>
+
+        <div class="form-group">
+          <label>Flight Type:</label>
+          <select name="direct_indirect_flag" required>
+            <option value="direct" <%= flight.direct_indirect_flag==='direct' ? 'selected' : '' %>>Direct</option>
+            <option value="indirect" <%= flight.direct_indirect_flag==='indirect' ? 'selected' : '' %>>Indirect</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Return Option:</label>
+          <select name="return_option_flag" required>
+            <option value="false" <%= !flight.return_option_flag ? 'selected' : '' %>>No</option>
+            <option value="true" <%= flight.return_option_flag ? 'selected' : '' %>>Yes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Scheduled Departure:</label>
+          <input
+            type="datetime-local"
+            name="scheduled_departure"
+            value="<%= new Date(flight.scheduled_departure).toISOString().slice(0,16) %>"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label>Scheduled Arrival:</label>
+          <input
+            type="datetime-local"
+            name="scheduled_arrival"
+            value="<%= new Date(flight.scheduled_arrival).toISOString().slice(0,16) %>"
+            required>
+        </div>
+
+        <button type="submit">Update Flight</button>
+      </form>
+      <p class="text-center"><a class="back-link" href="/flights">Back to Flights</a></p>
+    </div>
+  </body>
 </html>

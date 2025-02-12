@@ -13,7 +13,7 @@ describe("Pricing Integration", () => {
       "admin_pricing@example.com"
     );
   });
-  
+
   it("lists pricing and extracts created pricing_id", async () => {
     const listPricingRes = await pricingAgent.get("/pricing");
     expect(listPricingRes.statusCode).toBe(200);

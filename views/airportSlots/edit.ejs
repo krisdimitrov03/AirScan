@@ -3,75 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <title>Edit Airport Slot</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
-    <h1>Edit Airport Slot</h1>
+    <%- include('../partials/navbar', { user: user }) %>
 
-    <p>
-      <a href="/airport-slots">Back to Airport Slots</a>
-    </p>
+    <div class="form-container">
+      <h1 class="text-center">Edit Airport Slot</h1>
 
-    <form action="/airport-slots/<%= airportSlot.slot_id %>?_method=PUT" method="POST">
-      <div>
-        <label for="airport_code">Airport Code:</label>
-        <input
-          type="text"
-          id="airport_code"
-          name="airport_code"
-          maxlength="10"
-          value="<%= airportSlot.airport_code %>"
-          required
-        />
-      </div>
+      <form
+        action="/airport-slots/<%= airportSlot.slot_id %>?_method=PUT"
+        method="POST"
+      >
+        <div class="form-group">
+          <label for="airport_code">Airport Code:</label>
+          <input
+            type="text"
+            id="airport_code"
+            name="airport_code"
+            maxlength="10"
+            value="<%= airportSlot.airport_code %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="date">Date (YYYY-MM-DD):</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value="<%= airportSlot.date %>"
-          required
-        />
-      </div>
+        <div class="form-group">
+          <label for="date">Date (YYYY-MM-DD):</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value="<%= airportSlot.date %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="time_slot_start">Start Time (HH:MM:SS):</label>
-        <input
-          type="time"
-          id="time_slot_start"
-          name="time_slot_start"
-          value="<%= airportSlot.time_slot_start %>"
-          required
-        />
-      </div>
+        <div class="form-group">
+          <label for="time_slot_start">Start Time (HH:MM:SS):</label>
+          <input
+            type="time"
+            id="time_slot_start"
+            name="time_slot_start"
+            value="<%= airportSlot.time_slot_start %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="time_slot_end">End Time (HH:MM:SS):</label>
-        <input
-          type="time"
-          id="time_slot_end"
-          name="time_slot_end"
-          value="<%= airportSlot.time_slot_end %>"
-          required
-        />
-      </div>
+        <div class="form-group">
+          <label for="time_slot_end">End Time (HH:MM:SS):</label>
+          <input
+            type="time"
+            id="time_slot_end"
+            name="time_slot_end"
+            value="<%= airportSlot.time_slot_end %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="slot_capacity">Slot Capacity:</label>
-        <input
-          type="number"
-          id="slot_capacity"
-          name="slot_capacity"
-          min="0"
-          value="<%= airportSlot.slot_capacity %>"
-        />
-      </div>
+        <div class="form-group">
+          <label for="slot_capacity">Slot Capacity:</label>
+          <input
+            type="number"
+            id="slot_capacity"
+            name="slot_capacity"
+            min="0"
+            value="<%= airportSlot.slot_capacity %>"
+            required
+          />
+        </div>
 
-      <div style="margin-top: 1em">
         <button type="submit">Update</button>
-      </div>
-    </form>
+      </form>
+
+      <p class="text-center">
+        <a class="back-link" href="/airport-slots">Back to Airport Slots</a>
+      </p>
+    </div>
   </body>
 </html>

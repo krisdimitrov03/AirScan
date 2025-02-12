@@ -1,61 +1,83 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1><%= title %></h1>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-  <form method="GET" action="/admin/airport-slots">
-    <input type="text" name="search" placeholder="Search by code/date..." value="<%= search %>">
-    <button type="submit">Search</button>
-  </form>
+    <main>
+      <h1><%= title %></h1>
 
-  <p><a href="/admin/airport-slots/new">Create New Slot</a></p>
+      <div class="top-controls">
+        <a href="/admin/airport-slots/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Slot
+        </a>
 
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Slot ID</th>
-        <th>Airport Code</th>
-        <th>Date</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Capacity</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% slots.forEach(slot => { %>
-        <tr>
-          <td><%= slot.slot_id %></td>
-          <td><%= slot.airport_code %></td>
-          <td><%= slot.date %></td>
-          <td><%= slot.time_slot_start %></td>
-          <td><%= slot.time_slot_end %></td>
-          <td><%= slot.slot_capacity %></td>
-          <td>
-            <a href="/admin/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
-            <form method="POST" action="/admin/airport-slots/<%= slot.slot_id %>/delete" style="display:inline">
-              <button type="submit" onclick="return confirm('Delete this slot?')">Delete</button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
+        <form method="GET" action="/admin/airport-slots" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by code/date..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
 
-  <% if (totalPages > 1) { %>
-    <div>
-      <% for (let p = 1; p <= totalPages; p++) { %>
-        <% if (p === currentPage) { %>
-          <strong><%= p %></strong>
+      <table>
+        <thead>
+          <tr>
+            <th>Slot ID</th>
+            <th>Airport Code</th>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% slots.forEach(slot => { %>
+          <tr>
+            <td><%= slot.slot_id %></td>
+            <td><%= slot.airport_code %></td>
+            <td><%= slot.date %></td>
+            <td><%= slot.time_slot_start %></td>
+            <td><%= slot.time_slot_end %></td>
+            <td><%= slot.slot_capacity %></td>
+            <td>
+              <a href="/admin/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
+              <form
+                method="POST"
+                action="/admin/airport-slots/<%= slot.slot_id %>/delete"
+              >
+                <button
+                  type="submit"
+                  onclick="return confirm('Delete this slot?')"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+
+      <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
         <% } else { %>
-          <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-        <% } %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
       <% } %>
-    </div>
-  <% } %>
-</body>
+    </main>
+  </body>
 </html>

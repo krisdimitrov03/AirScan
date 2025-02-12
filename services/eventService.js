@@ -3,18 +3,15 @@ const {
   validateEventDateRange,
   validateExpectedAdditionalTrafficFactor,
 } = require("./validator");
+const { Op } = require("sequelize");
 
-/**
- * Create a new Event
- * @param {object} eventData
- * @param {string} eventData.event_id
- * @param {string} eventData.event_name
- * @param {string} [eventData.location_city]
- * @param {string|Date} eventData.start_date
- * @param {string|Date} eventData.end_date
- * @param {number} [eventData.expected_additional_traffic_factor]
- * @returns {Promise<object>} The created event record
- */
+async function bulkCreateEvents(eventArray) {
+  if (!Array.isArray(eventArray)) {
+    throw new Error("Data must be an array of event objects.");
+  }
+  return await Event.bulkCreate(eventArray, { validate: true });
+}
+
 async function createEvent(eventData) {
   const {
     event_id,
@@ -40,34 +37,42 @@ async function createEvent(eventData) {
   return newEvent;
 }
 
-/**
- * Retrieve all events
- * @returns {Promise<Array>} Array of event objects
- */
 async function getAllEvents() {
   return await Event.findAll();
 }
 
 /**
- * Retrieve a single event by primary key (event_id)
- * @param {string} eventId
- * @returns {Promise<object|null>} Returns the event if found, otherwise null
+ * Retrieve a list of events with pagination and optional search filtering.
+ *
+ * @param {Object} params - The parameters for pagination/filtering.
+ * @param {string} [params.search] - Optional search term for event name, ID, etc.
+ * @param {number} [params.limit] - Max number of records to return.
+ * @param {number} [params.offset] - How many records to skip.
+ * @returns {Promise<{ rows: Event[], count: number }>}
  */
+async function getAllEventsBy({ search = "", limit = 50, offset = 0 } = {}) {
+  const whereClause = {};
+
+  if (search) {
+    whereClause[Op.or] = [
+      { event_id: { [Op.like]: `%${search}%` } },
+      { event_name: { [Op.like]: `%${search}%` } },
+    ];
+  }
+
+  const { rows, count } = await Event.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
+    order: [["start_date", "ASC"]],
+  });
+
+  return { rows, count };
+}
+
 async function getEventById(eventId) {
   return await Event.findByPk(eventId);
 }
-
-/**
- * Update an existing event
- * @param {string} eventId
- * @param {object} updateData
- * @param {string} [updateData.event_name]
- * @param {string} [updateData.location_city]
- * @param {string|Date} [updateData.start_date]
- * @param {string|Date} [updateData.end_date]
- * @param {number} [updateData.expected_additional_traffic_factor]
- * @returns {Promise<object|null>} Updated event record, or null if not found
- */
 async function updateEvent(eventId, updateData) {
   if (updateData.start_date && updateData.end_date) {
     validateEventDateRange(updateData.start_date, updateData.end_date);
@@ -88,11 +93,6 @@ async function updateEvent(eventId, updateData) {
   return event;
 }
 
-/**
- * Delete an event by primary key (event_id)
- * @param {string} eventId
- * @returns {Promise<number>} The number of deleted rows (0 or 1)
- */
 async function deleteEvent(eventId) {
   const deletedRows = await Event.destroy({
     where: { event_id: eventId },
@@ -103,7 +103,9 @@ async function deleteEvent(eventId) {
 module.exports = {
   createEvent,
   getAllEvents,
+  getAllEventsBy,
   getEventById,
   updateEvent,
   deleteEvent,
+  bulkCreateEvents,
 };

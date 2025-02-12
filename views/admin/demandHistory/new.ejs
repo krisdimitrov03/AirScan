@@ -1,32 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Admin - Create Demand History Record</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Admin - Create Demand History Record</h1>
-  <% if (error) { %>
-    <p style="color:red;"><%= error %></p>
-  <% } %>
-  <form action="/admin/demand-history" method="POST">
-    <label for="flight_id">Flight ID:</label>
-    <input type="text" name="flight_id" id="flight_id" required>
-    <br>
-    <label for="date">Date:</label>
-    <input type="date" name="date" id="date" required>
-    <br>
-    <label for="historical_tickets_sold">Tickets Sold:</label>
-    <input type="number" name="historical_tickets_sold" id="historical_tickets_sold" min="0" required>
-    <br>
-    <label for="historical_load_factor">Load Factor (0-1):</label>
-    <input type="number" step="0.01" name="historical_load_factor" id="historical_load_factor" min="0" max="1" required>
-    <br>
-    <label for="customer_segment_distribution">Segment Distribution:</label>
-    <textarea name="customer_segment_distribution" id="customer_segment_distribution"></textarea>
-    <br>
-    <button type="submit">Create</button>
-  </form>
-  <a href="/admin/demand-history">Back to Demand History</a>
-</body>
+  <head>
+    <title>Admin - Create Demand History Record</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <div class="form-container">
+      <h1 class="text-center">Create Demand History Record</h1>
+
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <form action="/admin/demand-history" method="POST">
+        <div class="form-group">
+          <label for="flight_id">Flight ID:</label>
+          <input type="text" name="flight_id" id="flight_id" required />
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" name="date" id="date" required />
+        </div>
+
+        <div class="form-group">
+          <label for="historical_tickets_sold">Tickets Sold:</label>
+          <input
+            type="number"
+            name="historical_tickets_sold"
+            id="historical_tickets_sold"
+            min="0"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="historical_load_factor">Load Factor (0-1):</label>
+          <input
+            type="number"
+            step="0.01"
+            name="historical_load_factor"
+            id="historical_load_factor"
+            min="0"
+            max="1"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customer_segment_distribution"
+            >Segment Distribution:</label
+          >
+          <textarea
+            name="customer_segment_distribution"
+            id="customer_segment_distribution"
+          ></textarea>
+        </div>
+
+        <button type="submit">Create</button>
+      </form>
+
+      <p class="text-center">
+        <a class="back-link" href="/admin/demand-history"
+          >Back to Demand History</a
+        >
+      </p>
+    </div>
+  </body>
 </html>

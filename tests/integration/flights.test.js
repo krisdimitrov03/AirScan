@@ -20,5 +20,4 @@ describe("Non-Admin Flights Integration", () => {
     createdFlightUUID = match ? match[1] : null;
     expect(createdFlightUUID).toBeDefined();
   });
-
 });
