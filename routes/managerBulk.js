@@ -21,76 +21,16 @@ router.get("/", (req, res) => {
   res.render("manager/bulk", { message: null, error: null, user: req.user });
 });
 
-// ----------------- Roles -----------------
-router.get("/roles", (req, res) => {
-  res.render("manager/roles/bulk", { message: null, error: null, user: req.user });
-});
-
-router.post("/roles", upload.single("file"), async (req, res, next) => {
-  try {
-    if (!req.file) {
-      return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/roles";</script>`);
-    }
-    const fileData = fs.readFileSync(req.file.path, "utf8");
-    let rolesData;
-    try {
-      rolesData = JSON.parse(fileData);
-    } catch (e) {
-      return res.send(`<script>alert("Invalid JSON file."); window.location.href="/manager/bulk/roles";</script>`);
-    }
-    if (!Array.isArray(rolesData)) {
-      return res.send(`<script>alert("Data must be an array."); window.location.href="/manager/bulk/roles";</script>`);
-    }
-    await roleService.bulkCreateRoles(rolesData);
-    try {
-      await fs.promises.unlink(req.file.path);
-    } catch (err) {
-      console.error("Error deleting file:", err);
-    }
-    res.send(`<script>alert("Roles imported successfully"); window.location.href="/manager/bulk/roles";</script>`);
-  } catch (error) {
-    next(error);
-  }
-});
-
-// ----------------- Users -----------------
-router.get("/users", (req, res) => {
-  res.render("manager/users/bulk", { message: null, error: null, user: req.user });
-});
-
-router.post("/users", upload.single("file"), async (req, res, next) => {
-  try {
-    if (!req.file) {
-      return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/users";</script>`);
-    }
-    const fileData = fs.readFileSync(req.file.path, "utf8");
-    let usersData;
-    try {
-      usersData = JSON.parse(fileData);
-    } catch (e) {
-      return res.send(`<script>alert("Invalid JSON file."); window.location.href="/manager/bulk/users";</script>`);
-    }
-    if (!Array.isArray(usersData)) {
-      return res.send(`<script>alert("Data must be an array."); window.location.href="/manager/bulk/users";</script>`);
-    }
-    await userService.bulkCreateUsers(usersData);
-    try {
-      await fs.promises.unlink(req.file.path);
-    } catch (err) {
-      console.error("Error deleting file:", err);
-    }
-    res.send(`<script>alert("Users imported successfully"); window.location.href="/manager/bulk/users";</script>`);
-  } catch (error) {
-    next(error);
-  }
+router.get("/bulk", (req, res) => {
+  res.redirect("/manager");
 });
 
 // ----------------- Airport Slots -----------------
-router.get("/airport-slots", (req, res) => {
+router.get("/bulk/airport-slots", (req, res) => {
   res.render("manager/airportSlots/bulk", { message: null, error: null, user: req.user });
 });
 
-router.post("/airport-slots", upload.single("file"), async (req, res, next) => {
+router.post("/bulk/airport-slots", upload.single("file"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/airport-slots";</script>`);
@@ -118,11 +58,11 @@ router.post("/airport-slots", upload.single("file"), async (req, res, next) => {
 });
 
 // ----------------- Events -----------------
-router.get("/events", (req, res) => {
+router.get("/bulk/events", (req, res) => {
   res.render("manager/events/bulk", { message: null, error: null, user: req.user });
 });
 
-router.post("/events", upload.single("file"), async (req, res, next) => {
+router.post("/bulk/events", upload.single("file"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/events";</script>`);
@@ -150,11 +90,11 @@ router.post("/events", upload.single("file"), async (req, res, next) => {
 });
 
 // ----------------- Flights -----------------
-router.get("/flights", (req, res) => {
+router.get("/bulk/flights", (req, res) => {
   res.render("manager/flights/bulk", { message: null, error: null, user: req.user });
 });
 
-router.post("/flights", upload.single("file"), async (req, res, next) => {
+router.post("/bulk/flights", upload.single("file"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/flights";</script>`);
@@ -182,11 +122,11 @@ router.post("/flights", upload.single("file"), async (req, res, next) => {
 });
 
 // ----------------- Demand History -----------------
-router.get("/demand-history", (req, res) => {
+router.get("/bulk/demand-history", (req, res) => {
   res.render("manager/demandHistory/bulk", { message: null, error: null, user: req.user });
 });
 
-router.post("/demand-history", upload.single("file"), async (req, res, next) => {
+router.post("/bulk/demand-history", upload.single("file"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/demand-history";</script>`);
@@ -214,11 +154,11 @@ router.post("/demand-history", upload.single("file"), async (req, res, next) => 
 });
 
 // ----------------- Pricing -----------------
-router.get("/pricing", (req, res) => {
+router.get("/bulk/pricing", (req, res) => {
   res.render("manager/pricing/bulk", { message: null, error: null, user: req.user });
 });
 
-router.post("/pricing", upload.single("file"), async (req, res, next) => {
+router.post("/bulk/pricing", upload.single("file"), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.send(`<script>alert("File not provided."); window.location.href="/manager/bulk/pricing";</script>`);

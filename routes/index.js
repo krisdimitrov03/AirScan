@@ -26,6 +26,6 @@ router.use("/admin", adminRouter);
 router.use("/pricing", pricingRouter);
 router.use("/demand-history", demandHistoryRouter);
 router.use("/events", eventRouter);
-router.use("/manager/bulk", managerBulkRouter);
+router.use("/manager", managerBulkRouter);
 
 module.exports = router;
