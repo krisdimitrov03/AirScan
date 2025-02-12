@@ -74,14 +74,11 @@
     const profileEl = document.querySelector(".profile");
     const profileMenu = document.querySelector(".profile-menu");
 
-    // Toggle on click
     profileEl.addEventListener("click", (event) => {
-      // Prevent the click from bubbling to document
       event.stopPropagation();
       profileMenu.classList.toggle("show");
     });
 
-    // Close the menu if clicking anywhere else on the page
     document.addEventListener("click", () => {
       profileMenu.classList.remove("show");
     });

@@ -11,6 +11,8 @@ const demandHistoryRouter = require("./demandHistory");
 const eventRouter = require("./events");
 const managerBulkRouter = require("./managerBulk");
 
+const forecastRouter = require("./forecast");
+const planningRouter = require("./planning");
 const { verifyToken } = require("../middlewares/authMiddleware");
 
 router.get("/", verifyToken, (req, res) => {
@@ -27,5 +29,7 @@ router.use("/pricing", pricingRouter);
 router.use("/demand-history", demandHistoryRouter);
 router.use("/events", eventRouter);
 router.use("/manager", managerBulkRouter);
+router.use("/forecast", forecastRouter);
+router.use("/planning", planningRouter);
 
 module.exports = router;

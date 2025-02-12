@@ -26,7 +26,6 @@ async function getRoleById(roleId) {
 }
 
 async function createRole(role_name) {
-  // Unique constraint handled in DB or model
   return Role.create({ role_name });
 }
 
