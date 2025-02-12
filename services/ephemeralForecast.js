@@ -6,7 +6,6 @@ async function forecastNewFlight({
   destination_airport,
   departure_time,
 }) {
-
   // 1) convert departure_time to daysUntilDeparture
   const now = moment();
   const departure = moment(departure_time);

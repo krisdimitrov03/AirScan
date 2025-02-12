@@ -1,9 +1,9 @@
 const request = require("supertest");
 const app = require("../../app");
 
-const { connectDB } = require('../../config/db');
-const { syncDatabase } = require('../../models');
-const seedDatabase = require('../../seed/seedDatabase');
+const { connectDB } = require("../../config/db");
+const { syncDatabase } = require("../../models");
+const seedDatabase = require("../../seed/seedDatabase");
 
 beforeAll(async () => {
   await syncDatabase();
@@ -16,7 +16,9 @@ function requestAgent() {
 
 async function loginAsRole(username, password, roleName, email) {
   const agent = requestAgent();
-  await agent.post("/auth/login").send({ username:"admin", password: "Admin@123" });
+  await agent
+    .post("/auth/login")
+    .send({ username: "admin", password: "Admin@123" });
   return agent;
 }
 

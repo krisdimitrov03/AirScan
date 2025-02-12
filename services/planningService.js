@@ -1,18 +1,18 @@
 const OpenAI = require("openai");
 const { AirportSlot, Event, DemandHistory, Flight } = require("../models");
 async function suggestFlights() {
-  const slots        = await AirportSlot.findAll();
-  const events       = await Event.findAll();
-  const demand       = await DemandHistory.findAll();
-  const existingFlt  = await Flight.findAll();
-  const eventsSummary = events.map(e => ({
+  const slots = await AirportSlot.findAll();
+  const events = await Event.findAll();
+  const demand = await DemandHistory.findAll();
+  const existingFlt = await Flight.findAll();
+  const eventsSummary = events.map((e) => ({
     name: e.event_name,
     city: e.location_city,
     start: e.start_date,
     end: e.end_date,
-    factor: e.expected_additional_traffic_factor
+    factor: e.expected_additional_traffic_factor,
   }));
-  
+
   const prompt = `
   Given the following data:
   - Available airport slots: ${JSON.stringify(slots, null, 2)}
@@ -42,14 +42,14 @@ async function suggestFlights() {
     model: "gpt-3.5-turbo",
     messages: [
       { role: "system", content: "You are an expert flight planner." },
-      { role: "user", content: prompt }
+      { role: "user", content: prompt },
     ],
     temperature: 0.7,
     max_tokens: 400,
   });
   let aiContent = response.choices[0].message.content;
   aiContent = aiContent.replace(/```/g, "");
-  aiContent = aiContent.replace(/json/g, ""); 
+  aiContent = aiContent.replace(/json/g, "");
   let suggestions;
   try {
     suggestions = JSON.parse(aiContent);

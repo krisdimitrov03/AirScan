@@ -1,40 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1><%= title %></h1>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
 
-  <% if (error) { %>
-    <div style="color:red;"><%= error %></div>
-  <% } %>
+    <% if (error) { %>
+    <div style="color: red"><%= error %></div>
+    <% } %>
 
-  <form method="POST" action="/admin/airport-slots/new">
-    <label>Airport Code:
-      <input type="text" name="airport_code" required>
-    </label><br>
+    <form method="POST" action="/admin/airport-slots/new">
+      <label
+        >Airport Code:
+        <input type="text" name="airport_code" required /> </label
+      ><br />
 
-    <label>Date:
-      <input type="date" name="date" required>
-    </label><br>
+      <label
+        >Date:
+        <input type="date" name="date" required /> </label
+      ><br />
 
-    <label>Start Time:
-      <input type="time" name="time_slot_start" required>
-    </label><br>
+      <label
+        >Start Time:
+        <input type="time" name="time_slot_start" required /> </label
+      ><br />
 
-    <label>End Time:
-      <input type="time" name="time_slot_end" required>
-    </label><br>
+      <label
+        >End Time:
+        <input type="time" name="time_slot_end" required /> </label
+      ><br />
 
-    <label>Slot Capacity:
-      <input type="number" name="slot_capacity" min="1" required>
-    </label><br>
+      <label
+        >Slot Capacity:
+        <input type="number" name="slot_capacity" min="1" required /> </label
+      ><br />
 
-    <button type="submit">Create Slot</button>
-  </form>
+      <button type="submit">Create Slot</button>
+    </form>
 
-  <p><a href="/admin/airport-slots">Back to Slots</a></p>
-</body>
+    <p><a href="/admin/airport-slots">Back to Slots</a></p>
+  </body>
 </html>

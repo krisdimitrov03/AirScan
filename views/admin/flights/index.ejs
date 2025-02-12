@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1><%= title %></h1>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
 
-  <form method="GET" action="/admin/flights">
-    <input type="text" name="search" placeholder="Search flights..." value="<%= search %>">
-    <button type="submit">Search</button>
-  </form>
+    <form method="GET" action="/admin/flights">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search flights..."
+        value="<%= search %>"
+      />
+      <button type="submit">Search</button>
+    </form>
 
-  <p><a href="/admin/flights/new">Create New Flight</a></p>
+    <p><a href="/admin/flights/new">Create New Flight</a></p>
 
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Flight ID</th>
-        <th>Flight Number</th>
-        <th>Origin</th>
-        <th>Destination</th>
-        <th>Type</th>
-        <th>Return?</th>
-        <th>Departure</th>
-        <th>Arrival</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% flights.forEach(flight => { %>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Flight ID</th>
+          <th>Flight Number</th>
+          <th>Origin</th>
+          <th>Destination</th>
+          <th>Type</th>
+          <th>Return?</th>
+          <th>Departure</th>
+          <th>Arrival</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% flights.forEach(flight => { %>
         <tr>
           <td><%= flight.flight_id %></td>
           <td><%= flight.flight_number %></td>
@@ -41,25 +46,33 @@
           <td><%= flight.scheduled_arrival %></td>
           <td>
             <a href="/admin/flights/<%= flight.flight_id %>/edit">Edit</a>
-            <form method="POST" action="/admin/flights/<%= flight.flight_id %>/delete" style="display:inline">
-              <button type="submit" onclick="return confirm('Delete this flight?')">Delete</button>
+            <form
+              method="POST"
+              action="/admin/flights/<%= flight.flight_id %>/delete"
+              style="display: inline"
+            >
+              <button
+                type="submit"
+                onclick="return confirm('Delete this flight?')"
+              >
+                Delete
+              </button>
             </form>
           </td>
         </tr>
-      <% }) %>
-    </tbody>
-  </table>
+        <% }) %>
+      </tbody>
+    </table>
 
-  <% if (totalPages > 1) { %>
+    <% if (totalPages > 1) { %>
     <div>
-      <% for (let p = 1; p <= totalPages; p++) { %>
-        <% if (p === currentPage) { %>
-          <strong><%= p %></strong>
-        <% } else { %>
-          <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-        <% } %>
-      <% } %>
+      <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage) {
+      %>
+      <strong><%= p %></strong>
+      <% } else { %>
+      <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+      <% } %> <% } %>
     </div>
-  <% } %>
-</body>
+    <% } %>
+  </body>
 </html>

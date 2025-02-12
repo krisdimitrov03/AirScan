@@ -2,15 +2,25 @@ const roleService = require("../../../services/roleService");
 const { Role } = require("../../../models");
 const { Op } = require("sequelize");
 jest.mock("../../../models", () => ({
-  Role: { findAndCountAll: jest.fn(), findByPk: jest.fn(), create: jest.fn(), destroy: jest.fn() },
+  Role: {
+    findAndCountAll: jest.fn(),
+    findByPk: jest.fn(),
+    create: jest.fn(),
+    destroy: jest.fn(),
+  },
 }));
 
 describe("roleService", () => {
-  afterEach(() => { jest.clearAllMocks(); });
-  
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("getAllRoles", () => {
     it("returns roles without search filter", async () => {
-      const rolesData = { rows: [{ role_id: 1, role_name: "admin" }], count: 1 };
+      const rolesData = {
+        rows: [{ role_id: 1, role_name: "admin" }],
+        count: 1,
+      };
       Role.findAndCountAll.mockResolvedValue(rolesData);
       const result = await roleService.getAllRoles({});
       expect(Role.findAndCountAll).toHaveBeenCalledWith({
@@ -22,9 +32,16 @@ describe("roleService", () => {
       expect(result).toEqual(rolesData);
     });
     it("applies search filter", async () => {
-      const rolesData = { rows: [{ role_id: 1, role_name: "admin" }], count: 1 };
+      const rolesData = {
+        rows: [{ role_id: 1, role_name: "admin" }],
+        count: 1,
+      };
       Role.findAndCountAll.mockResolvedValue(rolesData);
-      const result = await roleService.getAllRoles({ search: "adm", limit: 10, offset: 0 });
+      const result = await roleService.getAllRoles({
+        search: "adm",
+        limit: 10,
+        offset: 0,
+      });
       expect(Role.findAndCountAll).toHaveBeenCalledWith({
         where: { role_name: { [Op.like]: `%adm%` } },
         limit: 10,
@@ -34,7 +51,7 @@ describe("roleService", () => {
       expect(result).toEqual(rolesData);
     });
   });
-  
+
   describe("getRoleById", () => {
     it("returns role by id", async () => {
       const role = { role_id: 1, role_name: "admin" };
@@ -44,7 +61,7 @@ describe("roleService", () => {
       expect(result).toEqual(role);
     });
   });
-  
+
   describe("createRole", () => {
     it("creates a new role", async () => {
       const roleData = { role_name: "manager" };
@@ -55,13 +72,15 @@ describe("roleService", () => {
       expect(result).toEqual(createdRole);
     });
   });
-  
+
   describe("updateRole", () => {
     it("updates a role", async () => {
       const roleInstance = {
         role_id: 1,
         role_name: "admin",
-        save: jest.fn().mockResolvedValue({ role_id: 1, role_name: "superadmin" }),
+        save: jest
+          .fn()
+          .mockResolvedValue({ role_id: 1, role_name: "superadmin" }),
       };
       Role.findByPk.mockResolvedValue(roleInstance);
       const result = await roleService.updateRole(1, "superadmin");
@@ -76,7 +95,7 @@ describe("roleService", () => {
       expect(result).toBeNull();
     });
   });
-  
+
   describe("deleteRole", () => {
     it("returns true if deletion is successful", async () => {
       Role.destroy.mockResolvedValue(1);

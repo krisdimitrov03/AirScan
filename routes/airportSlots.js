@@ -12,7 +12,10 @@ const {
 
 const roles = require("../constants/roles");
 
-router.use(verifyToken, authorizeRoles([roles.ANALYST, roles.ADMIN, roles.MANAGER]));
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ANALYST, roles.ADMIN, roles.MANAGER])
+);
 
 router.get("/", async (_, res, next) => {
   try {

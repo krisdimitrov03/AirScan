@@ -5,11 +5,10 @@ const {
 } = require("../middlewares/authMiddleware");
 const { forecastFlight } = require("../services/forecastService");
 const roles = require("../constants/roles");
-router.use(verifyToken, authorizeRoles([
-  roles.ADMIN,
-  roles.MANAGER,
-  roles.ANALYST
-]));
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
+);
 
 router.get("/:flightId", async (req, res, next) => {
   try {
