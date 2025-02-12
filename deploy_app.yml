@@ -1,0 +1,87 @@
+---
+- name: Deploy app using Docker Compose
+  hosts: aws_instance
+  become: yes
+  vars:
+    app_dir: /opt/airscan
+  tasks:
+    - name: Update apt cache (Debian/Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker (Debian/Ubuntu)
+      apt:
+        name: docker.io
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Install Docker Compose (Debian/Ubuntu)
+      apt:
+        name: docker-compose
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Docker service is running and enabled
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Create application directory
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Synchronize application code to the server
+      synchronize:
+        src: "./"
+        dest: "{{ app_dir }}/"
+        recursive: yes
+        rsync_opts:
+          - "--exclude=.git"
+          - "--exclude=node_modules"
+
+    - name: Stop and remove any existing containers
+      command: docker-compose down
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        PORT: "{{ port }}"
+        DB_USER: "{{ db_user }}"
+        DB_PASS: "{{ db_pass }}"
+        DB_NAME: "{{ db_name }}"
+        DB_PORT: "{{ db_port }}"
+        DB_ROOT_PASS: "{{ db_root_pass }}"
+      ignore_errors: yes
+
+    - name: Show effective Docker Compose configuration (debug)
+      command: docker-compose config
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        PORT: "{{ port }}"
+        DB_USER: "{{ db_user }}"
+        DB_PASS: "{{ db_pass }}"
+        DB_NAME: "{{ db_name }}"
+        DB_PORT: "{{ db_port }}"
+        DB_ROOT_PASS: "{{ db_root_pass }}"
+      register: docker_config
+      changed_when: false
+
+    - debug:
+        var: docker_config.stdout_lines
+
+    - name: Deploy Docker containers (build if necessary)
+      command: docker-compose up -d --build
+      args:
+        chdir: "{{ app_dir }}"
+      environment:
+        PORT: "{{ port }}"
+        DB_USER: "{{ db_user }}"
+        DB_PASS: "{{ db_pass }}"
+        DB_NAME: "{{ db_name }}"
+        DB_PORT: "{{ db_port }}"
+        DB_ROOT_PASS: "{{ db_root_pass }}"
+        JWT_SECRET: "{{ jwt_secret }}"
