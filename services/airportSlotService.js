@@ -1,4 +1,4 @@
-const AirportSlot = require('../models/AirportSlot');
+const AirportSlot = require("../models/AirportSlot");
 
 async function bulkCreateAirportSlots(slotArray) {
   if (!Array.isArray(slotArray)) {
@@ -27,8 +27,10 @@ async function updateSlot(slotId, slotData) {
 }
 
 async function deleteSlot(slotId) {
-  const deletedCount = await AirportSlot.destroy({ where: { slot_id: slotId } });
-  return deletedCount === 1; 
+  const deletedCount = await AirportSlot.destroy({
+    where: { slot_id: slotId },
+  });
+  return deletedCount === 1;
 }
 
 module.exports = {
@@ -37,5 +39,5 @@ module.exports = {
   createSlot,
   updateSlot,
   deleteSlot,
-  bulkCreateAirportSlots
+  bulkCreateAirportSlots,
 };

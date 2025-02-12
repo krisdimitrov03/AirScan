@@ -1,12 +1,15 @@
 {
   "name": "air_scan",
-  "version": "1.2.0",
+  "version": "1.2.4",
   "description": "An intelligent airport slot management and flight demand forecasting system.",
   "main": "server.js",
   "scripts": {
     "test": "jest --runInBand --detectOpenHandles",
     "test:coverage": "jest --coverage --runInBand --detectOpenHandles",
     "start": "node server.js"
+  },
+  "jest": {
+    "globalSetup": "./jestGlobalSetup.js"
   },
   "keywords": [],
   "author": "",

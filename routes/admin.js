@@ -691,9 +691,6 @@ router.get("/events", async (req, res, next) => {
 
     const totalPages = Math.ceil(count / limit);
 
-    console.log(events);
-    
-
     res.render("admin/events/index", {
       title: "Manage Events",
       events,

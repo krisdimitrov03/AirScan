@@ -2,8 +2,8 @@ const { loginAsRole } = require("./testUtils");
 
 describe("Admin Flights Integration", () => {
   let adminAgent;
-  let createdFlightId; 
-  
+  let createdFlightId;
+
   beforeAll(async () => {
     adminAgent = await loginAsRole(
       "test_admin_flights",
@@ -20,5 +20,4 @@ describe("Admin Flights Integration", () => {
     createdFlightId = match ? match[1] : null;
     expect(createdFlightId).toBeDefined();
   });
-  
 });

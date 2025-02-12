@@ -2,7 +2,12 @@ const eventService = require("../../../services/eventService");
 const { Event } = require("../../../models");
 const validator = require("../../../services/validator");
 jest.mock("../../../models", () => ({
-  Event: { create: jest.fn(), findAll: jest.fn(), findByPk: jest.fn(), destroy: jest.fn() },
+  Event: {
+    create: jest.fn(),
+    findAll: jest.fn(),
+    findByPk: jest.fn(),
+    destroy: jest.fn(),
+  },
 }));
 jest.mock("../../../services/validator", () => ({
   validateEventDateRange: jest.fn(),
@@ -10,8 +15,10 @@ jest.mock("../../../services/validator", () => ({
 }));
 
 describe("eventService", () => {
-  afterEach(() => { jest.clearAllMocks(); });
-  
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe("createEvent", () => {
     it("creates an event when data is valid", async () => {
       const eventData = {
@@ -25,13 +32,18 @@ describe("eventService", () => {
       const createdEvent = { ...eventData };
       Event.create.mockResolvedValue(createdEvent);
       const result = await eventService.createEvent(eventData);
-      expect(validator.validateEventDateRange).toHaveBeenCalledWith("2025-01-01", "2025-01-02");
-      expect(validator.validateExpectedAdditionalTrafficFactor).toHaveBeenCalledWith(2);
+      expect(validator.validateEventDateRange).toHaveBeenCalledWith(
+        "2025-01-01",
+        "2025-01-02"
+      );
+      expect(
+        validator.validateExpectedAdditionalTrafficFactor
+      ).toHaveBeenCalledWith(2);
       expect(Event.create).toHaveBeenCalledWith(eventData);
       expect(result).toEqual(createdEvent);
     });
   });
-  
+
   describe("getAllEvents", () => {
     it("returns all events", async () => {
       const events = [{ event_id: "evt1" }, { event_id: "evt2" }];
@@ -41,7 +53,7 @@ describe("eventService", () => {
       expect(result).toEqual(events);
     });
   });
-  
+
   describe("getEventById", () => {
     it("returns event by id", async () => {
       const event = { event_id: "evt1" };
@@ -51,7 +63,7 @@ describe("eventService", () => {
       expect(result).toEqual(event);
     });
   });
-  
+
   describe("updateEvent", () => {
     it("updates event when found", async () => {
       const updateData = {
@@ -60,23 +72,27 @@ describe("eventService", () => {
         end_date: "2025-02-02",
         expected_additional_traffic_factor: 3,
       };
-      // mock event instance
-      const eventInstance = { 
+      const mockEventInstance = {
         event_id: "evt1",
         event_name: "Original Event",
         start_date: "2025-01-01",
         end_date: "2025-01-02",
         expected_additional_traffic_factor: 2,
-        update: jest.fn().mockImplementation(function(data) {
+        update: jest.fn().mockImplementation(function (data) {
           Object.assign(this, data);
           return Promise.resolve(this);
         }),
       };
-      Event.findByPk.mockResolvedValue(eventInstance);
+      Event.findByPk.mockResolvedValue(mockEventInstance);
       const result = await eventService.updateEvent("evt1", updateData);
-      expect(validator.validateEventDateRange).toHaveBeenCalledWith("2025-02-01", "2025-02-02");
-      expect(validator.validateExpectedAdditionalTrafficFactor).toHaveBeenCalledWith(3);
-      expect(eventInstance.update).toHaveBeenCalledWith(updateData);
+      expect(validator.validateEventDateRange).toHaveBeenCalledWith(
+        "2025-02-01",
+        "2025-02-02"
+      );
+      expect(
+        validator.validateExpectedAdditionalTrafficFactor
+      ).toHaveBeenCalledWith(3);
+      expect(mockEventInstance.update).toHaveBeenCalledWith(updateData);
       expect(result).toMatchObject({ ...updateData, event_id: "evt1" });
     });
     it("returns null if event is not found", async () => {
@@ -85,12 +101,14 @@ describe("eventService", () => {
       expect(result).toBeNull();
     });
   });
-  
+
   describe("deleteEvent", () => {
     it("returns the number of deleted rows", async () => {
       Event.destroy.mockResolvedValue(1);
       const result = await eventService.deleteEvent("evt1");
-      expect(Event.destroy).toHaveBeenCalledWith({ where: { event_id: "evt1" } });
+      expect(Event.destroy).toHaveBeenCalledWith({
+        where: { event_id: "evt1" },
+      });
       expect(result).toBe(1);
     });
   });

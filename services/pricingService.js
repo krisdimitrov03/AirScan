@@ -44,5 +44,5 @@ module.exports = {
   getAllPricing,
   updatePricing,
   deletePricing,
-  bulkCreatePricing
+  bulkCreatePricing,
 };
