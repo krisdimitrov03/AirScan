@@ -11,20 +11,21 @@ router.use(
   authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
 );
 
-router.get("/", async (_, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const events = await eventService.getAllEvents();
-    res.render("events/index", { title: "All Events", events });
+    res.render("events/index", { title: "All Events", events, user: req.user });
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/new", (_, res) => {
+router.get("/new", (req, res) => {
   res.render("events/new", {
     title: "Create New Event",
     eventData: {},
     error: null,
+    user: req.user,
   });
 });
 
@@ -37,6 +38,7 @@ router.post("/", async (req, res, next) => {
       title: "Create New Event",
       eventData: req.body,
       error: error.message || "Error creating event",
+      user: req.user,
     });
   }
 });
@@ -51,6 +53,7 @@ router.get("/:eventId/edit", async (req, res, next) => {
       title: "Edit Event",
       eventData: event,
       error: null,
+      user: req.user,
     });
   } catch (error) {
     next(error);
@@ -72,6 +75,7 @@ router.put("/:eventId", async (req, res, next) => {
       title: "Edit Event",
       eventData: { ...req.body, event_id: req.params.eventId },
       error: error.message || "Error updating event",
+      user: req.user,
     });
   }
 });
