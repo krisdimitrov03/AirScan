@@ -9,10 +9,11 @@ const adminRouter = require("./admin");
 const pricingRouter = require("./pricing");
 const demandHistoryRouter = require("./demandHistory");
 const eventRouter = require("./events");
-const { verifyToken } = require("../middlewares/authMiddleware");
+const forecastRouter = require("./forecast");
+const planningRouter = require("./planning");
 
-router.get("/", verifyToken, (req, res) => {
-  res.redirect("/dashboard");
+router.get("/", (req, res) => {
+  res.render("index", { title: "Home Page" });
 });
 
 router.use("/auth", authRouter);
@@ -24,5 +25,7 @@ router.use("/admin", adminRouter);
 router.use("/pricing", pricingRouter);
 router.use("/demand-history", demandHistoryRouter);
 router.use("/events", eventRouter);
+router.use("/forecast", forecastRouter);
+router.use("/planning", planningRouter);
 
 module.exports = router;

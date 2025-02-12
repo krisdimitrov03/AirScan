@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body>
+    <h1><%= title %></h1>
+
+    <% if (suggestions.error) { %>
+      <p><strong>Error:</strong> <%= suggestions.error %></p>
+      <p><%= suggestions.raw %></p>
+    <% } else if (!suggestions.length) { %>
+      <p>No suggestions found.</p>
+    <% } else { %>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Origin</th>
+            <th>Destination</th>
+            <th>Departure Time</th>
+            <th>Arrival Time</th>
+            <th>Rationale</th>
+            <th>Forecasted Profit</th>
+            <th>Create Flight</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% suggestions.forEach((s, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td><%= s.origin_airport || "N/A" %></td>
+              <td><%= s.destination_airport || "N/A" %></td>
+              <td><%= s.departure_time || "N/A" %></td>
+              <td><%= s.arrival_time || "N/A" %></td>
+              <td><%= s.rationale || "" %></td>
+              <td><%= s.forecastedProfit || "N/A" %> USD</td>
+              <td>
+                <a class="create-flight-link" 
+                   href="/flights/new?origin_airport_code=<%= encodeURIComponent(s.origin_airport || "") %>&destination_airport_code=<%= encodeURIComponent(s.destination_airport || "") %>&scheduled_departure=<%= encodeURIComponent(s.departure_time || "") %>&scheduled_arrival=<%= encodeURIComponent(s.arrival_time || "") %>&direct_indirect_flag=direct&return_option_flag=false">
+                  <button>Create Flight</button>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+
+  </body>
+</html>
