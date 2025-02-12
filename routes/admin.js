@@ -43,7 +43,7 @@ router.get("/users", async (req, res, next) => {
     });
     const totalPages = Math.ceil(count / limit);
 
-    // For convenience let’s also fetch how many total admins exist
+    // for convenience let’s also fetch how many total admins exist
     // so we can detect if a user is the only admin
     const adminCount = await userService.countAdmins();
 
