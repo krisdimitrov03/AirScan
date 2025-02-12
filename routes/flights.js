@@ -16,7 +16,6 @@ router.use(
 router.get(
   "/",
   verifyToken,
-  authorizeRoles([roles.ADMIN, roles.ANALYST]),
   async (req, res, next) => {
     try {
       const flights = await flightService.getAllFlights();
