@@ -18,61 +18,65 @@ function generateFlightNumber(origin, destination) {
   return "AS" + originDigits + destinationDigits;
 }
 
-const Flight = sequelize.define("Flight", {
-  flight_id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
-  },
-  flight_number: {
-    type: DataTypes.STRING(100),
-    allowNull: true,
-    // there can be different flights with the same number, just not the same uuid
-  },
-  origin_airport_code: {
-    type: DataTypes.STRING(10),
-    allowNull: false
-  },
-  destination_airport_code: {
-    type: DataTypes.STRING(10),
-    allowNull: false
-  },
-  direct_indirect_flag: {
-    type: DataTypes.ENUM("direct", "indirect"),
-    defaultValue: "direct"
-  },
-  return_option_flag: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  scheduled_departure: {
-    type: DataTypes.DATE
-  },
-  scheduled_arrival: {
-    type: DataTypes.DATE
-  }
-}, {
-  tableName: "flights",
-  timestamps: false,
-  hooks: {
-    beforeCreate: (flight) => {
-      if (!flight.origin_airport_code || !flight.destination_airport_code)
-        throw new Error("Origin and destination codes are required");
-      
-      flight.flight_number = generateFlightNumber(
-        flight.origin_airport_code,
-        flight.destination_airport_code
-      );
+const Flight = sequelize.define(
+  "Flight",
+  {
+    flight_id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    beforeUpdate: (flight) => {
-      if (!flight.origin_airport_code || !flight.destination_airport_code)
-        throw new Error("Origin and destination codes are required");
-      flight.flight_number = generateFlightNumber(
-        flight.origin_airport_code,
-        flight.destination_airport_code
-      );
-    }
+    flight_number: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      // there can be different flights with the same number, just not the same uuid
+    },
+    origin_airport_code: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
+    destination_airport_code: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
+    direct_indirect_flag: {
+      type: DataTypes.ENUM("direct", "indirect"),
+      defaultValue: "direct",
+    },
+    return_option_flag: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    scheduled_departure: {
+      type: DataTypes.DATE,
+    },
+    scheduled_arrival: {
+      type: DataTypes.DATE,
+    },
+  },
+  {
+    tableName: "flights",
+    timestamps: false,
+    hooks: {
+      beforeCreate: (flight) => {
+        if (!flight.origin_airport_code || !flight.destination_airport_code)
+          throw new Error("Origin and destination codes are required");
+
+        flight.flight_number = generateFlightNumber(
+          flight.origin_airport_code,
+          flight.destination_airport_code
+        );
+      },
+      beforeUpdate: (flight) => {
+        if (!flight.origin_airport_code || !flight.destination_airport_code)
+          throw new Error("Origin and destination codes are required");
+        flight.flight_number = generateFlightNumber(
+          flight.origin_airport_code,
+          flight.destination_airport_code
+        );
+      },
+    },
   }
-});
+);
 
 module.exports = Flight;

@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h2><%= title %> (#<%= role.role_id %>)</h2>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <h2><%= title %> (#<%= role.role_id %>)</h2>
 
-  <% if(error) { %>
-    <div style="color:red;"><%= error %></div>
-  <% } %>
+    <% if(error) { %>
+    <div style="color: red"><%= error %></div>
+    <% } %>
 
-  <form method="POST" action="/admin/roles/<%= role.role_id %>/edit">
-    <label>Role Name:
-      <input type="text" name="role_name" value="<%= role.role_name %>">
-    </label><br>
-    <button type="submit">Save</button>
-  </form>
-</body>
+    <form method="POST" action="/admin/roles/<%= role.role_id %>/edit">
+      <label
+        >Role Name:
+        <input
+          type="text"
+          name="role_name"
+          value="<%= role.role_name %>"
+        /> </label
+      ><br />
+      <button type="submit">Save</button>
+    </form>
+  </body>
 </html>

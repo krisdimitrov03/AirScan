@@ -18,7 +18,9 @@ describe("Admin Integration (Users & Roles)", () => {
   it("lists roles and extracts created role_id", async () => {
     const listRes = await adminAgent.get("/admin/roles");
     expect(listRes.statusCode).toBe(200);
-    const match = listRes.text.match(/data-role-id="(\d+)".*?TempRoleForTesting/);
+    const match = listRes.text.match(
+      /data-role-id="(\d+)".*?TempRoleForTesting/
+    );
     createdRoleId = match ? match[1] : null;
     expect(createdRoleId).toBeDefined();
   });

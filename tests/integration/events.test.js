@@ -22,9 +22,7 @@ describe("Events Integration", () => {
       end_date: "2025-01-05",
       expected_additional_traffic_factor: 2,
     };
-    const res = await eventsAgent
-      .post("/events")
-      .send(eventData);
+    const res = await eventsAgent.post("/events").send(eventData);
     expect(res.statusCode).toBe(302);
     expect(res.header.location).toBe("/events");
   });
@@ -52,8 +50,7 @@ describe("Events Integration", () => {
   });
 
   it("deletes the event", async () => {
-    const delRes = await eventsAgent
-      .delete(`/events/${eventId}`);
+    const delRes = await eventsAgent.delete(`/events/${eventId}`);
     expect(delRes.statusCode).toBe(302);
     expect(delRes.header.location).toBe("/events");
 

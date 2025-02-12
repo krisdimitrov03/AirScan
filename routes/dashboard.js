@@ -6,7 +6,10 @@ const {
 
 const roles = require("../constants/roles");
 
-router.use(verifyToken, authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST]));
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
+);
 
 router.get("/", verifyToken, (req, res) => {
   res.render("analyst/dashboard", { title: "Dashboard", user: req.user });

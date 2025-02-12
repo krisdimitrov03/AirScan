@@ -1,5 +1,5 @@
-const { Role } = require('../models');
-const { Op } = require('sequelize');
+const { Role } = require("../models");
+const { Op } = require("sequelize");
 
 async function bulkCreateRoles(roleArray) {
   if (!Array.isArray(roleArray)) {
@@ -17,7 +17,7 @@ async function getAllRoles({ search, limit = 50, offset = 0 }) {
     where,
     limit,
     offset,
-    order: [['role_id', 'ASC']]
+    order: [["role_id", "ASC"]],
   });
 }
 
@@ -48,5 +48,5 @@ module.exports = {
   createRole,
   updateRole,
   deleteRole,
-  bulkCreateRoles
+  bulkCreateRoles,
 };

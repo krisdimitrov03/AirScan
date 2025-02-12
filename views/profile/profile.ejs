@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <header>
-    <h1><%= title %></h1>
-    <p>Welcome, <%= user.username %></p>
-    <nav>
-      <a href="/profile/edit">Edit Profile</a>
-      <a href="/profile/delete">Delete Profile</a>
-      <a href="/dashboard">Dashboard</a>
-    </nav>
-  </header>
-  <main>
-    <p>Email: <%= user.email %></p>
-    <p>Role: <%= user.Role ? user.Role.role_name : 'N/A' %></p>
-  </main>
-</body>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1><%= title %></h1>
+      <p>Welcome, <%= user.username %></p>
+      <nav>
+        <a href="/profile/edit">Edit Profile</a>
+        <a href="/profile/delete">Delete Profile</a>
+        <a href="/dashboard">Dashboard</a>
+      </nav>
+    </header>
+    <main>
+      <p>Email: <%= user.email %></p>
+      <p>Role: <%= user.Role ? user.Role.role_name : 'N/A' %></p>
+    </main>
+  </body>
 </html>

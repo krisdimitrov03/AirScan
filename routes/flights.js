@@ -13,18 +13,14 @@ router.use(
   authorizeRoles([roles.ADMIN, roles.ANALYST, roles.MANAGER])
 );
 
-router.get(
-  "/",
-  verifyToken,
-  async (req, res, next) => {
-    try {
-      const flights = await flightService.getAllFlights();
-      res.render("flights/index", { flights });
-    } catch (e) {
-      next(e);
-    }
+router.get("/", verifyToken, async (req, res, next) => {
+  try {
+    const flights = await flightService.getAllFlights();
+    res.render("flights/index", { flights });
+  } catch (e) {
+    next(e);
   }
-);
+});
 
 router.get("/new", (req, res) => {
   const {

@@ -40,7 +40,9 @@ async function updateDemandHistory(id, data) {
 }
 
 async function deleteDemandHistory(id) {
-  const deletedCount = await DemandHistory.destroy({ where: { record_id: id } });
+  const deletedCount = await DemandHistory.destroy({
+    where: { record_id: id },
+  });
   return deletedCount === 1;
 }
 
