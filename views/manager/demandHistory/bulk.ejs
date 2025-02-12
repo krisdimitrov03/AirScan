@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bulk Import Airport Slots</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Bulk Import Airport Slots from JSON</h1>
+  <% if (error) { %>
+    <p style="color:red;"><%= error %></p>
+  <% } %>
+  <% if (message) { %>
+    <p style="color:green;"><%= message %></p>
+  <% } %>
+  <form action="/manager/bulk/airport-slots" method="POST" enctype="multipart/form-data">
+    <div>
+      <label for="file">Select JSON File:</label>
+      <input type="file" name="file" id="file" accept=".json" required>
+    </div>
+    <button type="submit">Upload &amp; Import Airport Slots</button>
+  </form>
+  <p><a href="/airport-slots">Back to Airport Slots List</a></p>
+</body>
+</html>

@@ -2,6 +2,20 @@ const { User, Role } = require('../models');
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 
+async function bulkCreateUsers(userArray) {
+  if (!Array.isArray(userArray)) {
+    throw new Error("Data must be an array of user objects.");
+  }
+  const processedUsers = await Promise.all(userArray.map(async (user) => {
+    if (user.password) {
+      user.password_hash = await bcrypt.hash(user.password, 10);
+      delete user.password;
+    }
+    return user;
+  }));
+  return await User.bulkCreate(processedUsers, { validate: true });
+}
+
 async function countAdmins() {
   return User.count({
     include: [{ model: Role, where: { role_name: 'admin' } }]
@@ -72,5 +86,6 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  countAdmins
+  countAdmins,
+  bulkCreateUsers
 };

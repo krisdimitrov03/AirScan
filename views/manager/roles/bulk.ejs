@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bulk Import Roles</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Bulk Import Roles from JSON</h1>
+  <% if (error) { %>
+    <p style="color:red;"><%= error %></p>
+  <% } %>
+  <% if (message) { %>
+    <p style="color:green;"><%= message %></p>
+  <% } %>
+  <form action="/manager/bulk/roles" method="POST" enctype="multipart/form-data">
+    <div>
+      <label for="file">Select JSON File:</label>
+      <input type="file" name="file" id="file" accept=".json" required>
+    </div>
+    <button type="submit">Upload &amp; Import Roles</button>
+  </form>
+  <p><a href="/roles">Back to Roles List</a></p>
+</body>
+</html>

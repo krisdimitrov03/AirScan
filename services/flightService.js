@@ -1,6 +1,12 @@
 const { Op } = require('sequelize');
 const Flight = require('../models/Flight');
 
+async function bulkCreateFlights(flightArray) {
+  if (!Array.isArray(flightArray)) {
+    throw new Error("Data must be an array of flight objects.");
+  }
+  return await Flight.bulkCreate(flightArray, { validate: true });
+}
 
 function airportCodeToNumberString(code) {
   code = code.toUpperCase();
@@ -71,5 +77,6 @@ module.exports = {
   getFlightByUUID,
   createFlight,
   updateFlight,
-  deleteFlight
+  deleteFlight,
+  bulkCreateFlights
 };
