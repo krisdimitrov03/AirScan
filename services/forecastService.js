@@ -85,10 +85,10 @@ function trapz(x, y) {
 function calculateTotalExpectedWins(
   baseFare,
   seats,
-  margin = 0.05,
+  margin = 0.09,
   commonPriceParams = {},
   commonBookingParams = {},
-  totalDays = 60
+  totalDays = 160
 ) {
   // Limit integration to at most 160 days:
   const effectiveDays = Math.min(totalDays, 160);
@@ -196,7 +196,7 @@ async function forecastFlight(flightId) {
     baseline: 5,
     traffic_coeff: trafficBoost,
   };
-  const margin = 0.05;
+  const margin = 0.09;
 
   const forecastedProfit = calculateTotalExpectedWins(
     baseFare,
