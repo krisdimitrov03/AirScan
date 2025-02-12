@@ -1,24 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Bulk Import Users</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Bulk Import Users from JSON</h1>
-  <% if (error) { %>
-    <p style="color:red;"><%= error %></p>
-  <% } %>
-  <% if (message) { %>
-    <p style="color:green;"><%= message %></p>
-  <% } %>
-  <form action="/manager/bulk/users" method="POST" enctype="multipart/form-data">
-    <div>
-      <label for="file">Select JSON File:</label>
-      <input type="file" name="file" id="file" accept=".json" required>
-    </div>
-    <button type="submit">Upload &amp; Import Users</button>
-  </form>
-  <p><a href="/users">Back to Users List</a></p>
-</body>
+  <head>
+    <title>Bulk Import Users</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <header>
+      <h1>Bulk Import Users from JSON</h1>
+    </header>
+    <main>
+      <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+      <% } %> <% if (message) { %>
+      <p style="color: green"><%= message %></p>
+      <% } %>
+      <form
+        action="/manager/bulk/users"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label for="file">Select JSON File:</label>
+          <input type="file" name="file" id="file" accept=".json" required />
+        </div>
+        <button type="submit">Upload &amp; Import Users</button>
+      </form>
+      <p><a href="/users">Back to Users List</a></p>
+    </main>
+  </body>
 </html>

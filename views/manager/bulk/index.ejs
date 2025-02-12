@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Manager Bulk Import</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Bulk Import Options</h1>
-  <ul>
-    <li><a href="/manager/bulk/roles">Bulk Import Roles</a></li>
-    <li><a href="/manager/bulk/users">Bulk Import Users</a></li>
-    <li><a href="/manager/bulk/airport-slots">Bulk Import Airport Slots</a></li>
-    <li><a href="/manager/bulk/demand-history">Bulk Import Demand History</a></li>
-    <li><a href="/manager/bulk/events">Bulk Import Events</a></li>
-    <li><a href="/manager/bulk/flights">Bulk Import Flights</a></li>
-    <li><a href="/manager/bulk/pricing">Bulk Import Pricing</a></li>
-  </ul>
-  <p><a href="/manager/dashboard">Back to Dashboard</a></p>
-</body>
+  <head>
+    <title>Manager - Bulk Import Options</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+  
+    <header>
+      <h1>Bulk Import Options</h1>
+    </header>
+    <main>
+      <ul>
+        <li><a href="/manager/bulk/roles">Bulk Import Roles</a></li>
+        <li><a href="/manager/bulk/users">Bulk Import Users</a></li>
+        <li>
+          <a href="/manager/bulk/airport-slots">Bulk Import Airport Slots</a>
+        </li>
+        <li>
+          <a href="/manager/bulk/demand-history">Bulk Import Demand History</a>
+        </li>
+        <li><a href="/manager/bulk/events">Bulk Import Events</a></li>
+        <li><a href="/manager/bulk/flights">Bulk Import Flights</a></li>
+        <li><a href="/manager/bulk/pricing">Bulk Import Pricing</a></li>
+      </ul>
+
+      <p><a href="/dashboard">Back to Dashboard</a></p>
+    </main>
+  </body>
 </html>

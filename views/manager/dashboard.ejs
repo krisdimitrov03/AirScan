@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Manager Dashboard</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Manager Dashboard</h1>
-  <ul>
-    <li><a href="/users">Manage Users</a></li>
-    <li><a href="/roles">Manage Roles</a></li>
-    <li><a href="/flights">Manage Flights</a></li>
-    <li><a href="/airport-slots">Manage Airport Slots</a></li>
-    <li><a href="/demand-history">Manage Demand History</a></li>
-    <li><a href="/pricing">Manage Pricing</a></li>
-    <li><a href="/events">Manage Events</a></li>
-    <li><a href="/bulk">Bulk Import Options</a></li>
-  </ul>
-</body>
+  <head>
+    <title>Manager - Bulk Import Users</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <header>
+      <h1>Bulk Import Users from JSON</h1>
+    </header>
+    <main>
+      <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+      <% } %> <% if (message) { %>
+      <p style="color: green"><%= message %></p>
+      <% } %>
+
+      <form
+        action="/manager/bulk/users"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label for="file">Select JSON File:</label>
+          <input type="file" name="file" id="file" accept=".json" required />
+        </div>
+        <button type="submit">Upload &amp; Import Users</button>
+      </form>
+
+      <p><a href="/users">Back to Users List</a></p>
+    </main>
+  </body>
 </html>

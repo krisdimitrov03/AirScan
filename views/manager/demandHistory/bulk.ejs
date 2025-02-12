@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Bulk Import Airport Slots</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Bulk Import Airport Slots from JSON</h1>
-  <% if (error) { %>
-    <p style="color:red;"><%= error %></p>
-  <% } %>
-  <% if (message) { %>
-    <p style="color:green;"><%= message %></p>
-  <% } %>
-  <form action="/manager/bulk/airport-slots" method="POST" enctype="multipart/form-data">
-    <div>
-      <label for="file">Select JSON File:</label>
-      <input type="file" name="file" id="file" accept=".json" required>
-    </div>
-    <button type="submit">Upload &amp; Import Airport Slots</button>
-  </form>
-  <p><a href="/airport-slots">Back to Airport Slots List</a></p>
-</body>
+  <head>
+    <title>Manager - Bulk Import Demand History</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <header>
+      <h1>Bulk Import Demand History from JSON</h1>
+    </header>
+    <main>
+      <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+      <% } %> <% if (message) { %>
+      <p style="color: green"><%= message %></p>
+      <% } %>
+
+      <form
+        action="/manager/bulk/demand-history"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label for="file">Select JSON File:</label>
+          <input type="file" name="file" id="file" accept=".json" required />
+        </div>
+        <button type="submit">Upload &amp; Import Demand History</button>
+      </form>
+
+      <p><a href="/demand-history">Back to Demand History List</a></p>
+    </main>
+  </body>
 </html>

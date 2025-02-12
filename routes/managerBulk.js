@@ -17,9 +17,13 @@ const upload = multer({ dest: "uploads/" });
 
 router.use(verifyToken, authorizeRoles([roles.MANAGER]));
 
+router.get("/", (req, res) => {
+  res.render("manager/bulk", { message: null,error: null, user: req.user });
+});
+
 // ----------------- Roles -----------------
 router.get("/roles", (req, res) => {
-  res.render("manager/roles/bulk", { message: null, error: null });
+  res.render("manager/roles/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/roles", upload.single("file"), async (req, res, next) => {
@@ -46,7 +50,7 @@ router.post("/roles", upload.single("file"), async (req, res, next) => {
 
 // ----------------- Users -----------------
 router.get("/users", (req, res) => {
-  res.render("manager/users/bulk", { message: null, error: null });
+  res.render("manager/users/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/users", upload.single("file"), async (req, res, next) => {
@@ -73,7 +77,7 @@ router.post("/users", upload.single("file"), async (req, res, next) => {
 
 // ----------------- Airport Slots -----------------
 router.get("/airport-slots", (req, res) => {
-  res.render("manager/airportSlots/bulk", { message: null, error: null });
+  res.render("manager/airportSlots/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/airport-slots", upload.single("file"), async (req, res, next) => {
@@ -100,7 +104,7 @@ router.post("/airport-slots", upload.single("file"), async (req, res, next) => {
 
 // ----------------- Events -----------------
 router.get("/events", (req, res) => {
-  res.render("manager/events/bulk", { message: null, error: null });
+  res.render("manager/events/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/events", upload.single("file"), async (req, res, next) => {
@@ -127,7 +131,7 @@ router.post("/events", upload.single("file"), async (req, res, next) => {
 
 // ----------------- Flights -----------------
 router.get("/flights", (req, res) => {
-  res.render("manager/flights/bulk", { message: null, error: null });
+  res.render("manager/flights/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/flights", upload.single("file"), async (req, res, next) => {
@@ -154,7 +158,7 @@ router.post("/flights", upload.single("file"), async (req, res, next) => {
 
 // ----------------- Demand History -----------------
 router.get("/demand-history", (req, res) => {
-  res.render("manager/demandHistory/bulk", { message: null, error: null });
+  res.render("manager/demandHistory/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/demand-history", upload.single("file"), async (req, res, next) => {
@@ -181,7 +185,7 @@ router.post("/demand-history", upload.single("file"), async (req, res, next) => 
 
 // ----------------- Pricing -----------------
 router.get("/pricing", (req, res) => {
-  res.render("manager/pricing/bulk", { message: null, error: null });
+  res.render("manager/pricing/bulk", { message: null,error: null, user: req.user });
 });
 
 router.post("/pricing", upload.single("file"), async (req, res, next) => {
