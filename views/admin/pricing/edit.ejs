@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <!-- Global + form-specific CSS -->
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <div class="form-container">
+      <h1 class="text-center"><%= title %></h1>
+
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <form
+        method="POST"
+        action="/admin/pricing/<%= pricingRecord.pricing_id %>/edit"
+      >
+        <div class="form-group">
+          <label>Flight ID:</label>
+          <input
+            type="text"
+            name="flight_id"
+            value="<%= pricingRecord.flight_id %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Effective Start Date:</label>
+          <input
+            type="date"
+            name="effective_date_range_start"
+            value="<%= pricingRecord.effective_date_range_start %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Effective End Date:</label>
+          <input
+            type="date"
+            name="effective_date_range_end"
+            value="<%= pricingRecord.effective_date_range_end %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Base Price:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="base_price"
+            value="<%= pricingRecord.base_price %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Discounts Offered:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="discounts_offered"
+            value="<%= pricingRecord.discounts_offered %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Peak Season Surcharge:</label>
+          <input
+            type="number"
+            step="0.01"
+            name="peak_season_surcharge"
+            value="<%= pricingRecord.peak_season_surcharge %>"
+          />
+        </div>
+
+        <button type="submit">Update Pricing</button>
+      </form>
+
+      <p class="text-center">
+        <a class="back-link" href="/admin/pricing">Back to Pricing</a>
+      </p>
+    </div>
+  </body>
+</html>

@@ -4,60 +4,62 @@
     <meta charset="UTF-8" />
     <title>Airport Slots Management</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
     <%- include('../partials/navbar', { user: user }) %>
-
-    <h1>Airport Slots</h1>
-
-    <div style="margin-bottom: 1em">
-      <a href="/airport-slots/new">Create New Slot</a>
-    </div>
-
-    <table border="1" cellpadding="5" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Slot ID</th>
-          <th>Airport Code</th>
-          <th>Date</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Slot Capacity</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (airportSlots && airportSlots.length) { %> <%
-        airportSlots.forEach(slot => { %>
-        <tr>
-          <td><%= slot.slot_id %></td>
-          <td><%= slot.airport_code %></td>
-          <td><%= slot.date %></td>
-          <td><%= slot.time_slot_start %></td>
-          <td><%= slot.time_slot_end %></td>
-          <td><%= slot.slot_capacity %></td>
-          <td>
-            <a href="/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
-            <form
-              action="/airport-slots/<%= slot.slot_id %>?_method=DELETE"
-              method="POST"
-              style="display: inline"
-            >
-              <button
-                type="submit"
-                onclick="return confirm('Are you sure you want to delete this slot?')"
+    <main>
+      <h1>Airport Slots</h1>
+      <div class="top-controls">
+        <a href="/airport-slots/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Slot
+        </a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Slot ID</th>
+            <th>Airport Code</th>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Slot Capacity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (airportSlots && airportSlots.length) { %> <%
+          airportSlots.forEach(slot => { %>
+          <tr>
+            <td><%= slot.slot_id %></td>
+            <td><%= slot.airport_code %></td>
+            <td><%= slot.date %></td>
+            <td><%= slot.time_slot_start %></td>
+            <td><%= slot.time_slot_end %></td>
+            <td><%= slot.slot_capacity %></td>
+            <td>
+              <a href="/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
+              <form
+                action="/airport-slots/<%= slot.slot_id %>?_method=DELETE"
+                method="POST"
               >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% }) %> <% } else { %>
-        <tr>
-          <td colspan="7">No airport slots found.</td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
+                <button
+                  type="submit"
+                  onclick="return confirm('Are you sure you want to delete this slot?')"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }); %> <% } else { %>
+          <tr>
+            <td colspan="7">No airport slots found.</td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </main>
   </body>
 </html>
