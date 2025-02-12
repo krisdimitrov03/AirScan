@@ -2,6 +2,13 @@ const DemandHistory = require("../models/DemandHistory");
 const Flight = require("../models/Flight");
 const { validateDemandHistoryData } = require("./validator");
 
+async function bulkCreateDemandHistory(dataArray) {
+  if (!Array.isArray(dataArray)) {
+    throw new Error("Data must be an array of demand history objects.");
+  }
+  return await DemandHistory.bulkCreate(dataArray, { validate: true });
+}
+
 async function getAllDemandHistory() {
   return DemandHistory.findAll();
 }
@@ -42,5 +49,6 @@ module.exports = {
   getDemandHistoryById,
   createDemandHistory,
   updateDemandHistory,
-  deleteDemandHistory
+  deleteDemandHistory,
+  bulkCreateDemandHistory,
 };

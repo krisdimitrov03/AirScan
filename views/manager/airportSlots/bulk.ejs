@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Manager - Bulk Import Airport Slots</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Bulk Import Airport Slots from JSON</h1>
+    </header>
+    <main>
+      <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+      <% } %> <% if (message) { %>
+      <p style="color: green"><%= message %></p>
+      <% } %>
+
+      <form
+        action="/manager/bulk/airport-slots"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div>
+          <label for="file">Select JSON File:</label>
+          <input type="file" name="file" id="file" accept=".json" required />
+        </div>
+        <button type="submit">Upload &amp; Import Airport Slots</button>
+      </form>
+
+      <p><a href="/airport-slots">Back to Airport Slots List</a></p>
+
+      <!-- Optional: script to print the received file data in console -->
+      <script>
+        const fileInput = document.getElementById("file");
+        fileInput.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const text = e.target.result;
+            console.log(text);
+          };
+          reader.readAsText(file);
+        });
+      </script>
+    </main>
+  </body>
+</html>

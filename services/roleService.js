@@ -1,6 +1,13 @@
 const { Role } = require('../models');
 const { Op } = require('sequelize');
 
+async function bulkCreateRoles(roleArray) {
+  if (!Array.isArray(roleArray)) {
+    throw new Error("Data must be an array of role objects.");
+  }
+  return await Role.bulkCreate(roleArray, { validate: true });
+}
+
 async function getAllRoles({ search, limit = 50, offset = 0 }) {
   let where = {};
   if (search) {
@@ -40,5 +47,6 @@ module.exports = {
   getRoleById,
   createRole,
   updateRole,
-  deleteRole
+  deleteRole,
+  bulkCreateRoles
 };
