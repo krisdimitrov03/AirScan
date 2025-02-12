@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Create New Pricing</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
     <h1>Create New Pricing</h1>
 
     <% if (error) { %>

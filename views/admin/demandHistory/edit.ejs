@@ -1,32 +1,70 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Admin - Edit Demand History Record</title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1>Admin - Edit Demand History Record</h1>
-  <% if (error) { %>
-    <p style="color:red;"><%= error %></p>
-  <% } %>
-  <form action="/admin/demand-history/<%= dh.record_id %>?_method=PUT" method="POST">
-    <label for="flight_id">Flight ID:</label>
-    <input type="text" name="flight_id" id="flight_id" value="<%= dh.flight_id %>" required>
-    <br>
-    <label for="date">Date:</label>
-    <input type="date" name="date" id="date" value="<%= dh.date %>" required>
-    <br>
-    <label for="historical_tickets_sold">Tickets Sold:</label>
-    <input type="number" name="historical_tickets_sold" id="historical_tickets_sold" min="0" value="<%= dh.historical_tickets_sold %>" required>
-    <br>
-    <label for="historical_load_factor">Load Factor (0-1):</label>
-    <input type="number" step="0.01" name="historical_load_factor" id="historical_load_factor" min="0" max="1" value="<%= dh.historical_load_factor %>" required>
-    <br>
-    <label for="customer_segment_distribution">Segment Distribution:</label>
-    <textarea name="customer_segment_distribution" id="customer_segment_distribution"><%= dh.customer_segment_distribution %></textarea>
-    <br>
-    <button type="submit">Update</button>
-  </form>
-  <a href="/admin/demand-history">Back to Demand History</a>
-</body>
+  <head>
+    <title>Admin - Edit Demand History Record</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
+
+    <h1>Admin - Edit Demand History Record</h1>
+    <% if (error) { %>
+    <p style="color: red"><%= error %></p>
+    <% } %>
+    <form
+      action="/admin/demand-history/<%= dh.record_id %>?_method=PUT"
+      method="POST"
+    >
+      <label for="flight_id">Flight ID:</label>
+      <input
+        type="text"
+        name="flight_id"
+        id="flight_id"
+        value="<%= dh.flight_id %>"
+        required
+      />
+      <br />
+      <label for="date">Date:</label>
+      <input
+        type="date"
+        name="date"
+        id="date"
+        value="<%= dh.date %>"
+        required
+      />
+      <br />
+      <label for="historical_tickets_sold">Tickets Sold:</label>
+      <input
+        type="number"
+        name="historical_tickets_sold"
+        id="historical_tickets_sold"
+        min="0"
+        value="<%= dh.historical_tickets_sold %>"
+        required
+      />
+      <br />
+      <label for="historical_load_factor">Load Factor (0-1):</label>
+      <input
+        type="number"
+        step="0.01"
+        name="historical_load_factor"
+        id="historical_load_factor"
+        min="0"
+        max="1"
+        value="<%= dh.historical_load_factor %>"
+        required
+      />
+      <br />
+      <label for="customer_segment_distribution">Segment Distribution:</label>
+      <textarea
+        name="customer_segment_distribution"
+        id="customer_segment_distribution"
+      >
+<%= dh.customer_segment_distribution %></textarea
+      >
+      <br />
+      <button type="submit">Update</button>
+    </form>
+    <a href="/admin/demand-history">Back to Demand History</a>
+  </body>
 </html>

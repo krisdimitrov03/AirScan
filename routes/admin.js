@@ -9,12 +9,13 @@ const userService = require("../services/userService");
 const roleService = require("../services/roleService");
 const flightService = require("../services/flightService");
 const airportSlotService = require("../services/airportSlotService");
+const demandHistoryService = require("../services/demandHistoryService");
 const roles = require("../constants/roles");
 
 router.use(verifyToken, authorizeRoles([roles.ADMIN]));
 
 router.get("/", (req, res) => {
-  res.render("admin/dashboard", { title: "Admin Dashboard" });
+  res.render("admin/dashboard", { title: "Admin Dashboard", user: req.user });
 });
 
 async function isLastAdmin(userId) {
@@ -55,6 +56,7 @@ router.get("/users", async (req, res, next) => {
       search,
       currentUserId: req.user.user_id,
       adminCount,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -62,7 +64,11 @@ router.get("/users", async (req, res, next) => {
 });
 
 router.get("/users/new", (req, res) => {
-  res.render("admin/users/new", { title: "Create User", error: null });
+  res.render("admin/users/new", {
+    title: "Create User",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/users", async (req, res) => {
@@ -71,7 +77,11 @@ router.post("/users", async (req, res) => {
     await userService.createUser({ username, password, email, role_id });
     res.redirect("/admin/users");
   } catch (err) {
-    res.render("admin/users/new", { title: "Create User", error: err.message });
+    res.render("admin/users/new", {
+      title: "Create User",
+      error: err.message,
+      user: req.user,
+    });
   }
 });
 
@@ -79,7 +89,12 @@ router.get("/users/:id/edit", async (req, res, next) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (!user) return res.status(404).send("User not found.");
-    res.render("admin/users/edit", { title: "Edit User", user, error: null });
+    res.render("admin/users/edit", {
+      title: "Edit User",
+      user,
+      error: null,
+      user: req.user,
+    });
   } catch (err) {
     next(err);
   }
@@ -159,6 +174,7 @@ router.get("/roles", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -166,7 +182,11 @@ router.get("/roles", async (req, res, next) => {
 });
 
 router.get("/roles/new", (req, res) => {
-  res.render("admin/roles/new", { title: "Create Role", error: null });
+  res.render("admin/roles/new", {
+    title: "Create Role",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/roles", async (req, res) => {
@@ -183,7 +203,12 @@ router.get("/roles/:id/edit", async (req, res, next) => {
   try {
     const role = await roleService.getRoleById(req.params.id);
     if (!role) return res.status(404).send("Role not found.");
-    res.render("admin/roles/edit", { title: "Edit Role", role, error: null });
+    res.render("admin/roles/edit", {
+      title: "Edit Role",
+      role,
+      error: null,
+      user: req.user,
+    });
   } catch (err) {
     next(err);
   }
@@ -237,6 +262,7 @@ router.get("/flights", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -244,7 +270,11 @@ router.get("/flights", async (req, res, next) => {
 });
 
 router.get("/flights/new", (req, res) => {
-  res.render("admin/flights/new", { title: "Create Flight", error: null });
+  res.render("admin/flights/new", {
+    title: "Create Flight",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/flights/new", async (req, res, next) => {
@@ -282,6 +312,7 @@ router.get("/flights/:id/edit", async (req, res, next) => {
       title: "Edit Flight",
       flight,
       error: null,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -332,6 +363,7 @@ router.get("/airport-slots", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -342,6 +374,7 @@ router.get("/airport-slots/new", (req, res) => {
   res.render("admin/airportSlots/new", {
     title: "Create Airport Slot",
     error: null,
+    user: req.user,
   });
 });
 
@@ -379,6 +412,7 @@ router.get("/airport-slots/:id/edit", async (req, res, next) => {
       title: "Edit Airport Slot",
       slot,
       error: null,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -425,14 +459,22 @@ router.post("/airport-slots/:id/delete", async (req, res, next) => {
 router.get("/demand-history", async (req, res, next) => {
   try {
     const demandHistory = await demandHistoryService.getAllDemandHistory();
-    res.render("admin/demandHistory/index", { title: "Demand History", demandHistory });
-  } catch(err) {
+    res.render("admin/demandHistory/index", {
+      title: "Demand History",
+      demandHistory,
+      user: req.user,
+    });
+  } catch (err) {
     next(err);
   }
 });
 
 router.get("/demand-history/new", (req, res) => {
-  res.render("admin/demandHistory/new", { title: "Create Demand History", error: null });
+  res.render("admin/demandHistory/new", {
+    title: "Create Demand History",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/demand-history", async (req, res, next) => {
@@ -440,7 +482,11 @@ router.post("/demand-history", async (req, res, next) => {
     await demandHistoryService.createDemandHistory(req.body);
     res.redirect("/admin/demand-history");
   } catch (err) {
-    res.render("admin/demandHistory/new", { title: "Create Demand History", error: err.message });
+    res.render("admin/demandHistory/new", {
+      title: "Create Demand History",
+      error: err.message,
+      user: req.user,
+    });
   }
 });
 
@@ -449,7 +495,12 @@ router.get("/demand-history/:id/edit", async (req, res, next) => {
     const recordId = parseInt(req.params.id, 10);
     const dh = await demandHistoryService.getDemandHistoryById(recordId);
     if (!dh) return res.status(404).send("Demand history record not found.");
-    res.render("admin/demandHistory/edit", { title: "Edit Demand History", dh, error: null });
+    res.render("admin/demandHistory/edit", {
+      title: "Edit Demand History",
+      dh,
+      error: null,
+      user: req.user,
+    });
   } catch (err) {
     next(err);
   }
@@ -458,11 +509,20 @@ router.get("/demand-history/:id/edit", async (req, res, next) => {
 router.post("/demand-history/:id/edit", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
-    const updated = await demandHistoryService.updateDemandHistory(recordId, req.body);
-    if (!updated) return res.status(404).send("Update failed; record not found.");
+    const updated = await demandHistoryService.updateDemandHistory(
+      recordId,
+      req.body
+    );
+    if (!updated)
+      return res.status(404).send("Update failed; record not found.");
     res.redirect("/admin/demand-history");
   } catch (err) {
-    res.render("admin/demand-history/edit", { title: "Edit Demand History", dh: { ...req.body, record_id: req.params.id }, error: err.message });
+    res.render("admin/demand-history/edit", {
+      title: "Edit Demand History",
+      dh: { ...req.body, record_id: req.params.id },
+      error: err.message,
+      user: req.user,
+    });
   }
 });
 
@@ -470,7 +530,8 @@ router.post("/demand-history/:id/delete", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
     const deleted = await demandHistoryService.deleteDemandHistory(recordId);
-    if (!deleted) return res.status(404).send("Could not delete record; not found.");
+    if (!deleted)
+      return res.status(404).send("Could not delete record; not found.");
     res.redirect("/admin/demand-history");
   } catch (err) {
     next(err);

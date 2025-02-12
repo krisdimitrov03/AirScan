@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Pricing List</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
     <h1>Pricing List</h1>
 
     <% if (pricings && pricings.length > 0) { %>

@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Edit Pricing</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
     <h1>Edit Pricing (ID: <%= pricing.pricing_id %>)</h1>
 
     <% if (error) { %>

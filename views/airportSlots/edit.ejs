@@ -3,16 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>Edit Airport Slot</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css" />
   </head>
   <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
     <h1>Edit Airport Slot</h1>
 
     <p>
       <a href="/airport-slots">Back to Airport Slots</a>
     </p>
 
-    <form action="/airport-slots/<%= airportSlot.slot_id %>?_method=PUT" method="POST">
+    <form
+      action="/airport-slots/<%= airportSlot.slot_id %>?_method=PUT"
+      method="POST"
+    >
       <div>
         <label for="airport_code">Airport Code:</label>
         <input

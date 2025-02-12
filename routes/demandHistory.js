@@ -22,14 +22,14 @@ router.use(
 router.get("/", async (req, res, next) => {
   try {
     const demandHistory = await getAllDemandHistory();
-    res.render("demandHistory/index", { demandHistory });
+    res.render("demandHistory/index", { demandHistory, user: req.user });
   } catch (err) {
     next(err);
   }
 });
 
 router.get("/new", async (req, res) => {
-  res.render("demandHistory/new", { error: null });
+  res.render("demandHistory/new", { error: null, user: req.user });
 });
 
 router.post("/", async (req, res, next) => {
@@ -37,7 +37,7 @@ router.post("/", async (req, res, next) => {
     await createDemandHistory(req.body);
     res.redirect("/demand-history");
   } catch (err) {
-    res.render("demandHistory/new", { error: err.message });
+    res.render("demandHistory/new", { error: err.message, user: req.user });
   }
 });
 
@@ -46,7 +46,7 @@ router.get("/:id/edit", async (req, res, next) => {
     const recordId = parseInt(req.params.id, 10);
     const dh = await getDemandHistoryById(recordId);
     if (!dh) return res.status(404).send("Demand history record not found.");
-    res.render("demandHistory/edit", { dh, error: null });
+    res.render("demandHistory/edit", { dh, error: null, user: req.user });
   } catch (err) {
     next(err);
   }
@@ -63,6 +63,7 @@ router.put("/:id", async (req, res, next) => {
     res.render("demandHistory/edit", {
       dh: { ...req.body, record_id: req.params.id },
       error: err.message,
+      user: req.user,
     });
   }
 });

@@ -1,49 +1,63 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h2><%= title %></h2>
-  
-  <form method="GET" action="/admin/roles">
-    <input type="text" name="search" placeholder="Search..." value="<%= search %>">
-    <button type="submit">Search</button>
-  </form>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-  <a href="/admin/roles/new">Create New Role</a>
+    <h2><%= title %></h2>
 
-  <table border="1">
-    <tr>
-      <th>Role ID</th>
-      <th>Role Name</th>
-      <th>Actions</th>
-    </tr>
-    <% roles.forEach(role => { %>
+    <form method="GET" action="/admin/roles">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search..."
+        value="<%= search %>"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <a href="/admin/roles/new">Create New Role</a>
+
+    <table border="1">
+      <tr>
+        <th>Role ID</th>
+        <th>Role Name</th>
+        <th>Actions</th>
+      </tr>
+      <% roles.forEach(role => { %>
       <tr>
         <td><%= role.role_id %></td>
         <td><%= role.role_name %></td>
         <td>
           <a href="/admin/roles/<%= role.role_id %>/edit">Edit</a>
-          <form method="POST" action="/admin/roles/<%= role.role_id %>/delete" style="display:inline;">
-            <button type="submit" onclick="return confirm('Delete this role?');">Delete</button>
+          <form
+            method="POST"
+            action="/admin/roles/<%= role.role_id %>/delete"
+            style="display: inline"
+          >
+            <button
+              type="submit"
+              onclick="return confirm('Delete this role?');"
+            >
+              Delete
+            </button>
           </form>
         </td>
       </tr>
-    <% }); %>
-  </table>
+      <% }); %>
+    </table>
 
-  <% if(totalPages > 1) { %>
+    <% if(totalPages > 1) { %>
     <div>
-      <% for(let p = 1; p <= totalPages; p++) { %>
-        <% if(p === currentPage) { %>
-          <strong><%= p %></strong>
-        <% } else { %>
-          <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-        <% } %>
-      <% } %>
+      <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) { %>
+      <strong><%= p %></strong>
+      <% } else { %>
+      <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+      <% } %> <% } %>
     </div>
-  <% } %>
-</body>
+    <% } %>
+  </body>
 </html>

@@ -12,19 +12,22 @@ const {
 
 const roles = require("../constants/roles");
 
-router.use(verifyToken, authorizeRoles([roles.ANALYST, roles.ADMIN, roles.MANAGER]));
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ANALYST, roles.ADMIN, roles.MANAGER])
+);
 
-router.get("/", async (_, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const airportSlots = await airportSlotService.getAllSlots();
-    res.render("airportSlots/index", { airportSlots });
+    res.render("airportSlots/index", { airportSlots, user: req.user });
   } catch (error) {
     next(error);
   }
 });
 
 router.get("/new", (req, res) => {
-  res.render("airportSlots/new");
+  res.render("airportSlots/new", { user: req.user });
 });
 
 router.post("/", async (req, res, next) => {
@@ -87,7 +90,7 @@ router.get("/:id/edit", async (req, res, next) => {
       return res.status(404).send("Slot not found.");
     }
 
-    res.render("airportSlots/edit", { airportSlot });
+    res.render("airportSlots/edit", { airportSlot, user: req.user });
   } catch (error) {
     next(error);
   }

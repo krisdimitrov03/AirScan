@@ -1,28 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h2><%= title %></h2>
-  
-  <form method="GET" action="/admin/users">
-    <input type="text" name="search" placeholder="Search..." value="<%= search %>">
-    <button type="submit">Search</button>
-  </form>
-  
-  <a href="/admin/users/new">Create New User</a>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-  <table border="1">
-    <tr>
-      <th>ID</th>
-      <th>Username</th>
-      <th>Email</th>
-      <th>Role</th>
-      <th>Actions</th>
-    </tr>
-    <% users.forEach(user => { %>
+    <h2><%= title %></h2>
+
+    <form method="GET" action="/admin/users">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search..."
+        value="<%= search %>"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <a href="/admin/users/new">Create New User</a>
+
+    <table border="1">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+      <% users.forEach(user => { %>
       <tr>
         <td><%= user.user_id %></td>
         <td><%= user.username %></td>
@@ -30,38 +37,40 @@
         <td><%= user.Role ? user.Role.role_name : '' %></td>
         <td>
           <a href="/admin/users/<%= user.user_id %>/edit">Edit</a>
-          
-          <% 
-            // Condition 1: Hide if it's the currently logged-in user
-            const isSelf = (user.user_id === currentUserId);
-            // Condition 2: Hide if it's the last remaining admin
-            const isAdmin = (user.Role && user.Role.role_name === 'admin');
-          %>
-    
-          <% if (!isSelf) { %>
-            <% if (isAdmin && adminCount === 1) { %>
-              <button disabled title="Cannot delete the last remaining admin">Delete</button>
-            <% } else { %>
-              <form method="POST" action="/admin/users/<%= user.user_id %>/delete" style="display:inline;">
-                <button type="submit" onclick="return confirm('Delete this user?');">Delete</button>
-              </form>
-            <% } %>
-          <% } %>
+
+          <% isSelf = (user.user_id === currentUserId); const isAdmin =
+          (user.Role && user.Role.role_name === 'admin'); %> <% if (!isSelf) {
+          %> <% if (isAdmin && adminCount === 1) { %>
+          <button disabled title="Cannot delete the last remaining admin">
+            Delete
+          </button>
+          <% } else { %>
+          <form
+            method="POST"
+            action="/admin/users/<%= user.user_id %>/delete"
+            style="display: inline"
+          >
+            <button
+              type="submit"
+              onclick="return confirm('Delete this user?');"
+            >
+              Delete
+            </button>
+          </form>
+          <% } %> <% } %>
         </td>
       </tr>
-    <% }); %>
-  </table>
+      <% }); %>
+    </table>
 
-  <% if(totalPages > 1) { %>
+    <% if(totalPages > 1) { %>
     <div>
-      <% for(let p = 1; p <= totalPages; p++) { %>
-        <% if(p === currentPage) { %>
-          <strong><%= p %></strong>
-        <% } else { %>
-          <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
-        <% } %>
-      <% } %>
+      <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) { %>
+      <strong><%= p %></strong>
+      <% } else { %>
+      <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+      <% } %> <% } %>
     </div>
-  <% } %>
-</body>
+    <% } %>
+  </body>
 </html>

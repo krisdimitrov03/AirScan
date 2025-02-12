@@ -1,66 +1,73 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body>
-  <h1><%= title %></h1>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-  <% if (error) { %>
-    <div style="color:red;"><%= error %></div>
-  <% } %>
+    <h1><%= title %></h1>
 
-  <form method="POST" action="/admin/airport-slots/<%= slot.slot_id %>/edit">
-    <label>Airport Code:
-      <input
-        type="text"
-        name="airport_code"
-        value="<%= slot.airport_code %>"
-        required
-      >
-    </label><br>
+    <% if (error) { %>
+    <div style="color: red"><%= error %></div>
+    <% } %>
 
-    <label>Date:
-      <input
-        type="date"
-        name="date"
-        value="<%= slot.date %>"
-        required
-      >
-    </label><br>
+    <form method="POST" action="/admin/airport-slots/<%= slot.slot_id %>/edit">
+      <label
+        >Airport Code:
+        <input
+          type="text"
+          name="airport_code"
+          value="<%= slot.airport_code %>"
+          required
+        /> </label
+      ><br />
 
-    <label>Start Time:
-      <input
-        type="time"
-        name="time_slot_start"
-        value="<%= slot.time_slot_start %>"
-        required
-      >
-    </label><br>
+      <label
+        >Date:
+        <input
+          type="date"
+          name="date"
+          value="<%= slot.date %>"
+          required
+        /> </label
+      ><br />
 
-    <label>End Time:
-      <input
-        type="time"
-        name="time_slot_end"
-        value="<%= slot.time_slot_end %>"
-        required
-      >
-    </label><br>
+      <label
+        >Start Time:
+        <input
+          type="time"
+          name="time_slot_start"
+          value="<%= slot.time_slot_start %>"
+          required
+        /> </label
+      ><br />
 
-    <label>Slot Capacity:
-      <input
-        type="number"
-        name="slot_capacity"
-        min="1"
-        value="<%= slot.slot_capacity %>"
-        required
-      >
-    </label><br>
+      <label
+        >End Time:
+        <input
+          type="time"
+          name="time_slot_end"
+          value="<%= slot.time_slot_end %>"
+          required
+        /> </label
+      ><br />
 
-    <button type="submit">Update Slot</button>
-  </form>
+      <label
+        >Slot Capacity:
+        <input
+          type="number"
+          name="slot_capacity"
+          min="1"
+          value="<%= slot.slot_capacity %>"
+          required
+        /> </label
+      ><br />
 
-  <p><a href="/admin/airport-slots">Back to Slots</a></p>
-</body>
+      <button type="submit">Update Slot</button>
+    </form>
+
+    <p><a href="/admin/airport-slots">Back to Slots</a></p>
+  </body>
 </html>
