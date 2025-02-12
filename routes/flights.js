@@ -28,7 +28,27 @@ router.get(
 );
 
 router.get("/new", (req, res) => {
-  res.render("flights/new");
+  const {
+    origin_airport_code,
+    destination_airport_code,
+    scheduled_departure,
+    scheduled_arrival,
+    direct_indirect_flag,
+    return_option_flag,
+  } = req.query;
+
+  res.render("flights/new", {
+    title: "Create New Flight",
+    error: null,
+    suggested: {
+      origin_airport_code: origin_airport_code || "",
+      destination_airport_code: destination_airport_code || "",
+      scheduled_departure: scheduled_departure || "",
+      scheduled_arrival: scheduled_arrival || "",
+      direct_indirect_flag: direct_indirect_flag || "direct",
+      return_option_flag: return_option_flag || "false",
+    },
+  });
 });
 
 router.post("/", async (req, res, next) => {
