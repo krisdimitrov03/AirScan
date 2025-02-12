@@ -2,6 +2,11 @@ name: Deploy App to AWS
 
 on:
   push:
+    branches:
+      - RELEASE
+  pull_request:
+    branches:
+      - RELEASE
   workflow_dispatch:
 
 jobs:
