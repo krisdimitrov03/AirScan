@@ -15,61 +15,61 @@
       <div class="error-message"><%= error %></div>
       <% } %>
 
-      <form
-        method="POST"
-        action="/admin/airport-slots/<%= slot.slot_id %>/edit"
-      >
+      <form method="POST" action="/admin/events/<%= event.event_id %>/edit">
         <div class="form-group">
-          <label>Airport Code:</label>
+          <label>Event Name:</label>
           <input
             type="text"
-            name="airport_code"
-            value="<%= slot.airport_code %>"
+            name="event_name"
+            value="<%= event.event_name %>"
             required
           />
         </div>
 
         <div class="form-group">
-          <label>Date:</label>
-          <input type="date" name="date" value="<%= slot.date %>" required />
-        </div>
-
-        <div class="form-group">
-          <label>Start Time:</label>
+          <label>City:</label>
           <input
-            type="time"
-            name="time_slot_start"
-            value="<%= slot.time_slot_start %>"
-            required
+            type="text"
+            name="location_city"
+            value="<%= event.location_city %>"
           />
         </div>
 
         <div class="form-group">
-          <label>End Time:</label>
+          <label>Start Date:</label>
           <input
-            type="time"
-            name="time_slot_end"
-            value="<%= slot.time_slot_end %>"
+            type="date"
+            name="start_date"
+            value="<%= event.start_date %>"
             required
           />
         </div>
 
         <div class="form-group">
-          <label>Slot Capacity:</label>
+          <label>End Date:</label>
+          <input
+            type="date"
+            name="end_date"
+            value="<%= event.end_date %>"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Expected Additional Traffic Factor:</label>
           <input
             type="number"
-            name="slot_capacity"
-            min="1"
-            value="<%= slot.slot_capacity %>"
-            required
+            step="0.01"
+            name="expected_additional_traffic_factor"
+            value="<%= event.expected_additional_traffic_factor %>"
           />
         </div>
 
-        <button type="submit">Update Slot</button>
+        <button type="submit">Update Event</button>
       </form>
 
       <p class="text-center">
-        <a class="back-link" href="/admin/airport-slots">Back to Slots</a>
+        <a class="back-link" href="/admin/events">Back to Events</a>
       </p>
     </div>
   </body>

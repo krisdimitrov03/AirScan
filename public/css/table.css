@@ -1,0 +1,76 @@
+/* --- Custom Styles for This Page --- */
+
+/* Container for top controls (Create button and Search form) */
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+/* Align search input and button vertically using flex */
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+.search-form input[type="text"] {
+  width: 200px; /* Shorter search box */
+  margin-bottom: 0;
+}
+.search-form button {
+  padding: 0.63rem 1rem;
+}
+
+/* Ensure all buttons have consistent padding */
+button,
+.btn {
+  padding: 0.6rem 1rem;
+}
+
+/* Style for Create New Slot button with plus icon */
+.new-item-button {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  background-color: #28a745;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  font-weight: 500;
+}
+.new-item-button:hover {
+  background-color: #218838;
+}
+.new-item-button .plus-icon {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+/* Make the table use the full width of its container */
+table {
+  width: 100%;
+}
+
+/* Align inline elements in table actions */
+td form {
+  display: inline;
+}
+td a,
+td button {
+  vertical-align: middle;
+}
+
+/* Style the Delete button in the table */
+table tbody td form button {
+  background-color: darkred;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.63rem 1rem;
+  transition: background-color 0.3s;
+}
+table tbody td form button:hover {
+  background-color: #a50000;
+}

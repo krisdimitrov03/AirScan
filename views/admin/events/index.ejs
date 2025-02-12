@@ -11,17 +11,17 @@
     <main>
       <h1><%= title %></h1>
 
+      <!-- Top Controls -->
       <div class="top-controls">
-        <a href="/admin/airport-slots/new" class="new-item-button">
+        <a href="/admin/events/new" class="new-item-button">
           <span class="plus-icon">+</span>
-          Create New Slot
+          Create New Event
         </a>
-
-        <form method="GET" action="/admin/airport-slots" class="search-form">
+        <form method="GET" action="/admin/events" class="search-form">
           <input
             type="text"
             name="search"
-            placeholder="Search by code/date..."
+            placeholder="Search events..."
             value="<%= search %>"
           />
           <button type="submit">Search</button>
@@ -31,40 +31,41 @@
       <table>
         <thead>
           <tr>
-            <th>Slot ID</th>
-            <th>Airport Code</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Capacity</th>
+            <th>Event ID</th>
+            <th>Event Name</th>
+            <th>City</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Traffic Factor</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <% slots.forEach(slot => { %>
+          <% events.forEach(event => { %>
           <tr>
-            <td><%= slot.slot_id %></td>
-            <td><%= slot.airport_code %></td>
-            <td><%= slot.date %></td>
-            <td><%= slot.time_slot_start %></td>
-            <td><%= slot.time_slot_end %></td>
-            <td><%= slot.slot_capacity %></td>
+            <td><%= event.event_id %></td>
+            <td><%= event.event_name %></td>
+            <td><%= event.location_city %></td>
+            <td><%= event.start_date %></td>
+            <td><%= event.end_date %></td>
+            <td><%= event.expected_additional_traffic_factor %></td>
             <td>
-              <a href="/admin/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
+              <a href="/admin/events/<%= event.event_id %>/edit">Edit</a>
               <form
                 method="POST"
-                action="/admin/airport-slots/<%= slot.slot_id %>/delete"
+                action="/admin/events/<%= event.event_id %>/delete"
+                style="display: inline"
               >
                 <button
                   type="submit"
-                  onclick="return confirm('Delete this slot?')"
+                  onclick="return confirm('Delete this event?')"
                 >
                   Delete
                 </button>
               </form>
             </td>
           </tr>
-          <% }) %>
+          <% }); %>
         </tbody>
       </table>
 

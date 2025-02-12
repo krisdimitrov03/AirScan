@@ -3,17 +3,26 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
-    <h2><%= title %></h2>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-    <% if(error) { %>
-    <div style="color: red"><%= error %></div>
-    <% } %>
+    <div class="form-container">
+      <h2 class="text-center"><%= title %></h2>
 
-    <form method="POST" action="/admin/roles">
-      <label>Role Name: <input type="text" name="role_name" /></label><br />
-      <button type="submit">Create</button>
-    </form>
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/roles">
+        <div class="form-group">
+          <label>Role Name:</label>
+          <input type="text" name="role_name" required />
+        </div>
+
+        <button type="submit">Create</button>
+      </form>
+    </div>
   </body>
 </html>

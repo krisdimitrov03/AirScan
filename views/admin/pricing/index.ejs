@@ -2,72 +2,82 @@
 <html>
   <head>
     <title><%= title %></title>
+    <!-- Global + table-specific CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
+    <!-- Include your navbar partial -->
     <%- include('../../partials/navbar', { user: user }) %>
 
     <main>
       <h1><%= title %></h1>
 
+      <!-- Top Controls: Create Button & Search Form -->
       <div class="top-controls">
-        <a href="/admin/airport-slots/new" class="new-item-button">
+        <a href="/admin/pricing/new" class="new-item-button">
           <span class="plus-icon">+</span>
-          Create New Slot
+          Create New Pricing
         </a>
 
-        <form method="GET" action="/admin/airport-slots" class="search-form">
+        <form method="GET" action="/admin/pricing" class="search-form">
           <input
             type="text"
             name="search"
-            placeholder="Search by code/date..."
+            placeholder="Search by Flight ID..."
             value="<%= search %>"
           />
           <button type="submit">Search</button>
         </form>
       </div>
 
+      <!-- Table -->
       <table>
         <thead>
           <tr>
-            <th>Slot ID</th>
-            <th>Airport Code</th>
-            <th>Date</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Capacity</th>
+            <th>ID</th>
+            <th>Flight ID</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Base Price</th>
+            <th>Discounts</th>
+            <th>Surcharge</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          <% slots.forEach(slot => { %>
+          <% pricingRecords.forEach(record => { %>
           <tr>
-            <td><%= slot.slot_id %></td>
-            <td><%= slot.airport_code %></td>
-            <td><%= slot.date %></td>
-            <td><%= slot.time_slot_start %></td>
-            <td><%= slot.time_slot_end %></td>
-            <td><%= slot.slot_capacity %></td>
+            <td><%= record.pricing_id %></td>
+            <td><%= record.flight_id %></td>
+            <td><%= record.effective_date_range_start %></td>
+            <td><%= record.effective_date_range_end %></td>
+            <td><%= record.base_price %></td>
+            <td><%= record.discounts_offered %></td>
+            <td><%= record.peak_season_surcharge %></td>
             <td>
-              <a href="/admin/airport-slots/<%= slot.slot_id %>/edit">Edit</a>
+              <!-- Edit -->
+              <a href="/admin/pricing/<%= record.pricing_id %>/edit">Edit</a>
+
+              <!-- Delete -->
               <form
                 method="POST"
-                action="/admin/airport-slots/<%= slot.slot_id %>/delete"
+                action="/admin/pricing/<%= record.pricing_id %>/delete"
               >
                 <button
                   type="submit"
-                  onclick="return confirm('Delete this slot?')"
+                  onclick="return confirm('Delete this pricing record?')"
                 >
                   Delete
                 </button>
               </form>
             </td>
           </tr>
-          <% }) %>
+          <% }); %>
         </tbody>
       </table>
 
+      <!-- Pagination -->
       <% if (totalPages > 1) { %>
       <div class="pagination">
         <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)

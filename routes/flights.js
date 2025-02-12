@@ -16,7 +16,7 @@ router.use(
 router.get("/", verifyToken, async (req, res, next) => {
   try {
     const flights = await flightService.getAllFlights();
-    res.render("flights/index", { flights });
+    res.render("flights/index", { flights, user: req.user });
   } catch (e) {
     next(e);
   }
@@ -43,6 +43,7 @@ router.get("/new", (req, res) => {
       direct_indirect_flag: direct_indirect_flag || "direct",
       return_option_flag: return_option_flag || "false",
     },
+    user: req.user,
   });
 });
 
@@ -77,7 +78,7 @@ router.get("/:uuid/edit", async (req, res, next) => {
   try {
     const flight = await flightService.getFlightByUUID(req.params.uuid);
     if (!flight) return res.status(404).send("Flight not found.");
-    res.render("flights/edit", { flight });
+    res.render("flights/edit", { flight, user: req.user });
   } catch (e) {
     next(e);
   }

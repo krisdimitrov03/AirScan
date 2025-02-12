@@ -4,59 +4,63 @@
     <meta charset="UTF-8" />
     <title>Pricing List</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
-    <h1>Pricing List</h1>
-
-    <% if (pricings && pricings.length > 0) { %>
-    <table border="1" cellpadding="5" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Pricing ID</th>
-          <th>Flight ID</th>
-          <th>Effective Start</th>
-          <th>Effective End</th>
-          <th>Base Price</th>
-          <th>Discounts</th>
-          <th>Peak Surcharge</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% pricings.forEach((pricing) => { %>
-        <tr>
-          <td><%= pricing.pricing_id %></td>
-          <td><%= pricing.flight_id %></td>
-          <td><%= pricing.effective_date_range_start %></td>
-          <td><%= pricing.effective_date_range_end %></td>
-          <td><%= pricing.base_price %></td>
-          <td><%= pricing.discounts_offered %></td>
-          <td><%= pricing.peak_season_surcharge %></td>
-          <td>
-            <a href="/pricing/<%= pricing.pricing_id %>/edit">Edit</a>
-
-            <form
-              action="/pricing/<%= pricing.pricing_id %>?_method=DELETE"
-              method="POST"
-              style="display: inline"
-            >
-              <button
-                type="submit"
-                onclick="return confirm('Delete this pricing record?');"
+    <%- include('../partials/navbar', { user: user }) %>
+    <main>
+      <h1>Pricing List</h1>
+      <% if (pricings && pricings.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Pricing ID</th>
+            <th>Flight ID</th>
+            <th>Effective Start</th>
+            <th>Effective End</th>
+            <th>Base Price</th>
+            <th>Discounts</th>
+            <th>Peak Surcharge</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% pricings.forEach((pricing) => { %>
+          <tr>
+            <td><%= pricing.pricing_id %></td>
+            <td><%= pricing.flight_id %></td>
+            <td><%= pricing.effective_date_range_start %></td>
+            <td><%= pricing.effective_date_range_end %></td>
+            <td><%= pricing.base_price %></td>
+            <td><%= pricing.discounts_offered %></td>
+            <td><%= pricing.peak_season_surcharge %></td>
+            <td>
+              <a href="/pricing/<%= pricing.pricing_id %>/edit">Edit</a>
+              <form
+                action="/pricing/<%= pricing.pricing_id %>?_method=DELETE"
+                method="POST"
               >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    <% } else { %>
-    <p>No pricing records found.</p>
-    <% } %>
-
-    <hr />
-    <a href="/pricing/new">Create New Pricing</a>
+                <button
+                  type="submit"
+                  onclick="return confirm('Delete this pricing record?');"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <p>No pricing records found.</p>
+      <% } %>
+      <div class="top-controls">
+        <a href="/pricing/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Pricing
+        </a>
+      </div>
+    </main>
   </body>
 </html>

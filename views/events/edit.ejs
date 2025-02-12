@@ -2,87 +2,94 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title><%= title %></title>
+    <title>Edit Event</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
     <%- include('../partials/navbar', { user: user }) %>
 
-    <h1>Edit Event</h1>
+    <div class="form-container">
+      <h1 class="text-center">Edit Event</h1>
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <form
+        action="/events/<%= eventData.event_id %>?_method=PUT"
+        method="POST"
+      >
+        <div class="form-group">
+          <label for="event_id">Event ID</label>
+          <input
+            type="text"
+            id="event_id"
+            name="event_id"
+            value="<%= eventData.event_id || '' %>"
+            readonly
+          />
+        </div>
 
-    <% if (error) { %>
-    <p style="color: red"><%= error %></p>
-    <% } %>
+        <div class="form-group">
+          <label for="event_name">Event Name</label>
+          <input
+            type="text"
+            id="event_name"
+            name="event_name"
+            value="<%= eventData.event_name || '' %>"
+            required
+          />
+        </div>
 
-    <form action="/events/<%= eventData.event_id %>?_method=PUT" method="POST">
-      <div>
-        <label for="event_id">Event ID</label>
-        <input
-          type="text"
-          id="event_id"
-          name="event_id"
-          value="<%= eventData.event_id || '' %>"
-          readonly
-        />
-      </div>
+        <div class="form-group">
+          <label for="location_city">Location City</label>
+          <input
+            type="text"
+            id="location_city"
+            name="location_city"
+            value="<%= eventData.location_city || '' %>"
+          />
+        </div>
 
-      <div>
-        <label for="event_name">Event Name</label>
-        <input
-          type="text"
-          id="event_name"
-          name="event_name"
-          value="<%= eventData.event_name || '' %>"
-          required
-        />
-      </div>
+        <div class="form-group">
+          <label for="start_date">Start Date</label>
+          <input
+            type="date"
+            id="start_date"
+            name="start_date"
+            value="<%= eventData.start_date || '' %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="location_city">Location City</label>
-        <input
-          type="text"
-          id="location_city"
-          name="location_city"
-          value="<%= eventData.location_city || '' %>"
-        />
-      </div>
+        <div class="form-group">
+          <label for="end_date">End Date</label>
+          <input
+            type="date"
+            id="end_date"
+            name="end_date"
+            value="<%= eventData.end_date || '' %>"
+            required
+          />
+        </div>
 
-      <div>
-        <label for="start_date">Start Date</label>
-        <input
-          type="date"
-          id="start_date"
-          name="start_date"
-          value="<%= eventData.start_date || '' %>"
-          required
-        />
-      </div>
+        <div class="form-group">
+          <label for="expected_additional_traffic_factor"
+            >Expected Traffic Factor</label
+          >
+          <input
+            type="number"
+            step="0.01"
+            id="expected_additional_traffic_factor"
+            name="expected_additional_traffic_factor"
+            value="<%= eventData.expected_additional_traffic_factor || '' %>"
+          />
+        </div>
 
-      <div>
-        <label for="end_date">End Date</label>
-        <input
-          type="date"
-          id="end_date"
-          name="end_date"
-          value="<%= eventData.end_date || '' %>"
-          required
-        />
-      </div>
-
-      <div>
-        <label for="expected_additional_traffic_factor">
-          Expected Traffic Factor
-        </label>
-        <input
-          type="number"
-          step="0.01"
-          id="expected_additional_traffic_factor"
-          name="expected_additional_traffic_factor"
-          value="<%= eventData.expected_additional_traffic_factor || '' %>"
-        />
-      </div>
-
-      <button type="submit">Update Event</button>
-    </form>
+        <button type="submit">Update Event</button>
+      </form>
+      <p class="text-center">
+        <a class="back-link" href="/events">Back to Events</a>
+      </p>
+    </div>
   </body>
 </html>
