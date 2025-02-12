@@ -9,9 +9,10 @@ const adminRouter = require("./admin");
 const pricingRouter = require("./pricing");
 const demandHistoryRouter = require("./demandHistory");
 const eventRouter = require("./events");
+const { verifyToken } = require("../middlewares/authMiddleware");
 
-router.get("/", (req, res) => {
-  res.render("index", { title: "Home Page" });
+router.get("/", verifyToken, (req, res) => {
+  res.redirect("/dashboard");
 });
 
 router.use("/auth", authRouter);
