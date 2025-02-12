@@ -35,6 +35,5 @@ jobs:
             -e "db_pass=${{ secrets.DB_PASS }}" \
             -e "db_name=${{ secrets.DB_NAME }}" \
             -e "db_port=${{ secrets.DB_PORT }}" \
-            -e "db_root_pass=${{ secrets.DB_ROOT_PASS }}"
-
-
+            -e "db_root_pass=${{ secrets.DB_ROOT_PASS }}" \
+            -e "jwt_secret=${{ secrets.JWT_SECRET }}"
