@@ -1,17 +1,14 @@
-name: Clean Database
+name: Clean Test Database
 
 on:
   workflow_dispatch:
-    inputs:
-      confirm:
-        description: "Type YES to confirm clearing the database (this is destructive and should not be used in production!)"
-        required: true
-        default: "NO"
 
 jobs:
-  clean-db:
-    if: ${{ github.event.inputs.confirm == 'YES' }}
+  drop-database:
+    # WARNING: This is for dev/test environments only. Use with caution.
+    name: "Danger! Drop DB for debugging only."
     runs-on: ubuntu-latest
+
     services:
       mysql:
         image: mysql:8.0
@@ -27,37 +24,32 @@ jobs:
           --health-retries 10
 
     steps:
-      - name: Install MySQL client
-        run: sudo apt-get update && sudo apt-get install -y mysql-client
+      - name: Check out repo
+        uses: actions/checkout@v3
 
       - name: Wait for MySQL to be ready
         run: |
-          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1" ; do
-            echo "Waiting for MySQL..."
+          sudo apt-get update
+          sudo apt-get install -y mysql-client
+          # Loop until we can successfully connect
+          until mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SELECT 1"; do
+            echo "Waiting for MySQL to be ready..."
             sleep 3
           done
 
-      - name: WARNING - Destructive Operation
-        run: echo "WARNING - This job is going to drop and recreate your database! Do not run in production environments!"
-
-      - name: Drop and recreate database
+      - name: WARNING Prompt
         run: |
+          echo "WARNING: You are about to drop the database ${{ secrets.DB_NAME }}."
+          echo "This operation is *destructive* and should only be run in a dev/testing environment."
+
+      - name: Drop database
+        run: |
+          echo "Dropping database: ${{ secrets.DB_NAME }}..."
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "DROP DATABASE IF EXISTS \`${{ secrets.DB_NAME }}\`;"
-          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE \`${{ secrets.DB_NAME }}\`;"
+          echo "Database dropped."
 
-      - name: Verify database reset
+      - name: Verify database has been dropped
         run: |
-          RESULT=$(mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SHOW DATABASES LIKE '${{ secrets.DB_NAME }}';" | grep ${{ secrets.DB_NAME }})
-          if [ -z "$RESULT" ]; then
-            echo "Database was not recreated successfully."
-            exit 1
-          else
-            echo "Database emptied and recreated successfully."
-          fi
-
-  warn:
-    if: ${{ github.event.inputs.confirm != 'YES' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Abort Operation
-        run: echo "Database cleaning not confirmed. To proceed, re-run and type YES for the confirm input."
+          echo "Verifying that ${{ secrets.DB_NAME }} does not exist."
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SHOW DATABASES;"
+          echo "If you see ${{ secrets.DB_NAME }} in the list above, the drop was not successful."
