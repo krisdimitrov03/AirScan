@@ -1,34 +1,97 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 const {
   verifyToken,
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
 const roles = require("../constants/roles");
 
-const roleService = require("../services/roleService");
-const userService = require("../services/userService");
 const airportSlotService = require("../services/airportSlotService");
 const eventService = require("../services/eventService");
 const flightService = require("../services/flightService");
 const demandHistoryService = require("../services/demandHistoryService");
 const pricingService = require("../services/pricingService");
-
-const fs = require("fs");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { getDailyForecastSeries, getEarliestAndLatestFlightDates } = require("../services/analyticsService");
 
 router.use(verifyToken, authorizeRoles([roles.MANAGER]));
 
-router.get("/", (req, res) => {
-  res.render("manager/bulk", { message: null, error: null, user: req.user });
+router.get("/", async (req, res) => {
+  let message = null;
+  let error = null;
+  let user = req.user;
+
+  // We'll gather 4 sets of data in parallel or sequentially
+  try {
+    const now = require("moment")();
+    // 1. 1 week -> last 7 days
+    const startWeek = now.clone().subtract(6, "days").startOf("day");
+    const { labels: weekLabels, data: weekData } = await getDailyForecastSeries(
+      startWeek,
+      now
+    );
+
+    // 2. 1 month -> last 30 days
+    const startMonth = now.clone().subtract(29, "days").startOf("day");
+    const { labels: monthLabels, data: monthData } =
+      await getDailyForecastSeries(startMonth, now);
+
+    // 3. 1 year -> last 365 days
+    const startYear = now.clone().subtract(364, "days").startOf("day");
+    const { labels: yearLabels, data: yearData } = await getDailyForecastSeries(
+      startYear,
+      now
+    );
+
+    // 4. "All time" -> from earliest flight date to latest flight date
+    const earliestLatest = await getEarliestAndLatestFlightDates();
+    let allTimeLabels = [];
+    let allTimeData = [];
+    if (earliestLatest) {
+      const { earliest, latest } = earliestLatest;
+      const { labels, data } = await getDailyForecastSeries(earliest, latest);
+      allTimeLabels = labels;
+      allTimeData = data;
+    }
+
+    res.render("manager/bulk", {
+      message,
+      error,
+      user,
+      // pass all four sets to the EJS
+      weekLabels,
+      weekData,
+      monthLabels,
+      monthData,
+      yearLabels,
+      yearData,
+      allTimeLabels,
+      allTimeData,
+    });
+  } catch (err) {
+    error = err.message || "Error building analytics data.";
+    return res.render("manager/bulk", {
+      message: null,
+      error,
+      user,
+      weekLabels: [],
+      weekData: [],
+      monthLabels: [],
+      monthData: [],
+      yearLabels: [],
+      yearData: [],
+      allTimeLabels: [],
+      allTimeData: [],
+    });
+  }
 });
 
-router.get("/bulk", (req, res) => {
-  res.redirect("/manager");
-});
+/** The existing “bulk” routes (unchanged) */
 
-// ----------------- Airport Slots -----------------
+// Bulk: Airport Slots
 router.get("/bulk/airport-slots", (req, res) => {
   res.render("manager/airportSlots/bulk", {
     message: null,
@@ -76,7 +139,7 @@ router.post(
   }
 );
 
-// ----------------- Events -----------------
+// Bulk: Events
 router.get("/bulk/events", (req, res) => {
   res.render("manager/events/bulk", {
     message: null,
@@ -120,7 +183,7 @@ router.post("/bulk/events", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// ----------------- Flights -----------------
+// Bulk: Flights
 router.get("/bulk/flights", (req, res) => {
   res.render("manager/flights/bulk", {
     message: null,
@@ -164,7 +227,7 @@ router.post("/bulk/flights", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// ----------------- Demand History -----------------
+// Bulk: Demand History
 router.get("/bulk/demand-history", (req, res) => {
   res.render("manager/demandHistory/bulk", {
     message: null,
@@ -212,7 +275,7 @@ router.post(
   }
 );
 
-// ----------------- Pricing -----------------
+// Bulk: Pricing
 router.get("/bulk/pricing", (req, res) => {
   res.render("manager/pricing/bulk", {
     message: null,
