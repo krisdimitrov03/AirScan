@@ -44,7 +44,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Clean and seed database
+      - name: Clean DB
         run: |
           echo "Dropping the existing database (if it exists)..."
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "DROP DATABASE IF EXISTS \`${{ secrets.DB_NAME }}\`;"
@@ -52,13 +52,7 @@ jobs:
           echo "Creating a fresh database..."
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE \`${{ secrets.DB_NAME }}\`;"
           
-          echo "Seeding the database..."
-          node ./seed/seedDatabase.js
-          
-          echo "First row of 'flights' table after seeding:"
-          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -D ${{ secrets.DB_NAME }} -e "SELECT * FROM flights LIMIT 1;"
-
-      - name: Run test coverage
+      - name: Seed DB and run test coverage
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
           DB_USER: root
@@ -67,7 +61,12 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: ${{ secrets.PORT }}
-        run: npm run test:coverage
+        run: |
+          npm run test:coverage
+          
+          echo "First row of 'flights' table after seeding:"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -D ${{ secrets.DB_NAME }} -e "SELECT * FROM flights LIMIT 1;"
+
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
