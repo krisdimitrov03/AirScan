@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Edit Pricing</title>
+    <title>Edit Pricing (ID: <%= pricing.pricing_id %>)</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/form.css" />
   </head>
@@ -13,11 +13,63 @@
       <h1 class="text-center">Edit Pricing (ID: <%= pricing.pricing_id %>)</h1>
       <% if (error) { %>
       <div class="error-message"><%= error %></div>
-      <% } %>
+      <% } %> <% let originCity = ''; let destinationCity = ''; if
+      (selectedFlight) { for (let city in cityToAirports) { if
+      (cityToAirports[city].includes(selectedFlight.origin_airport_code)) {
+      originCity = city; break; } } for (let city in cityToAirports) { if
+      (cityToAirports[city].includes(selectedFlight.destination_airport_code)) {
+      destinationCity = city; break; } } } %>
+
       <form
         action="/pricing/<%= pricing.pricing_id %>?_method=PUT"
         method="POST"
       >
+        <div class="form-group">
+          <label for="originCityFilter">Origin City:</label>
+          <input
+            type="text"
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value="<%= originCity %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <select
+            id="originAirportSelect"
+            required
+            data-suggested="<%= selectedFlight ? selectedFlight.origin_airport_code : '' %>"
+          ></select>
+        </div>
+        <div class="form-group">
+          <label for="destinationCityFilter">Destination City:</label>
+          <input
+            type="text"
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value="<%= destinationCity %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect"
+            >Destination Airport Code:</label
+          >
+          <select
+            id="destinationAirportSelect"
+            required
+            data-suggested="<%= selectedFlight ? selectedFlight.destination_airport_code : '' %>"
+          ></select>
+        </div>
+        <div class="form-group">
+          <label for="flightOptionsSelect">Flight Options:</label>
+          <select name="flight_id" id="flightOptionsSelect" required>
+            <option value="">
+              Select a flight (populate when both origin and destination are
+              selected)
+            </option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="effective_date_range_start">Effective Start Date:</label>
           <input
@@ -79,5 +131,17 @@
         <a class="back-link" href="/pricing">Back to Pricing List</a>
       </p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    <script>
+      window.flights = <%- JSON.stringify(flights) %>;
+    </script>
+    <script>
+      window.selectedFlight = <%- JSON.stringify(selectedFlight || {}) %>;
+    </script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/flightOptions.js"></script>
   </body>
 </html>

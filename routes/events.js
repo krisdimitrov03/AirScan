@@ -13,8 +13,33 @@ router.use(
 
 router.get("/", async (req, res, next) => {
   try {
-    const events = await eventService.getAllEvents();
-    res.render("events/index", { title: "All Events", events, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allEvents = await eventService.getAllEvents();
+    if (search) {
+      allEvents = allEvents.filter(
+        (event) =>
+          event.event_id?.includes(search) ||
+          event.event_name?.includes(search) ||
+          event.location_city?.includes(search)
+      );
+    }
+
+    const count = allEvents.length;
+    const paginatedEvents = allEvents.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("events/index", {
+      title: "All Events",
+      events: paginatedEvents,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     next(error);
   }

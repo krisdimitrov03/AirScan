@@ -5,6 +5,7 @@ const {
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
 const flightService = require("../services/flightService");
+const cityToAirports = require("../config/cityToAirports");
 
 const roles = require("../constants/roles");
 
@@ -15,8 +16,33 @@ router.use(
 
 router.get("/", verifyToken, async (req, res, next) => {
   try {
-    const flights = await flightService.getAllFlights();
-    res.render("flights/index", { flights, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allFlights = await flightService.getAllFlights();
+
+    if (search) {
+      allFlights = allFlights.filter(
+        (f) =>
+          f.flight_number?.includes(search) ||
+          f.origin_airport_code?.includes(search) ||
+          f.destination_airport_code?.includes(search)
+      );
+    }
+
+    const count = allFlights.length;
+    const flights = allFlights.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("flights/index", {
+      flights,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (e) {
     next(e);
   }
@@ -44,6 +70,7 @@ router.get("/new", (req, res) => {
       return_option_flag: return_option_flag || "false",
     },
     user: req.user,
+    cityToAirports,
   });
 });
 
@@ -78,7 +105,7 @@ router.get("/:uuid/edit", async (req, res, next) => {
   try {
     const flight = await flightService.getFlightByUUID(req.params.uuid);
     if (!flight) return res.status(404).send("Flight not found.");
-    res.render("flights/edit", { flight, user: req.user });
+    res.render("flights/edit", { flight, user: req.user, cityToAirports });
   } catch (e) {
     next(e);
   }

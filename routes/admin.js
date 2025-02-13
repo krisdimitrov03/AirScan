@@ -13,6 +13,7 @@ const demandHistoryService = require("../services/demandHistoryService");
 const pricingService = require("../services/pricingService");
 const eventService = require("../services/eventService");
 const roles = require("../constants/roles");
+const cityToAirports = require("../config/cityToAirports");
 
 router.use(verifyToken, authorizeRoles([roles.ADMIN]));
 
@@ -102,7 +103,7 @@ router.get("/users/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/users/:id/edit", async (req, res) => {
+router.put("/users/:id", async (req, res) => {
   try {
     const { username, password, email, role_id } = req.body;
 
@@ -216,7 +217,7 @@ router.get("/roles/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/roles/:id/edit", async (req, res) => {
+router.put("/roles/:id", async (req, res) => {
   try {
     const { role_name } = req.body;
     const role = await roleService.updateRole(req.params.id, role_name);
@@ -272,10 +273,28 @@ router.get("/flights", async (req, res, next) => {
 });
 
 router.get("/flights/new", (req, res) => {
+  const {
+    origin_airport_code,
+    destination_airport_code,
+    scheduled_departure,
+    scheduled_arrival,
+    direct_indirect_flag,
+    return_option_flag,
+  } = req.query;
+
   res.render("admin/flights/new", {
     title: "Create Flight",
     error: null,
     user: req.user,
+    suggested: {
+      origin_airport_code: origin_airport_code || "",
+      destination_airport_code: destination_airport_code || "",
+      scheduled_departure: scheduled_departure || "",
+      scheduled_arrival: scheduled_arrival || "",
+      direct_indirect_flag: direct_indirect_flag || "direct",
+      return_option_flag: return_option_flag || "false",
+    },
+    cityToAirports,
   });
 });
 
@@ -315,13 +334,14 @@ router.get("/flights/:id/edit", async (req, res, next) => {
       flight,
       error: null,
       user: req.user,
+      cityToAirports,
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/flights/:id/edit", async (req, res, next) => {
+router.put("/flights/:id", async (req, res, next) => {
   try {
     const updated = await flightService.updateFlight(req.params.id, req.body);
     if (!updated) return res.status(404).send("Flight update failed.");
@@ -377,6 +397,7 @@ router.get("/airport-slots/new", (req, res) => {
     title: "Create Airport Slot",
     error: null,
     user: req.user,
+    cityToAirports,
   });
 });
 
@@ -415,13 +436,14 @@ router.get("/airport-slots/:id/edit", async (req, res, next) => {
       slot,
       error: null,
       user: req.user,
+      cityToAirports,
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/airport-slots/:id/edit", async (req, res, next) => {
+router.put("/airport-slots/:id", async (req, res, next) => {
   try {
     const slotId = parseInt(req.params.id, 10);
     const {
@@ -460,22 +482,45 @@ router.post("/airport-slots/:id/delete", async (req, res, next) => {
 // ----------------- DEMAND HISTORY -----------------
 router.get("/demand-history", async (req, res, next) => {
   try {
-    const demandHistory = await demandHistoryService.getAllDemandHistory();
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allDemandHistory = await demandHistoryService.getAllDemandHistory();
+
+    if (search) {
+      allDemandHistory = allDemandHistory.filter((record) =>
+        record.flight_id.includes(search)
+      );
+    }
+
+    const count = allDemandHistory.length;
+    const demandHistory = allDemandHistory.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
     res.render("admin/demandHistory/index", {
-      title: "Demand History",
+      title: "Manage Demand History",
       demandHistory,
+      currentPage: page,
+      totalPages,
+      search,
       user: req.user,
     });
   } catch (err) {
-    next(err);
+    res.status(500).send(err.message);
   }
 });
 
-router.get("/demand-history/new", (req, res) => {
+router.get("/demand-history/new", async (req, res) => {
+  let flights = await flightService.getAllFlights();
+
   res.render("admin/demandHistory/new", {
     title: "Create Demand History",
     error: null,
     user: req.user,
+    cityToAirports,
+    flights,
   });
 });
 
@@ -495,6 +540,7 @@ router.post("/demand-history", async (req, res, next) => {
 router.get("/demand-history/:id/edit", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
+    let flights = await flightService.getAllFlights();
     const dh = await demandHistoryService.getDemandHistoryById(recordId);
     if (!dh) return res.status(404).send("Demand history record not found.");
     res.render("admin/demandHistory/edit", {
@@ -502,13 +548,15 @@ router.get("/demand-history/:id/edit", async (req, res, next) => {
       dh,
       error: null,
       user: req.user,
+      cityToAirports,
+      flights,
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/demand-history/:id/edit", async (req, res, next) => {
+router.put("/demand-history/:id", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
     const updated = await demandHistoryService.updateDemandHistory(
@@ -574,11 +622,14 @@ router.get("/pricing", async (req, res, next) => {
   }
 });
 
-router.get("/pricing/new", (req, res) => {
+router.get("/pricing/new", async (req, res) => {
+  let flights = await flightService.getAllFlights();
   res.render("admin/pricing/new", {
     title: "Create Pricing Record",
     error: null,
     user: req.user,
+    cityToAirports,
+    flights,
   });
 });
 
@@ -616,6 +667,7 @@ router.get("/pricing/:id/edit", async (req, res, next) => {
   try {
     const pricingId = parseInt(req.params.id, 10);
     const pricingRecord = await pricingService.getPricingById(pricingId);
+    let flights = await flightService.getAllFlights();
 
     if (!pricingRecord)
       return res.status(404).send("Pricing record not found.");
@@ -625,13 +677,15 @@ router.get("/pricing/:id/edit", async (req, res, next) => {
       pricingRecord,
       error: null,
       user: req.user,
+      cityToAirports,
+      flights,
     });
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/pricing/:id/edit", async (req, res) => {
+router.put("/pricing/:id", async (req, res) => {
   try {
     const pricingId = parseInt(req.params.id, 10);
 
@@ -760,7 +814,7 @@ router.get("/events/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/events/:id/edit", async (req, res) => {
+router.put("/events/:id", async (req, res) => {
   try {
     const eventId = req.params.id;
     const {

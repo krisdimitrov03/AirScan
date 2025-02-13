@@ -11,15 +11,22 @@
     <main>
       <h1>Admin - Demand History Records</h1>
 
-      <!-- Top Controls: Create Button -->
       <div class="top-controls">
         <a href="/admin/demand-history/new" class="new-item-button">
           <span class="plus-icon">+</span>
-          Create New Record
+          Create New Demand History Record
         </a>
+        <form method="GET" action="/admin/demand-history" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
 
-      <!-- Table -->
       <table>
         <thead>
           <tr>
@@ -28,7 +35,9 @@
             <th>Date</th>
             <th>Tickets Sold</th>
             <th>Load Factor</th>
-            <th>Segment Distribution</th>
+            <th>Economy</th>
+            <th>First</th>
+            <th>Business</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -40,7 +49,9 @@
             <td><%= record.date %></td>
             <td><%= record.historical_tickets_sold %></td>
             <td><%= record.historical_load_factor %></td>
-            <td><%= record.customer_segment_distribution %></td>
+            <td><%= record.economy_segment_sold %></td>
+            <td><%= record.first_segment_sold %></td>
+            <td><%= record.business_segment_sold %></td>
             <td>
               <a href="/admin/demand-history/<%= record.record_id %>/edit"
                 >Edit</a
@@ -61,6 +72,17 @@
           <% }); %>
         </tbody>
       </table>
+
+      <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
+      <% } %>
 
       <div class="navigation">
         <a href="/admin">Back to Admin Dashboard</a>

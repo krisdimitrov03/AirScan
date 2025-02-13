@@ -22,7 +22,15 @@ async function createDemandHistory(data) {
   const flight = await Flight.findByPk(data.flight_id);
   if (!flight) throw new Error("Invalid flight_id — flight does not exist.");
 
-  return DemandHistory.create(data);
+  return DemandHistory.create({
+    flight_id: data.flight_id,
+    date: data.date,
+    historical_tickets_sold: data.historical_tickets_sold,
+    historical_load_factor: data.historical_load_factor,
+    economy_segment_sold: data.economy_segment_sold,
+    business_segment_sold: data.business_segment_sold,
+    first_segment_sold: data.first_segment_sold,
+  });
 }
 
 async function updateDemandHistory(id, data) {
@@ -36,7 +44,15 @@ async function updateDemandHistory(id, data) {
     if (!flight) throw new Error("Invalid flight_id — flight does not exist.");
   }
 
-  return existing.update(data);
+  return existing.update({
+    flight_id: data.flight_id,
+    date: data.date,
+    historical_tickets_sold: data.historical_tickets_sold,
+    historical_load_factor: data.historical_load_factor,
+    economy_segment_sold: data.economy_segment_sold,
+    business_segment_sold: data.business_segment_sold,
+    first_segment_sold: data.first_segment_sold,
+  });
 }
 
 async function deleteDemandHistory(id) {

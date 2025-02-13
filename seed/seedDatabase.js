@@ -267,20 +267,33 @@ async function seedDemandHistory(flights) {
   }
 
   const demandRecords = [];
+  const seatCapacity = 300;
+
   for (const flight of flights) {
     const recordDate = moment().subtract(1, "days").format("YYYY-MM-DD");
-    const ticketsSold = Math.floor(Math.random() * 200) + 50;
-    const loadFactor = parseFloat((Math.random() * 0.4 + 0.5).toFixed(2));
-    const distribution = JSON.stringify({
-      business: Math.floor(Math.random() * 50) + 20,
-      economy: Math.floor(Math.random() * 150) + 50,
-    });
+
+    const loadFactor = Math.random() * (0.9 - 0.5) + 0.5;
+    const ticketsSold = Math.floor(seatCapacity * loadFactor);
+
+    const ratioEconomy = Math.random() * (0.7 - 0.5) + 0.5;
+    const maxBusiness = Math.min(0.4, 1 - ratioEconomy);
+    const ratioBusiness = maxBusiness > 0.2 
+      ? Math.random() * (maxBusiness - 0.2) + 0.2 
+      : maxBusiness;
+
+    const economy = Math.floor(ticketsSold * ratioEconomy);
+    const business = Math.floor(ticketsSold * ratioBusiness);
+
+    const first = ticketsSold - economy - business;
+
     demandRecords.push({
       flight_id: flight.flight_id,
       date: recordDate,
       historical_tickets_sold: ticketsSold,
-      historical_load_factor: loadFactor,
-      customer_segment_distribution: distribution,
+      historical_load_factor: parseFloat((ticketsSold / seatCapacity).toFixed(2)),
+      economy_segment_sold: economy,
+      business_segment_sold: business,
+      first_segment_sold: first,
     });
   }
   await DemandHistory.bulkCreate(demandRecords);
