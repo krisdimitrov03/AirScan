@@ -1,7 +1,7 @@
 (function () {
   /**
-   * Populate the airport dropdown based on the city input.
-   * Searches for cities starting with the entered value (minimum 3 characters)
+   * Populates the airport dropdown based on the city input.
+   * Searches for cities starting with the entered value (min. 3 characters)
    * and aggregates all related airport codes.
    *
    * @param {string} cityFilterId - The ID of the city input field.
@@ -19,6 +19,7 @@
 
     const cityQuery = cityInput.value.trim().toLowerCase();
 
+    // Require at least 3 characters to search.
     if (cityQuery.length < 3) {
       const option = document.createElement("option");
       option.value = "";
@@ -27,6 +28,7 @@
       return;
     }
 
+    // Gather all airports from cities that start with the query.
     let matchedAirports = [];
     for (const cityName in window.cityToAirports) {
       if (cityName.toLowerCase().startsWith(cityQuery)) {
@@ -44,8 +46,8 @@
       return;
     }
 
+    // Remove duplicate airport codes.
     const uniqueAirports = Array.from(new Set(matchedAirports));
-
     uniqueAirports.forEach((airport) => {
       const option = document.createElement("option");
       option.value = airport;
@@ -58,17 +60,17 @@
   }
 
   /**
-   * Initializes the dropdown for a given pair of city input and airport select.
-   * If a suggested airport code is present, it finds the corresponding city and pre-fills
-   * the city input so the dropdown is populated with related airports.
+   * Initializes the dropdown for a given city input and airport select.
+   * If a suggested airport code is provided, it pre-fills the city input
+   * with the corresponding full city name.
    *
-   * @param {string} cityFilterId - The ID of the city input field.
-   * @param {string} airportSelectId - The ID of the airport dropdown.
+   * @param {string} cityFilterId - The ID of the city input.
+   * @param {string} airportSelectId - The ID of the airport select.
    */
   function initializeDropdown(cityFilterId, airportSelectId) {
     const airportSelect = document.getElementById(airportSelectId);
-    const suggestedAirport = airportSelect.getAttribute("data-suggested");
     const cityInput = document.getElementById(cityFilterId);
+    const suggestedAirport = airportSelect.getAttribute("data-suggested");
 
     if (suggestedAirport) {
       let found = false;
@@ -91,10 +93,42 @@
       const currentSuggested = airportSelect.getAttribute("data-suggested");
       updateAirportOptions(cityFilterId, airportSelectId, currentSuggested);
     });
+
+    airportSelect.addEventListener("change", function () {
+      const selectedAirport = airportSelect.value;
+      let foundCity = "";
+      for (const city in window.cityToAirports) {
+        if (window.cityToAirports[city].includes(selectedAirport)) {
+          foundCity = city;
+          break;
+        }
+      }
+      if (foundCity) {
+        cityInput.value = foundCity;
+        updateAirportOptions(cityFilterId, airportSelectId, selectedAirport);
+      }
+    });
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    initializeDropdown("originCityFilter", "originAirportSelect");
-    initializeDropdown("destinationCityFilter", "destinationAirportSelect");
+    // Initialize dropdowns if the corresponding elements exist.
+    if (
+      document.getElementById("originCityFilter") &&
+      document.getElementById("originAirportSelect")
+    ) {
+      initializeDropdown("originCityFilter", "originAirportSelect");
+    }
+    if (
+      document.getElementById("destinationCityFilter") &&
+      document.getElementById("destinationAirportSelect")
+    ) {
+      initializeDropdown("destinationCityFilter", "destinationAirportSelect");
+    }
+    if (
+      document.getElementById("airportCityFilter") &&
+      document.getElementById("airportSelect")
+    ) {
+      initializeDropdown("airportCityFilter", "airportSelect");
+    }
   });
 })();

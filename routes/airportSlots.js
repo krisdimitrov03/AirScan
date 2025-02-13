@@ -9,6 +9,7 @@ const {
   verifyToken,
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
+const cityToAirports = require("../config/cityToAirports");
 
 const roles = require("../constants/roles");
 
@@ -27,7 +28,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/new", (req, res) => {
-  res.render("airportSlots/new", { user: req.user });
+  res.render("airportSlots/new", { user: req.user, cityToAirports });
 });
 
 router.post("/", async (req, res, next) => {
@@ -90,7 +91,11 @@ router.get("/:id/edit", async (req, res, next) => {
       return res.status(404).send("Slot not found.");
     }
 
-    res.render("airportSlots/edit", { airportSlot, user: req.user });
+    res.render("airportSlots/edit", {
+      airportSlot,
+      user: req.user,
+      cityToAirports,
+    });
   } catch (error) {
     next(error);
   }
