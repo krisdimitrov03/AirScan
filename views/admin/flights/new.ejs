@@ -1,55 +1,97 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="/css/form.css" />
+    <title>Admin - Create New Flight</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/form.css">
   </head>
   <body>
     <%- include('../../partials/navbar', { user: user }) %>
 
     <div class="form-container">
-      <h1 class="text-center"><%= title %></h1>
+      <h1 class="text-center">Create Flight (Admin)</h1>
 
       <% if (error) { %>
-      <div class="error-message"><%= error %></div>
+        <div class="error-message"><%= error %></div>
       <% } %>
 
-      <form method="POST" action="/admin/flights/new">
+      <form method="POST" action="/admin/flights">
+        <!-- ORIGIN FIELDS -->
         <div class="form-group">
-          <label>Origin Airport Code:</label>
-          <input type="text" name="origin_airport_code" required />
+          <label for="originCityFilter">Origin City:</label>
+          <input
+            type="text"
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <select
+            name="origin_airport_code"
+            id="originAirportSelect"
+            required
+            data-suggested="<%= suggested ? suggested.origin_airport_code : '' %>"
+          >
+            <!-- Populated via dropdown.js -->
+          </select>
         </div>
 
         <div class="form-group">
-          <label>Destination Airport Code:</label>
-          <input type="text" name="destination_airport_code" required />
+          <label for="destinationCityFilter">Destination City:</label>
+          <input
+            type="text"
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect">Destination Airport Code:</label>
+          <select
+            name="destination_airport_code"
+            id="destinationAirportSelect"
+            required
+            data-suggested="<%= suggested ? suggested.destination_airport_code : '' %>"
+          >
+            <!-- Populated via dropdown.js -->
+          </select>
         </div>
 
         <div class="form-group">
           <label>Flight Type:</label>
           <select name="direct_indirect_flag" required>
-            <option value="direct">Direct</option>
-            <option value="indirect">Indirect</option>
+            <option value="direct" <%= (suggested && suggested.direct_indirect_flag === 'direct') ? 'selected' : '' %>>Direct</option>
+            <option value="indirect" <%= (suggested && suggested.direct_indirect_flag === 'indirect') ? 'selected' : '' %>>Indirect</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>Return Option:</label>
           <select name="return_option_flag" required>
-            <option value="false">No</option>
-            <option value="true">Yes</option>
+            <option value="false" <%= (suggested && suggested.return_option_flag === 'false') ? 'selected' : '' %>>No</option>
+            <option value="true" <%= (suggested && suggested.return_option_flag === 'true') ? 'selected' : '' %>>Yes</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>Scheduled Departure:</label>
-          <input type="datetime-local" name="scheduled_departure" required />
+          <input
+            type="datetime-local"
+            name="scheduled_departure"
+            value="<%= suggested ? suggested.scheduled_departure : '' %>"
+            required
+          />
         </div>
-
         <div class="form-group">
           <label>Scheduled Arrival:</label>
-          <input type="datetime-local" name="scheduled_arrival" required />
+          <input
+            type="datetime-local"
+            name="scheduled_arrival"
+            value="<%= suggested ? suggested.scheduled_arrival : '' %>"
+            required
+          />
         </div>
 
         <button type="submit">Create Flight</button>
@@ -59,5 +101,10 @@
         <a class="back-link" href="/admin/flights">Back to Flights</a>
       </p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    <script src="/js/dropdown.js"></script>
   </body>
 </html>
