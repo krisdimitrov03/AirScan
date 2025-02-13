@@ -49,6 +49,13 @@
   </ul>
 
   <div class="profile">
+    <span
+      class="role <%= user.role_name === 'Administrator' ? 'admin' : user.role_name === 'Manager' ? 'manager' : 'analyst' %>"
+    >
+      <%= user.role_name %>
+    </span>
+
+    <span><%= user.username %></span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="30"

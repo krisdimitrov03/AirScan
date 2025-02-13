@@ -3,6 +3,7 @@ const {
   validateEventDateRange,
   validateExpectedAdditionalTrafficFactor,
 } = require("./validator");
+const { Op } = require("sequelize");
 
 async function bulkCreateEvents(eventArray) {
   if (!Array.isArray(eventArray)) {
@@ -40,6 +41,35 @@ async function getAllEvents() {
   return await Event.findAll();
 }
 
+/**
+ * Retrieve a list of events with pagination and optional search filtering.
+ *
+ * @param {Object} params - The parameters for pagination/filtering.
+ * @param {string} [params.search] - Optional search term for event name, ID, etc.
+ * @param {number} [params.limit] - Max number of records to return.
+ * @param {number} [params.offset] - How many records to skip.
+ * @returns {Promise<{ rows: Event[], count: number }>}
+ */
+async function getAllEventsBy({ search = "", limit = 50, offset = 0 } = {}) {
+  const whereClause = {};
+
+  if (search) {
+    whereClause[Op.or] = [
+      { event_id: { [Op.like]: `%${search}%` } },
+      { event_name: { [Op.like]: `%${search}%` } },
+    ];
+  }
+
+  const { rows, count } = await Event.findAndCountAll({
+    where: whereClause,
+    limit,
+    offset,
+    order: [["start_date", "ASC"]],
+  });
+
+  return { rows, count };
+}
+
 async function getEventById(eventId) {
   return await Event.findByPk(eventId);
 }
@@ -73,6 +103,7 @@ async function deleteEvent(eventId) {
 module.exports = {
   createEvent,
   getAllEvents,
+  getAllEventsBy,
   getEventById,
   updateEvent,
   deleteEvent,

@@ -202,6 +202,40 @@ td {
   cursor: pointer;
   margin-left: 1rem;
 }
+
+.profile span {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.profile .role {
+  font-size: 1rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.admin {
+  background-color: #ff3c00;
+  color: rgb(255, 255, 255);
+}
+
+.manager {
+  background-color: #2ba125;
+  color: rgb(255, 255, 255);
+}
+
+.analyst {
+  background-color: #f0ad4e;
+  color: rgb(0, 0, 0);
+}
+
+.profile svg {
+  display: inline-block;
+  vertical-align: middle;
+}
 .profile-menu {
   display: none; /* Hidden by default */
   position: absolute;
@@ -281,7 +315,7 @@ p > a[href="/events/new"]:hover {
 /* Style the "Edit" link like a blue button; ensure same line-height/size as Delete */
 td a[href*="/edit"] {
   display: inline-block;
-  padding: 0.45rem 0.8rem;
+  padding: 0.45rem 1.35rem;
   margin-right: 0.5rem; /* small gap before Delete button */
   background-color: #007bff;
   color: #ffffff;

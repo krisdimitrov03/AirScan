@@ -3,43 +3,53 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <style>
+      
+    </style>
   </head>
   <body>
-    <h1><%= title %></h1>
+    <%- include('../../partials/navbar', { user: user }) %>
 
-    <% if (error) { %>
-    <div style="color: red"><%= error %></div>
-    <% } %>
+    <div class="form-container">
+      <h1 class="text-center"><%= title %></h1>
 
-    <form method="POST" action="/admin/airport-slots/new">
-      <label
-        >Airport Code:
-        <input type="text" name="airport_code" required /> </label
-      ><br />
+      <% if (error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
 
-      <label
-        >Date:
-        <input type="date" name="date" required /> </label
-      ><br />
+      <form method="POST" action="/admin/airport-slots/new">
+        <div class="form-group">
+          <label>Airport Code:</label>
+          <input type="text" name="airport_code" required />
+        </div>
 
-      <label
-        >Start Time:
-        <input type="time" name="time_slot_start" required /> </label
-      ><br />
+        <div class="form-group">
+          <label>Date:</label>
+          <input type="date" name="date" required />
+        </div>
 
-      <label
-        >End Time:
-        <input type="time" name="time_slot_end" required /> </label
-      ><br />
+        <div class="form-group">
+          <label>Start Time:</label>
+          <input type="time" name="time_slot_start" required />
+        </div>
 
-      <label
-        >Slot Capacity:
-        <input type="number" name="slot_capacity" min="1" required /> </label
-      ><br />
+        <div class="form-group">
+          <label>End Time:</label>
+          <input type="time" name="time_slot_end" required />
+        </div>
 
-      <button type="submit">Create Slot</button>
-    </form>
+        <div class="form-group">
+          <label>Slot Capacity:</label>
+          <input type="number" name="slot_capacity" min="1" required />
+        </div>
 
-    <p><a href="/admin/airport-slots">Back to Slots</a></p>
+        <button type="submit">Create Slot</button>
+      </form>
+
+      <p class="text-center">
+        <a class="back-link" href="/admin/airport-slots">Back to Slots</a>
+      </p>
+    </div>
   </body>
 </html>
