@@ -15,8 +15,33 @@ router.use(
 
 router.get("/", verifyToken, async (req, res, next) => {
   try {
-    const flights = await flightService.getAllFlights();
-    res.render("flights/index", { flights, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allFlights = await flightService.getAllFlights();
+
+    if (search) {
+      allFlights = allFlights.filter(
+        (f) =>
+          f.flight_number?.includes(search) ||
+          f.origin_airport_code?.includes(search) ||
+          f.destination_airport_code?.includes(search)
+      );
+    }
+
+    const count = allFlights.length;
+    const flights = allFlights.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("flights/index", {
+      flights,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (e) {
     next(e);
   }

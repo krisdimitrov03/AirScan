@@ -20,7 +20,6 @@ const DemandHistory = sequelize.define(
     historical_tickets_sold: { type: DataTypes.INTEGER },
     historical_load_factor: { type: DataTypes.FLOAT },
 
-    // New columns:
     economy_segment_sold: { type: DataTypes.INTEGER, allowNull: true },
     business_segment_sold: { type: DataTypes.INTEGER, allowNull: true },
     first_segment_sold: { type: DataTypes.INTEGER, allowNull: true },

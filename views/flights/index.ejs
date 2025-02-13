@@ -14,7 +14,17 @@
           <span class="plus-icon">+</span>
           Create New Flight
         </a>
+        <form method="GET" action="/flights" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search flights..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
+
       <table>
         <thead>
           <tr>
@@ -58,6 +68,17 @@
           <% }); %>
         </tbody>
       </table>
+
+      <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
+      <% } %>
     </main>
   </body>
 </html>

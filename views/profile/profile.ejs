@@ -3,22 +3,35 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
     <%- include('../partials/navbar', { user: user }) %>
 
-    <header>
-      <h1><%= title %></h1>
-      <p>Welcome, <%= user.username %></p>
-      <nav>
-        <a href="/profile/edit">Edit Profile</a>
-        <a href="/profile/delete">Delete Profile</a>
-        <a href="/dashboard">Dashboard</a>
-      </nav>
+    <header class="page-header">
+      <div class="container">
+        <h1 class="text-center">My Profile</h1>
+      </div>
     </header>
-    <main>
-      <p>Email: <%= user.email %></p>
-      <p>Role: <%= user.Role ? user.Role.role_name : 'N/A' %></p>
+
+    <main class="container">
+      <div class="profile-card">
+        <h2>Welcome, <%= user.username %>!</h2>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p>
+          <strong>Role:</strong> <%= user.Role ? user.Role.role_name : 'N/A' %>
+        </p>
+        <div class="profile-actions">
+          <a href="/profile/edit" class="button">Edit Profile</a>
+          <a
+            href="/profile/delete"
+            class="button button-danger"
+            onclick="return confirm('Are you sure you want to delete your account?')"
+            >Delete Profile</a
+          >
+          <a href="/dashboard" class="button">Go to Dashboard</a>
+        </div>
+      </div>
     </main>
   </body>
 </html>
