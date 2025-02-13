@@ -6,6 +6,7 @@ const {
 const pricingService = require("../services/pricingService");
 const flightService = require("../services/flightService");
 const roles = require("../constants/roles");
+const cityToAirports = require("../config/cityToAirports");
 
 router.use(
   verifyToken,
@@ -46,7 +47,12 @@ router.get("/", async (req, res) => {
 router.get("/new", async (req, res) => {
   const flights = await flightService.getAllFlights();
 
-  res.render("pricing/new", { error: null, flights, user: req.user });
+  res.render("pricing/new", {
+    error: null,
+    flights,
+    user: req.user,
+    cityToAirports,
+  });
 });
 
 router.post("/", async (req, res) => {
@@ -62,12 +68,23 @@ router.get("/:id/edit", async (req, res) => {
   try {
     const pricingId = req.params.id;
     const pricing = await pricingService.getPricingById(pricingId);
+    const flights = await flightService.getAllFlights();
+    const selectedFlight = await flightService.getFlightByUUID(
+      pricing.flight_id
+    );
 
     if (!pricing) {
       return res.status(404).send("Pricing record not found");
     }
 
-    res.render("pricing/edit", { pricing, error: null, user: req.user });
+    res.render("pricing/edit", {
+      pricing,
+      error: null,
+      user: req.user,
+      cityToAirports,
+      selectedFlight,
+      flights,
+    });
   } catch (error) {
     res.status(500).send("Error fetching pricing record for edit.");
   }
