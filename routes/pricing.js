@@ -24,13 +24,23 @@ router.get("/", async (req, res) => {
 
     if (search) {
       allPricing = allPricing.filter((record) =>
-        record.flight_id?.includes(search)
+        record.flight_number?.includes(search)
       );
     }
 
     const count = allPricing.length;
-    const paginatedPricing = allPricing.slice(offset, offset + limit);
+    let paginatedPricing = allPricing.slice(offset, offset + limit);
     const totalPages = Math.ceil(count / limit);
+
+    paginatedPricing = await Promise.all(
+      paginatedPricing.map(async (record) => {
+        const plainRecord = record.get({ plain: true });
+        const { flight_number } = await flightService.getFlightByUUID(
+          plainRecord.flight_id
+        );
+        return { ...plainRecord, flight_number };
+      })
+    );
 
     res.render("pricing/index", {
       pricings: paginatedPricing,

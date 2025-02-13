@@ -13,8 +13,7 @@
       <h1 class="text-center">Edit Pricing (ID: <%= pricing.pricing_id %>)</h1>
       <% if (error) { %>
       <div class="error-message"><%= error %></div>
-      <% } %> <%
-      let originCity = ''; let destinationCity = ''; if
+      <% } %> <% let originCity = ''; let destinationCity = ''; if
       (selectedFlight) { for (let city in cityToAirports) { if
       (cityToAirports[city].includes(selectedFlight.origin_airport_code)) {
       originCity = city; break; } } for (let city in cityToAirports) { if
@@ -25,8 +24,6 @@
         action="/pricing/<%= pricing.pricing_id %>?_method=PUT"
         method="POST"
       >
-        <!-- Dynamic Flight Selection Fields -->
-        <!-- ORIGIN -->
         <div class="form-group">
           <label for="originCityFilter">Origin City:</label>
           <input
@@ -44,7 +41,6 @@
             data-suggested="<%= selectedFlight ? selectedFlight.origin_airport_code : '' %>"
           ></select>
         </div>
-        <!-- DESTINATION -->
         <div class="form-group">
           <label for="destinationCityFilter">Destination City:</label>
           <input
@@ -64,7 +60,6 @@
             data-suggested="<%= selectedFlight ? selectedFlight.destination_airport_code : '' %>"
           ></select>
         </div>
-        <!-- Flight Options Dropdown -->
         <div class="form-group">
           <label for="flightOptionsSelect">Flight Options:</label>
           <select name="flight_id" id="flightOptionsSelect" required>
@@ -75,7 +70,6 @@
           </select>
         </div>
 
-        <!-- Pricing Fields -->
         <div class="form-group">
           <label for="effective_date_range_start">Effective Start Date:</label>
           <input
@@ -138,7 +132,6 @@
       </p>
     </div>
 
-    <!-- Expose Data for Client Scripts -->
     <script>
       window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
     </script>
@@ -148,7 +141,6 @@
     <script>
       window.selectedFlight = <%- JSON.stringify(selectedFlight || {}) %>;
     </script>
-    <!-- Include the dropdown & flight options scripts -->
     <script src="/js/dropdown.js"></script>
     <script src="/js/flightOptions.js"></script>
   </body>

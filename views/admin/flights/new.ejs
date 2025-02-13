@@ -16,7 +16,6 @@
       <% } %>
 
       <form method="POST" action="/admin/flights">
-        <!-- ORIGIN FIELDS -->
         <div class="form-group">
           <label for="originCityFilter">Origin City:</label>
           <input
@@ -32,9 +31,7 @@
             name="origin_airport_code"
             id="originAirportSelect"
             required
-            data-suggested="<%= suggested ? suggested.origin_airport_code : '' %>"
           >
-            <!-- Populated via dropdown.js -->
           </select>
         </div>
 
@@ -55,7 +52,6 @@
             required
             data-suggested="<%= suggested ? suggested.destination_airport_code : '' %>"
           >
-            <!-- Populated via dropdown.js -->
           </select>
         </div>
 
@@ -80,7 +76,6 @@
           <input
             type="datetime-local"
             name="scheduled_departure"
-            value="<%= suggested ? suggested.scheduled_departure : '' %>"
             required
           />
         </div>
@@ -89,7 +84,6 @@
           <input
             type="datetime-local"
             name="scheduled_arrival"
-            value="<%= suggested ? suggested.scheduled_arrival : '' %>"
             required
           />
         </div>

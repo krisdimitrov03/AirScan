@@ -16,7 +16,6 @@
         action="/airport-slots/<%= airportSlot.slot_id %>?_method=PUT"
         method="POST"
       >
-        <!-- Airport City & Code Fields -->
         <div class="form-group">
           <label for="airportCityFilter">Airport City:</label>
           <input
@@ -33,12 +32,9 @@
             id="airportSelect"
             required
             data-suggested="<%= airportSlot.airport_code %>"
-          >
-            <!-- Options populated by dropdown.js -->
-          </select>
+          ></select>
         </div>
 
-        <!-- Other Fields -->
         <div class="form-group">
           <label for="date">Date (YYYY-MM-DD):</label>
           <input
@@ -92,11 +88,9 @@
       </p>
     </div>
 
-    <!-- Expose the cityToAirports map to the front-end -->
     <script>
       window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
     </script>
-    <!-- Include the dropdown script -->
     <script src="/js/dropdown.js"></script>
   </body>
 </html>

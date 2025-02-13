@@ -14,7 +14,6 @@
       <div class="error-message"><%= error %></div>
       <% } %>
       <form action="/demand-history" method="POST">
-        <!-- Origin Fields -->
         <div class="form-group">
           <label for="originCityFilter">Origin City:</label>
           <input
@@ -29,7 +28,6 @@
           <select id="originAirportSelect" required data-suggested=""></select>
         </div>
 
-        <!-- Destination Fields -->
         <div class="form-group">
           <label for="destinationCityFilter">Destination City:</label>
           <input
@@ -50,7 +48,6 @@
           ></select>
         </div>
 
-        <!-- Flight Options Dropdown -->
         <div class="form-group">
           <label for="flightOptionsSelect">Flight Options:</label>
           <select name="flight_id" id="flightOptionsSelect" required>
@@ -61,7 +58,6 @@
           </select>
         </div>
 
-        <!-- Other Demand History Fields -->
         <div class="form-group">
           <label for="date">Date:</label>
           <input type="date" name="date" id="date" required />
@@ -91,7 +87,6 @@
           />
         </div>
 
-        <!-- New Segment Fields -->
         <div class="form-group">
           <label for="economy_segment_sold">Economy Segment Sold:</label>
           <input

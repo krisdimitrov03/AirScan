@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/css/form.css" />
   </head>
   <body>
-    <!-- Use the partial navbar as usual -->
     <%- include('../../partials/navbar', { user: user }) %>
 
     <div class="form-container">
@@ -16,9 +15,7 @@
         <div class="error-message"><%= error %></div>
       <% } %>
 
-      <!-- The form posts to the admin route for demand-history -->
       <form action="/admin/demand-history" method="POST">
-        <!-- Origin Fields -->
         <div class="form-group">
           <label for="originCityFilter">Origin City:</label>
           <input
@@ -35,11 +32,9 @@
             data-suggested=""
             required
           >
-            <!-- Options populated by dropdown.js based on cityToAirports -->
           </select>
         </div>
 
-        <!-- Destination Fields -->
         <div class="form-group">
           <label for="destinationCityFilter">Destination City:</label>
           <input
@@ -56,11 +51,9 @@
             data-suggested=""
             required
           >
-            <!-- Options populated by dropdown.js based on cityToAirports -->
           </select>
         </div>
 
-        <!-- Flight Options Dropdown (populated from flights after both origin & destination are selected) -->
         <div class="form-group">
           <label for="flightOptionsSelect">Flight Options:</label>
           <select name="flight_id" id="flightOptionsSelect" required>
@@ -70,7 +63,6 @@
           </select>
         </div>
 
-        <!-- Other Demand History Fields -->
         <div class="form-group">
           <label for="date">Date:</label>
           <input type="date" name="date" id="date" required />

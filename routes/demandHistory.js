@@ -40,8 +40,18 @@ router.get("/", async (req, res, next) => {
     }
 
     const count = allRecords.length;
-    const paginatedRecords = allRecords.slice(offset, offset + limit);
+    let paginatedRecords = allRecords.slice(offset, offset + limit);
     const totalPages = Math.ceil(count / limit);
+
+    paginatedRecords = await Promise.all(
+      paginatedRecords.map(async (record) => {
+        const plainRecord = record.get({ plain: true });
+        const { flight_number } = await flightService.getFlightByUUID(
+          plainRecord.flight_id
+        );
+        return { ...plainRecord, flight_number };
+      })
+    );
 
     res.render("demandHistory/index", {
       demandHistory: paginatedRecords,
