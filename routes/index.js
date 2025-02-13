@@ -14,9 +14,24 @@ const managerRouter = require("./manager");
 const forecastRouter = require("./forecast");
 const planningRouter = require("./planning");
 const { verifyToken } = require("../middlewares/authMiddleware");
+const { ADMIN, MANAGER, ANALYST } = require("../constants/roles");
 
 router.get("/", verifyToken, (req, res) => {
-  res.redirect("/dashboard");
+  let path = "";
+
+  switch (req.user.role_name) {
+    case ADMIN:
+      path = "/admin";
+      break;
+    case MANAGER:
+      path = "/manager";
+      break;
+    case ANALYST:
+      path = "/dashboard";
+      break;
+  }
+
+  return res.redirect(path);
 });
 
 router.use("/auth", authRouter);
