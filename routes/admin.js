@@ -9,6 +9,8 @@ const userService = require("../services/userService");
 const roleService = require("../services/roleService");
 const flightService = require("../services/flightService");
 const airportSlotService = require("../services/airportSlotService");
+const demandHistoryService = require("../services/demandHistoryService");
+
 const roles = require("../constants/roles");
 
 router.use(verifyToken, authorizeRoles([roles.ADMIN]));

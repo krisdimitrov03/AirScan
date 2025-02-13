@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
+
 const Flight = require("./Flight");
 
 const DemandHistory = sequelize.define(
@@ -18,7 +19,11 @@ const DemandHistory = sequelize.define(
     date: { type: DataTypes.DATEONLY, allowNull: false },
     historical_tickets_sold: { type: DataTypes.INTEGER },
     historical_load_factor: { type: DataTypes.FLOAT },
-    customer_segment_distribution: { type: DataTypes.TEXT },
+
+    // New columns:
+    economy_segment_sold: { type: DataTypes.INTEGER, allowNull: true },
+    business_segment_sold: { type: DataTypes.INTEGER, allowNull: true },
+    first_segment_sold: { type: DataTypes.INTEGER, allowNull: true },
   },
   { tableName: "demand_history", timestamps: false }
 );

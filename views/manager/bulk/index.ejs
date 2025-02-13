@@ -3,10 +3,12 @@
   <head>
     <title>Manager - Bulk Import Options</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <!-- Include Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <%- include('../../partials/navbar', { user: user }) %>
-  
+
     <header>
       <h1>Bulk Import Options</h1>
     </header>
@@ -24,6 +26,49 @@
       </ul>
 
       <p><a href="/dashboard">Back to Dashboard</a></p>
+
+      <% if (error) { %>
+      <p style="color: red"><%= error %></p>
+      <% } %> <% if (message) { %>
+      <p style="color: green"><%= message %></p>
+      <% } %>
+
+      <h2>Expected Earnings by Month (This Year)</h2>
+      <canvas id="forecastChart" width="800" height="400"></canvas>
+
+      <script>
+        // Data passed from the server.
+        const monthLabels = <%- JSON.stringify(monthLabels) %>;
+        const monthlyForecast = <%- JSON.stringify(monthlyForecast) %>;
+
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+        const chart = new Chart(ctx, {
+          type: 'line', // You can also try 'bar'
+          data: {
+            labels: monthLabels,
+            datasets: [{
+              label: 'Expected Earnings (Wins)',
+              data: monthlyForecast,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              fill: true,
+              tension: 0.1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: function(value) {
+                    return '$' + value.toFixed(2);
+                  }
+                }
+              }
+            }
+          }
+        });
+      </script>
     </main>
   </body>
 </html>

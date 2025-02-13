@@ -1,34 +1,82 @@
+// routes/managerBulk.js
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+
 const {
   verifyToken,
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
 const roles = require("../constants/roles");
 
-const roleService = require("../services/roleService");
-const userService = require("../services/userService");
 const airportSlotService = require("../services/airportSlotService");
 const eventService = require("../services/eventService");
 const flightService = require("../services/flightService");
 const demandHistoryService = require("../services/demandHistoryService");
 const pricingService = require("../services/pricingService");
-
-const fs = require("fs");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const { forecastFlight } = require("../services/forecastService");
 
 router.use(verifyToken, authorizeRoles([roles.MANAGER]));
 
-router.get("/", (req, res) => {
-  res.render("manager/bulk", { message: null, error: null, user: req.user });
+
+router.get("/", async (req, res) => {
+  let message = null;
+  let error = null;
+  let user = req.user;
+  try {
+    const currentYear = new Date().getFullYear();
+    // Retrieve all flights.
+    const flights = await flightService.getAllFlights();
+    // Filter to flights whose scheduled_departure is in the current year.
+    const flightsThisYear = flights.filter(fl => {
+      const depYear = new Date(fl.scheduled_departure).getFullYear();
+      return depYear === currentYear;
+    });
+
+    // Create an array with 12 zeros (one for each month: index 0 = January, etc).
+    const monthlyForecast = new Array(12).fill(0);
+    // For each flight, compute its forecasted profit and add to the proper month.
+    for (const fl of flightsThisYear) {
+      try {
+        const profit = await forecastFlight(fl.flight_id, 60);
+        const depDate = new Date(fl.scheduled_departure);
+        const month = depDate.getMonth(); // 0-based month index
+        monthlyForecast[month] += profit;
+      } catch (fcErr) {
+        console.error("Forecast error for flight", fl.flight_id, fcErr.message);
+      }
+    }
+
+    // Prepare month labels.
+    const monthLabels = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    res.render("manager/bulk", {
+      message,
+      error,
+      user,
+      monthlyForecast,
+      monthLabels
+    });
+  } catch (err) {
+    error = err.message || "Error fetching flights";
+    return res.render("manager/bulk", {
+      message: null,
+      error,
+      user,
+      monthlyForecast: [],
+      monthLabels: []
+    });
+  }
 });
 
-router.get("/bulk", (req, res) => {
-  res.redirect("/manager");
-});
+/** The existing “bulk” routes (unchanged) */
 
-// ----------------- Airport Slots -----------------
+// Bulk: Airport Slots
 router.get("/bulk/airport-slots", (req, res) => {
   res.render("manager/airportSlots/bulk", {
     message: null,
@@ -76,7 +124,7 @@ router.post(
   }
 );
 
-// ----------------- Events -----------------
+// Bulk: Events
 router.get("/bulk/events", (req, res) => {
   res.render("manager/events/bulk", {
     message: null,
@@ -120,7 +168,7 @@ router.post("/bulk/events", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// ----------------- Flights -----------------
+// Bulk: Flights
 router.get("/bulk/flights", (req, res) => {
   res.render("manager/flights/bulk", {
     message: null,
@@ -164,7 +212,7 @@ router.post("/bulk/flights", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// ----------------- Demand History -----------------
+// Bulk: Demand History
 router.get("/bulk/demand-history", (req, res) => {
   res.render("manager/demandHistory/bulk", {
     message: null,
@@ -212,7 +260,7 @@ router.post(
   }
 );
 
-// ----------------- Pricing -----------------
+// Bulk: Pricing
 router.get("/bulk/pricing", (req, res) => {
   res.render("manager/pricing/bulk", {
     message: null,

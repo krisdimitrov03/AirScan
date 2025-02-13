@@ -53,13 +53,36 @@
         required
       />
       <br />
-      <label for="customer_segment_distribution">Segment Distribution:</label>
-      <textarea
-        name="customer_segment_distribution"
-        id="customer_segment_distribution"
-      >
-<%= dh.customer_segment_distribution %></textarea
-      >
+      <!-- New fields for segment sold -->
+      <label for="economy_segment_sold">Economy Tickets Sold:</label>
+      <input
+        type="number"
+        name="economy_segment_sold"
+        id="economy_segment_sold"
+        min="0"
+        value="<%= dh.economy_segment_sold %>"
+        required
+      />
+      <br />
+      <label for="business_segment_sold">Business Tickets Sold:</label>
+      <input
+        type="number"
+        name="business_segment_sold"
+        id="business_segment_sold"
+        min="0"
+        value="<%= dh.business_segment_sold %>"
+        required
+      />
+      <br />
+      <label for="first_segment_sold">First Tickets Sold:</label>
+      <input
+        type="number"
+        name="first_segment_sold"
+        id="first_segment_sold"
+        min="0"
+        value="<%= dh.first_segment_sold %>"
+        required
+      />
       <br />
       <button type="submit">Update</button>
     </form>
