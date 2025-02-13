@@ -14,8 +14,30 @@ router.use(
 
 router.get("/", async (req, res) => {
   try {
-    const pricings = await pricingService.getAllPricing();
-    res.render("pricing/index", { pricings, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allPricing = await pricingService.getAllPricing();
+
+    if (search) {
+      allPricing = allPricing.filter((record) =>
+        record.flight_id?.includes(search)
+      );
+    }
+
+    const count = allPricing.length;
+    const paginatedPricing = allPricing.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("pricing/index", {
+      pricings: paginatedPricing,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     res.status(500).send("Error fetching pricing records.");
   }

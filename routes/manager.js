@@ -24,7 +24,6 @@ router.get("/", async (req, res) => {
   let error = null;
   let user = req.user;
 
-  // We'll gather 4 sets of data in parallel or sequentially
   try {
     const now = require("moment")();
     // 1. 1 week -> last 7 days
@@ -61,7 +60,6 @@ router.get("/", async (req, res) => {
       message,
       error,
       user,
-      // pass all four sets to the EJS
       weekLabels,
       weekData,
       monthLabels,
@@ -89,9 +87,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-/** The existing “bulk” routes (unchanged) */
-
-// Bulk: Airport Slots
 router.get("/bulk/airport-slots", (req, res) => {
   res.render("manager/airportSlots/bulk", {
     message: null,
@@ -139,7 +134,6 @@ router.post(
   }
 );
 
-// Bulk: Events
 router.get("/bulk/events", (req, res) => {
   res.render("manager/events/bulk", {
     message: null,
@@ -183,7 +177,6 @@ router.post("/bulk/events", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// Bulk: Flights
 router.get("/bulk/flights", (req, res) => {
   res.render("manager/flights/bulk", {
     message: null,
@@ -227,7 +220,6 @@ router.post("/bulk/flights", upload.single("file"), async (req, res, next) => {
   }
 });
 
-// Bulk: Demand History
 router.get("/bulk/demand-history", (req, res) => {
   res.render("manager/demandHistory/bulk", {
     message: null,
@@ -275,7 +267,6 @@ router.post(
   }
 );
 
-// Bulk: Pricing
 router.get("/bulk/pricing", (req, res) => {
   res.render("manager/pricing/bulk", {
     message: null,

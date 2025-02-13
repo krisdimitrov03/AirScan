@@ -3,10 +3,8 @@
   <head>
     <title>Manager - Bulk Import Options</title>
     <link rel="stylesheet" href="/css/styles.css" />
-    <!-- Include Chart.js from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      /* Simple button group styling */
       .button-group {
         margin-bottom: 20px;
       }
@@ -60,7 +58,6 @@
       <canvas id="forecastChart" width="800" height="400"></canvas>
 
       <script>
-        // Data arrays passed from the server:
         const weekLabels  = <%- JSON.stringify(weekLabels) %>;
         const weekData    = <%- JSON.stringify(weekData) %>;
         const monthLabels = <%- JSON.stringify(monthLabels) %>;
@@ -70,7 +67,6 @@
         const allTimeLabels = <%- JSON.stringify(allTimeLabels) %>;
         const allTimeData   = <%- JSON.stringify(allTimeData) %>;
 
-        // Set initial dataset (default to 7 Days)
         let currentLabels = weekLabels;
         let currentData = weekData;
         let currentTitle = 'Expected Earnings (7 Days)';
@@ -104,7 +100,6 @@
           }
         });
 
-        // Function to update chart data
         function updateChart(labels, data, title) {
           forecastChart.data.labels = labels;
           forecastChart.data.datasets[0].data = data;
@@ -112,14 +107,12 @@
           forecastChart.update();
         }
 
-        // Helper to remove 'active' class from all buttons
         function clearActive() {
           document.querySelectorAll('.button-group button').forEach(btn => {
             btn.classList.remove('active');
           });
         }
 
-        // Set event listeners for buttons
         document.getElementById('btn7D').addEventListener('click', function() {
           clearActive();
           this.classList.add('active');

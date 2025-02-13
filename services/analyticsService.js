@@ -6,10 +6,8 @@ const { forecastFlight } = require("./forecastService");
 async function forecastForSingleDate(thatDate, flights) {
   let dailySum = 0;
   for (const fl of flights) {
-    // Compare just the 'YYYY-MM-DD' part
     const flightDeparture = moment(fl.scheduled_departure).format("YYYY-MM-DD");
     if (flightDeparture === thatDate.format("YYYY-MM-DD")) {
-      // Forecast for this flight (any approach you like)
       const profit = await forecastFlight(fl.flight_id, 60);
       dailySum += profit;
     }
@@ -17,13 +15,9 @@ async function forecastForSingleDate(thatDate, flights) {
   return dailySum;
 }
 
-/**
- * For each day in [startDate..endDate], sum the forecast of flights departing that day.
- * Returns { labels: [...], data: [...] } for Chart.js usage.
- */
 async function getDailyForecastSeries(startDate, endDate) {
-  // 1) Grab all flights within that date range (to avoid forecasting flights far outside)
-  //    i.e. flights that depart on or after startDate, and on or before endDate
+  // Grab all flights within that date range (to avoid forecasting flights far outside)
+  // ergo flights that depart on or after startDate, and on or before endDate
   const flights = await Flight.findAll({
     where: {
       scheduled_departure: {
@@ -32,7 +26,6 @@ async function getDailyForecastSeries(startDate, endDate) {
     },
   });
 
-  // 2) Iterate from startDate to endDate day by day
   const labels = [];
   const data = [];
 
@@ -47,9 +40,6 @@ async function getDailyForecastSeries(startDate, endDate) {
   return { labels, data };
 }
 
-/**
- * Returns the earliest flight date and the latest flight date in the DB.
- */
 async function getEarliestAndLatestFlightDates() {
   const earliestFlight = await Flight.findOne({
     order: [["scheduled_departure", "ASC"]],
