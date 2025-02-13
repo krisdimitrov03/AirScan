@@ -85,3 +85,4 @@
         DB_PORT: "{{ db_port }}"
         DB_ROOT_PASS: "{{ db_root_pass }}"
         JWT_SECRET: "{{ jwt_secret }}"
+        OPENAI_SECRET: "{{ openai_secret }}"

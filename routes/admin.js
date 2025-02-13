@@ -10,13 +10,14 @@ const roleService = require("../services/roleService");
 const flightService = require("../services/flightService");
 const airportSlotService = require("../services/airportSlotService");
 const demandHistoryService = require("../services/demandHistoryService");
-
+const pricingService = require("../services/pricingService");
+const eventService = require("../services/eventService");
 const roles = require("../constants/roles");
 
 router.use(verifyToken, authorizeRoles([roles.ADMIN]));
 
 router.get("/", (req, res) => {
-  res.render("admin/dashboard", { title: "Admin Dashboard" });
+  res.render("admin/dashboard", { title: "Admin Dashboard", user: req.user });
 });
 
 async function isLastAdmin(userId) {
@@ -57,6 +58,7 @@ router.get("/users", async (req, res, next) => {
       search,
       currentUserId: req.user.user_id,
       adminCount,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -64,7 +66,11 @@ router.get("/users", async (req, res, next) => {
 });
 
 router.get("/users/new", (req, res) => {
-  res.render("admin/users/new", { title: "Create User", error: null });
+  res.render("admin/users/new", {
+    title: "Create User",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/users", async (req, res) => {
@@ -73,7 +79,11 @@ router.post("/users", async (req, res) => {
     await userService.createUser({ username, password, email, role_id });
     res.redirect("/admin/users");
   } catch (err) {
-    res.render("admin/users/new", { title: "Create User", error: err.message });
+    res.render("admin/users/new", {
+      title: "Create User",
+      error: err.message,
+      user: req.user,
+    });
   }
 });
 
@@ -81,7 +91,12 @@ router.get("/users/:id/edit", async (req, res, next) => {
   try {
     const user = await userService.getUserById(req.params.id);
     if (!user) return res.status(404).send("User not found.");
-    res.render("admin/users/edit", { title: "Edit User", user, error: null });
+    res.render("admin/users/edit", {
+      title: "Edit User",
+      user,
+      error: null,
+      auth_user: req.user,
+    });
   } catch (err) {
     next(err);
   }
@@ -161,6 +176,7 @@ router.get("/roles", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -168,7 +184,11 @@ router.get("/roles", async (req, res, next) => {
 });
 
 router.get("/roles/new", (req, res) => {
-  res.render("admin/roles/new", { title: "Create Role", error: null });
+  res.render("admin/roles/new", {
+    title: "Create Role",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/roles", async (req, res) => {
@@ -185,7 +205,12 @@ router.get("/roles/:id/edit", async (req, res, next) => {
   try {
     const role = await roleService.getRoleById(req.params.id);
     if (!role) return res.status(404).send("Role not found.");
-    res.render("admin/roles/edit", { title: "Edit Role", role, error: null });
+    res.render("admin/roles/edit", {
+      title: "Edit Role",
+      role,
+      error: null,
+      user: req.user,
+    });
   } catch (err) {
     next(err);
   }
@@ -239,6 +264,7 @@ router.get("/flights", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -246,7 +272,11 @@ router.get("/flights", async (req, res, next) => {
 });
 
 router.get("/flights/new", (req, res) => {
-  res.render("admin/flights/new", { title: "Create Flight", error: null });
+  res.render("admin/flights/new", {
+    title: "Create Flight",
+    error: null,
+    user: req.user,
+  });
 });
 
 router.post("/flights/new", async (req, res, next) => {
@@ -284,6 +314,7 @@ router.get("/flights/:id/edit", async (req, res, next) => {
       title: "Edit Flight",
       flight,
       error: null,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -334,6 +365,7 @@ router.get("/airport-slots", async (req, res, next) => {
       currentPage: page,
       totalPages,
       search,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -344,6 +376,7 @@ router.get("/airport-slots/new", (req, res) => {
   res.render("admin/airportSlots/new", {
     title: "Create Airport Slot",
     error: null,
+    user: req.user,
   });
 });
 
@@ -381,6 +414,7 @@ router.get("/airport-slots/:id/edit", async (req, res, next) => {
       title: "Edit Airport Slot",
       slot,
       error: null,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -430,6 +464,7 @@ router.get("/demand-history", async (req, res, next) => {
     res.render("admin/demandHistory/index", {
       title: "Demand History",
       demandHistory,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -440,6 +475,7 @@ router.get("/demand-history/new", (req, res) => {
   res.render("admin/demandHistory/new", {
     title: "Create Demand History",
     error: null,
+    user: req.user,
   });
 });
 
@@ -451,6 +487,7 @@ router.post("/demand-history", async (req, res, next) => {
     res.render("admin/demandHistory/new", {
       title: "Create Demand History",
       error: err.message,
+      user: req.user,
     });
   }
 });
@@ -464,6 +501,7 @@ router.get("/demand-history/:id/edit", async (req, res, next) => {
       title: "Edit Demand History",
       dh,
       error: null,
+      user: req.user,
     });
   } catch (err) {
     next(err);
@@ -485,6 +523,7 @@ router.post("/demand-history/:id/edit", async (req, res, next) => {
       title: "Edit Demand History",
       dh: { ...req.body, record_id: req.params.id },
       error: err.message,
+      user: req.user,
     });
   }
 });
@@ -498,6 +537,270 @@ router.post("/demand-history/:id/delete", async (req, res, next) => {
     res.redirect("/admin/demand-history");
   } catch (err) {
     next(err);
+  }
+});
+
+// ----------------- PRICING -----------------
+
+router.get("/pricing", async (req, res, next) => {
+  try {
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allPricing = await pricingService.getAllPricing();
+
+    if (search) {
+      allPricing = allPricing.filter((record) =>
+        record.flight_id.includes(search)
+      );
+    }
+
+    const count = allPricing.length;
+    const pricingRecords = allPricing.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("admin/pricing/index", {
+      title: "Manage Pricing",
+      pricingRecords,
+      currentPage: page,
+      totalPages,
+      search,
+      user: req.user,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/pricing/new", (req, res) => {
+  res.render("admin/pricing/new", {
+    title: "Create Pricing Record",
+    error: null,
+    user: req.user,
+  });
+});
+
+router.post("/pricing", async (req, res) => {
+  try {
+    const {
+      flight_id,
+      effective_date_range_start,
+      effective_date_range_end,
+      base_price,
+      discounts_offered,
+      peak_season_surcharge,
+    } = req.body;
+
+    await pricingService.createPricing({
+      flight_id,
+      effective_date_range_start,
+      effective_date_range_end,
+      base_price,
+      discounts_offered,
+      peak_season_surcharge,
+    });
+
+    res.redirect("/admin/pricing");
+  } catch (err) {
+    res.render("admin/pricing/new", {
+      title: "Create Pricing Record",
+      error: err.message,
+      user: req.user,
+    });
+  }
+});
+
+router.get("/pricing/:id/edit", async (req, res, next) => {
+  try {
+    const pricingId = parseInt(req.params.id, 10);
+    const pricingRecord = await pricingService.getPricingById(pricingId);
+
+    if (!pricingRecord)
+      return res.status(404).send("Pricing record not found.");
+
+    res.render("admin/pricing/edit", {
+      title: "Edit Pricing Record",
+      pricingRecord,
+      error: null,
+      user: req.user,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/pricing/:id/edit", async (req, res) => {
+  try {
+    const pricingId = parseInt(req.params.id, 10);
+
+    const {
+      flight_id,
+      effective_date_range_start,
+      effective_date_range_end,
+      base_price,
+      discounts_offered,
+      peak_season_surcharge,
+    } = req.body;
+
+    const updated = await pricingService.updatePricing(pricingId, {
+      flight_id,
+      effective_date_range_start,
+      effective_date_range_end,
+      base_price,
+      discounts_offered,
+      peak_season_surcharge,
+    });
+
+    if (!updated) return res.status(404).send("Pricing update failed.");
+
+    res.redirect("/admin/pricing");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.post("/pricing/:id/delete", async (req, res) => {
+  try {
+    const pricingId = parseInt(req.params.id, 10);
+    const deleted = await pricingService.deletePricing(pricingId);
+
+    if (!deleted) return res.status(404).send("Pricing record not found.");
+
+    res.redirect("/admin/pricing");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+// ----------------- EVENTS -----------------
+
+router.get("/events", async (req, res, next) => {
+  try {
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    const { rows: events, count } = await eventService.getAllEventsBy({
+      search,
+      limit,
+      offset,
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("admin/events/index", {
+      title: "Manage Events",
+      events,
+      currentPage: page,
+      totalPages,
+      search,
+      user: req.user,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/events/new", (req, res) => {
+  res.render("admin/events/new", {
+    title: "Create Event",
+    error: null,
+    user: req.user,
+  });
+});
+
+router.post("/events/new", async (req, res) => {
+  try {
+    const {
+      event_id,
+      event_name,
+      location_city,
+      start_date,
+      end_date,
+      expected_additional_traffic_factor,
+    } = req.body;
+
+    await eventService.createEvent({
+      event_id,
+      event_name,
+      location_city,
+      start_date,
+      end_date,
+      expected_additional_traffic_factor,
+    });
+
+    res.redirect("/admin/events");
+  } catch (err) {
+    res.render("admin/events/new", {
+      title: "Create Event",
+      error: err.message,
+      user: req.user,
+    });
+  }
+});
+
+router.get("/events/:id/edit", async (req, res, next) => {
+  try {
+    const eventId = req.params.id;
+    const event = await eventService.getEventById(eventId);
+
+    if (!event) return res.status(404).send("Event not found.");
+
+    res.render("admin/events/edit", {
+      title: "Edit Event",
+      event,
+      error: null,
+      user: req.user,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/events/:id/edit", async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const {
+      event_name,
+      location_city,
+      start_date,
+      end_date,
+      expected_additional_traffic_factor,
+    } = req.body;
+
+    const updated = await eventService.updateEvent(eventId, {
+      event_name,
+      location_city,
+      start_date,
+      end_date,
+      expected_additional_traffic_factor,
+    });
+
+    if (!updated) {
+      return res.status(404).send("Event update failed; event not found.");
+    }
+
+    res.redirect("/admin/events");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+router.post("/events/:id/delete", async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const success = await eventService.deleteEvent(eventId);
+
+    if (!success) {
+      return res.status(404).send("Event could not be deleted; not found.");
+    }
+
+    res.redirect("/admin/events");
+  } catch (err) {
+    res.status(500).send(err.message);
   }
 });
 

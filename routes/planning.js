@@ -25,6 +25,7 @@ router.get("/suggest", async (req, res, next) => {
     res.render("planning/suggestions", {
       title: "AI Flight Suggestions",
       suggestions: suggestionsWithForecast,
+      user: req.user,
     });
   } catch (err) {
     next(err);

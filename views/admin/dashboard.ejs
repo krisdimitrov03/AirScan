@@ -1,7 +1,18 @@
-<h1>Admin Dashboard</h1>
-<ul>
-  <li><a href="/admin/users">Manage Users</a></li>
-  <li><a href="/admin/roles">Manage Roles</a></li>
-  <li><a href="/admin/flights">Manage Flights</a></li>
-  <li><a href="/admin/airport-slots">Manage Airport Slots</a></li>
-</ul>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('../partials/navbar', { user: user }) %>
+
+    <h1>Admin Dashboard</h1>
+    <ul>
+      <li><a href="/admin/users">Manage Users</a></li>
+      <li><a href="/admin/roles">Manage Roles</a></li>
+      <li><a href="/admin/flights">Manage Flights</a></li>
+      <li><a href="/admin/airport-slots">Manage Airport Slots</a></li>
+    </ul>
+  </body>
+</html>

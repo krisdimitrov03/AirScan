@@ -3,55 +3,57 @@
   <head>
     <title>Demand History Records</title>
     <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
-    <h1>Demand History Records</h1>
-    <a href="/demand-history/new">Create New Record</a>
-    <table border="1">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Flight ID</th>
-          <th>Date</th>
-          <th>Tickets Sold</th>
-          <th>Load Factor</th>
-          <th>Segment Distribution</th>
-          <th>Economy Sold</th>
-          <th>Business Sold</th>
-          <th>First Sold</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% demandHistory.forEach(function(record){ %>
-        <tr>
-          <td><%= record.record_id %></td>
-          <td><%= record.flight_id %></td>
-          <td><%= record.date %></td>
-          <td><%= record.historical_tickets_sold %></td>
-          <td><%= record.historical_load_factor %></td>
-          <td><%= record.economy_segment_sold %></td>
-          <td><%= record.business_segment_sold %></td>
-          <td><%= record.first_segment_sold %></td>
-
-          <td>
-            <a href="/demand-history/<%= record.record_id %>/edit">Edit</a>
-            <form
-              action="/demand-history/<%= record.record_id %>?_method=DELETE"
-              method="POST"
-              style="display: inline"
-            >
-              <button
-                type="submit"
-                onclick="return confirm('Are you sure you want to delete this data?')"
+    <%- include('../partials/navbar', { user: user }) %>
+    <main>
+      <h1>Demand History Records</h1>
+      <div class="top-controls">
+        <a href="/demand-history/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Record
+        </a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Flight ID</th>
+            <th>Date</th>
+            <th>Tickets Sold</th>
+            <th>Load Factor</th>
+            <th>Segment Distribution</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% demandHistory.forEach(function(record){ %>
+          <tr>
+            <td><%= record.record_id %></td>
+            <td><%= record.flight_id %></td>
+            <td><%= record.date %></td>
+            <td><%= record.historical_tickets_sold %></td>
+            <td><%= record.historical_load_factor %></td>
+            <td><%= record.customer_segment_distribution %></td>
+            <td>
+              <a href="/demand-history/<%= record.record_id %>/edit">Edit</a>
+              <form
+                action="/demand-history/<%= record.record_id %>?_method=DELETE"
+                method="POST"
               >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
+                <button
+                  type="submit"
+                  onclick="return confirm('Are you sure you want to delete this data?')"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </main>
   </body>
 </html>
