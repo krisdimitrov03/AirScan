@@ -1,7 +1,12 @@
 name: Clean Database
 
 on:
-  push:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type YES to confirm cleaning the database'
+        required: true
+        default: 'NO'
 
 jobs:
   clean-db:
@@ -39,7 +44,7 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "DROP DATABASE IF EXISTS \`${{ secrets.DB_NAME }}\`;"
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE \`${{ secrets.DB_NAME }}\`;"
-
+      
       - name: Verify database reset
         run: |
           RESULT=$(mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "SHOW DATABASES LIKE '${{ secrets.DB_NAME }}';" | grep ${{ secrets.DB_NAME }})
