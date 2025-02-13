@@ -1,4 +1,3 @@
-// routes/managerBulk.js
 const express = require("express");
 const router = express.Router();
 const fs = require("fs");
@@ -16,60 +15,76 @@ const eventService = require("../services/eventService");
 const flightService = require("../services/flightService");
 const demandHistoryService = require("../services/demandHistoryService");
 const pricingService = require("../services/pricingService");
-const { forecastFlight } = require("../services/forecastService");
+const { getDailyForecastSeries, getEarliestAndLatestFlightDates } = require("../services/analyticsService");
 
 router.use(verifyToken, authorizeRoles([roles.MANAGER]));
-
 
 router.get("/", async (req, res) => {
   let message = null;
   let error = null;
   let user = req.user;
+
+  // We'll gather 4 sets of data in parallel or sequentially
   try {
-    const currentYear = new Date().getFullYear();
-    // Retrieve all flights.
-    const flights = await flightService.getAllFlights();
-    // Filter to flights whose scheduled_departure is in the current year.
-    const flightsThisYear = flights.filter(fl => {
-      const depYear = new Date(fl.scheduled_departure).getFullYear();
-      return depYear === currentYear;
-    });
+    const now = require("moment")();
+    // 1. 1 week -> last 7 days
+    const startWeek = now.clone().subtract(6, "days").startOf("day");
+    const { labels: weekLabels, data: weekData } = await getDailyForecastSeries(
+      startWeek,
+      now
+    );
 
-    // Create an array with 12 zeros (one for each month: index 0 = January, etc).
-    const monthlyForecast = new Array(12).fill(0);
-    // For each flight, compute its forecasted profit and add to the proper month.
-    for (const fl of flightsThisYear) {
-      try {
-        const profit = await forecastFlight(fl.flight_id, 60);
-        const depDate = new Date(fl.scheduled_departure);
-        const month = depDate.getMonth(); // 0-based month index
-        monthlyForecast[month] += profit;
-      } catch (fcErr) {
-        console.error("Forecast error for flight", fl.flight_id, fcErr.message);
-      }
+    // 2. 1 month -> last 30 days
+    const startMonth = now.clone().subtract(29, "days").startOf("day");
+    const { labels: monthLabels, data: monthData } =
+      await getDailyForecastSeries(startMonth, now);
+
+    // 3. 1 year -> last 365 days
+    const startYear = now.clone().subtract(364, "days").startOf("day");
+    const { labels: yearLabels, data: yearData } = await getDailyForecastSeries(
+      startYear,
+      now
+    );
+
+    // 4. "All time" -> from earliest flight date to latest flight date
+    const earliestLatest = await getEarliestAndLatestFlightDates();
+    let allTimeLabels = [];
+    let allTimeData = [];
+    if (earliestLatest) {
+      const { earliest, latest } = earliestLatest;
+      const { labels, data } = await getDailyForecastSeries(earliest, latest);
+      allTimeLabels = labels;
+      allTimeData = data;
     }
-
-    // Prepare month labels.
-    const monthLabels = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
 
     res.render("manager/bulk", {
       message,
       error,
       user,
-      monthlyForecast,
-      monthLabels
+      // pass all four sets to the EJS
+      weekLabels,
+      weekData,
+      monthLabels,
+      monthData,
+      yearLabels,
+      yearData,
+      allTimeLabels,
+      allTimeData,
     });
   } catch (err) {
-    error = err.message || "Error fetching flights";
+    error = err.message || "Error building analytics data.";
     return res.render("manager/bulk", {
       message: null,
       error,
       user,
-      monthlyForecast: [],
-      monthLabels: []
+      weekLabels: [],
+      weekData: [],
+      monthLabels: [],
+      monthData: [],
+      yearLabels: [],
+      yearData: [],
+      allTimeLabels: [],
+      allTimeData: [],
     });
   }
 });
