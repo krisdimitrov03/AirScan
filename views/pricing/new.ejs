@@ -16,15 +16,44 @@
       <% } %>
       <form action="/pricing" method="POST">
         <div class="form-group">
-          <label for="flight_id">Flight:</label>
-          <select name="flight_id" id="flight_id" required>
-            <option value="" disabled selected>Select a flight</option>
-            <% flights.forEach((flight) => { %>
-            <option value="<%= flight.flight_id %>">
-              <%= flight.flight_number %>: <%= flight.origin_airport_code %> -
-              <%= flight.destination_airport_code %>
+          <label for="originCityFilter">Origin City:</label>
+          <input
+            type="text"
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <select id="originAirportSelect" required data-suggested=""></select>
+        </div>
+        <div class="form-group">
+          <label for="destinationCityFilter">Destination City:</label>
+          <input
+            type="text"
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect"
+            >Destination Airport Code:</label
+          >
+          <select
+            id="destinationAirportSelect"
+            required
+            data-suggested=""
+          ></select>
+        </div>
+        <div class="form-group">
+          <label for="flightOptionsSelect">Flight Options:</label>
+          <select name="flight_id" id="flightOptionsSelect" required>
+            <option value="">
+              Select a flight (populate when both origin and destination are
+              selected)
             </option>
-            <% }) %>
           </select>
         </div>
 
@@ -87,5 +116,14 @@
         <a class="back-link" href="/pricing">Back to Pricing List</a>
       </p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    <script>
+      window.flights = <%- JSON.stringify(flights) %>;
+    </script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/flightOptions.js"></script>
   </body>
 </html>

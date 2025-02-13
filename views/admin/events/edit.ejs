@@ -15,7 +15,7 @@
       <div class="error-message"><%= error %></div>
       <% } %>
 
-      <form method="POST" action="/admin/events/<%= event.event_id %>/edit">
+      <form method="POST" action="/admin/events/<%= event.event_id %>?_method=PUT">
         <div class="form-group">
           <label>Event Name:</label>
           <input

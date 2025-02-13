@@ -5,7 +5,10 @@ const {
 } = require("../middlewares/authMiddleware");
 const roles = require("../constants/roles");
 const { suggestFlights } = require("../services/planningService");
-router.use(verifyToken, authorizeRoles([roles.ADMIN, roles.MANAGER]));
+router.use(
+  verifyToken,
+  authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
+);
 const { forecastNewFlight } = require("../services/ephemeralForecast");
 router.get("/suggest", async (req, res, next) => {
   try {

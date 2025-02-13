@@ -14,6 +14,9 @@ const {
   deleteDemandHistory,
 } = require("../services/demandHistoryService");
 
+const cityToAirports = require("../config/cityToAirports");
+const flightService = require("../services/flightService");
+
 router.use(
   verifyToken,
   authorizeRoles([roles.ADMIN, roles.MANAGER, roles.ANALYST])
@@ -37,8 +40,18 @@ router.get("/", async (req, res, next) => {
     }
 
     const count = allRecords.length;
-    const paginatedRecords = allRecords.slice(offset, offset + limit);
+    let paginatedRecords = allRecords.slice(offset, offset + limit);
     const totalPages = Math.ceil(count / limit);
+
+    paginatedRecords = await Promise.all(
+      paginatedRecords.map(async (record) => {
+        const plainRecord = record.get({ plain: true });
+        const { flight_number } = await flightService.getFlightByUUID(
+          plainRecord.flight_id
+        );
+        return { ...plainRecord, flight_number };
+      })
+    );
 
     res.render("demandHistory/index", {
       demandHistory: paginatedRecords,
@@ -53,7 +66,14 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/new", async (req, res) => {
-  res.render("demandHistory/new", { error: null, user: req.user });
+  const flights = await flightService.getAllFlights();
+
+  res.render("demandHistory/new", {
+    error: null,
+    user: req.user,
+    cityToAirports,
+    flights,
+  });
 });
 
 router.post("/", async (req, res, next) => {
@@ -69,8 +89,18 @@ router.get("/:id/edit", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
     const dh = await getDemandHistoryById(recordId);
+    const flights = await flightService.getAllFlights();
+    const selectedFlight = await flightService.getFlightByUUID(dh.flight_id);
+
     if (!dh) return res.status(404).send("Demand history record not found.");
-    res.render("demandHistory/edit", { dh, error: null, user: req.user });
+    res.render("demandHistory/edit", {
+      dh,
+      error: null,
+      user: req.user,
+      cityToAirports,
+      flights,
+      selectedFlight,
+    });
   } catch (err) {
     next(err);
   }
