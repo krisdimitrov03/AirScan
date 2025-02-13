@@ -41,13 +41,24 @@ jobs:
             sleep 3
           done
 
-      - name: Create test database
+      - name: Clean and seed database
         run: |
-          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE IF NOT EXISTS ${{ secrets.DB_NAME }};"
-
+          echo "Dropping the existing database (if it exists)..."
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "DROP DATABASE IF EXISTS \`${{ secrets.DB_NAME }}\`;"
+          
+          echo "Creating a fresh database..."
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE \`${{ secrets.DB_NAME }}\`;"
+          
+          echo "Seeding the database..."
+          # Make sure to adjust the path to your seed script if necessary.
+          node ./seed/seedDatabase.js
+          
+          echo "First row of 'flights' table after seeding:"
+          mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -D ${{ secrets.DB_NAME }} -e "SELECT * FROM flights LIMIT 1;"
+      
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run test coverage
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -57,12 +68,7 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: ${{ secrets.PORT }}
-        run: |
-          # The following will:
-          # 1) Connect to MySQL at 127.0.0.1 with the given user/password
-          # 2) syncDatabase() or seed if your startup logic does that automatically
-          # 3) Then run the tests
-          npm run test:coverage
+        run: npm run test:coverage
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
