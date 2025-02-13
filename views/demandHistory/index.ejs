@@ -32,7 +32,9 @@
             <th>Date</th>
             <th>Tickets Sold</th>
             <th>Load Factor</th>
-            <th>Segment Distribution</th>
+            <th>Economy</th>
+            <th>First</th>
+            <th>Business</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -44,7 +46,9 @@
             <td><%= record.date %></td>
             <td><%= record.historical_tickets_sold %></td>
             <td><%= record.historical_load_factor %></td>
-            <td><%= record.customer_segment_distribution %></td>
+            <td><%= record.economy_segment_sold %></td>
+            <td><%= record.first_segment_sold %></td>
+            <td><%= record.business_segment_sold %></td>
             <td>
               <a href="/demand-history/<%= record.record_id %>/edit">Edit</a>
               <form

@@ -80,7 +80,8 @@ router.get("/:id/edit", async (req, res, next) => {
     const recordId = parseInt(req.params.id, 10);
     const dh = await getDemandHistoryById(recordId);
     const flights = await flightService.getAllFlights();
-    const selectedFlight = flightService.getFlightByUUID(dh.flight_id);
+    const selectedFlight = await flightService.getFlightByUUID(dh.flight_id);
+
     if (!dh) return res.status(404).send("Demand history record not found.");
     res.render("demandHistory/edit", {
       dh,

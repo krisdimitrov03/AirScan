@@ -40,6 +40,11 @@
       option.textContent = "Flight " + flight.flight_id;
       flightOptionsSelect.appendChild(option);
     });
+
+    // Preselect the flight if window.selectedFlight is available
+    if (window.selectedFlight && window.selectedFlight.flight_id) {
+      flightOptionsSelect.value = window.selectedFlight.flight_id;
+    }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -51,6 +56,8 @@
     if (originSelect && destinationSelect) {
       originSelect.addEventListener("change", updateFlightOptions);
       destinationSelect.addEventListener("change", updateFlightOptions);
+      // Use a slight delay to allow dropdown.js to finish its work
+      setTimeout(updateFlightOptions, 100);
     }
   });
 })();
