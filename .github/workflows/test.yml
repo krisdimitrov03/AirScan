@@ -1,12 +1,7 @@
 name: Clean Database
 
 on:
-  workflow_dispatch:
-    inputs:
-      confirm:
-        description: "Type YES to confirm clearing the database (this is destructive and should not be used in production!)"
-        required: true
-        default: "NO"
+  push:
 
 jobs:
   clean-db:
