@@ -15,6 +15,15 @@
           <span class="plus-icon">+</span>
           Create New Event
         </a>
+        <form method="GET" action="/events" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search events..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
       <table>
         <thead>

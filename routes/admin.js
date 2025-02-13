@@ -460,14 +460,33 @@ router.post("/airport-slots/:id/delete", async (req, res, next) => {
 // ----------------- DEMAND HISTORY -----------------
 router.get("/demand-history", async (req, res, next) => {
   try {
-    const demandHistory = await demandHistoryService.getAllDemandHistory();
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allDemandHistory = await demandHistoryService.getAllDemandHistory();
+
+    if (search) {
+      allDemandHistory = allDemandHistory.filter((record) =>
+        record.flight_id.includes(search)
+      );
+    }
+
+    const count = allDemandHistory.length;
+    const demandHistory = allDemandHistory.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
     res.render("admin/demandHistory/index", {
-      title: "Demand History",
+      title: "Manage Demand History",
       demandHistory,
+      currentPage: page,
+      totalPages,
+      search,
       user: req.user,
     });
   } catch (err) {
-    next(err);
+    res.status(500).send(err.message);
   }
 });
 

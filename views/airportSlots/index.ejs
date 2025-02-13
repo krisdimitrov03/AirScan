@@ -15,7 +15,18 @@
           <span class="plus-icon">+</span>
           Create New Slot
         </a>
+
+        <form method="GET" action="/airport-slots" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by code/date..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
+
       <table>
         <thead>
           <tr>

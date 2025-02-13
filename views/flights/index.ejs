@@ -14,7 +14,17 @@
           <span class="plus-icon">+</span>
           Create New Flight
         </a>
+        <form method="GET" action="/flights" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search flights..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
+
       <table>
         <thead>
           <tr>

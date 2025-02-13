@@ -55,11 +55,22 @@
       <% } else { %>
       <p>No pricing records found.</p>
       <% } %>
+
       <div class="top-controls">
         <a href="/pricing/new" class="new-item-button">
           <span class="plus-icon">+</span>
           Create New Pricing
         </a>
+
+        <form method="GET" action="/pricing" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by Flight ID..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
 
       <% if (totalPages > 1) { %>
