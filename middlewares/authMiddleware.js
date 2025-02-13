@@ -34,7 +34,6 @@ const authorizeRoles = (allowedRoles) => {
     const userRoleId = req.user?.role_id;
     if (!userRoleId)
       return res.status(403).json({ message: "No role attached to token" });
-
     if (!allowedRoles.includes(req.user.role_name)) {
       return res.status(403).json({ message: "Not enough privileges" });
     }

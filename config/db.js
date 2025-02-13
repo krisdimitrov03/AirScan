@@ -16,7 +16,7 @@ const sequelize = new Sequelize(
       idle: 10000,
     },
     retry: {
-      max: 5,
+      max: 15,
     },
   }
 );
