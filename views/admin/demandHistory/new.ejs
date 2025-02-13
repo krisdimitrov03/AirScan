@@ -9,16 +9,58 @@
     <%- include('../../partials/navbar', { user: user }) %>
 
     <div class="form-container">
-      <h1 class="text-center">Create Demand History Record</h1>
+      <h1 class="text-center">Create Demand History Record (Admin)</h1>
 
       <% if (error) { %>
-      <div class="error-message"><%= error %></div>
+        <div class="error-message"><%= error %></div>
       <% } %>
 
       <form action="/admin/demand-history" method="POST">
         <div class="form-group">
-          <label for="flight_id">Flight ID:</label>
-          <input type="text" name="flight_id" id="flight_id" required />
+          <label for="originCityFilter">Origin City:</label>
+          <input
+            type="text"
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <select
+            id="originAirportSelect"
+            data-suggested=""
+            required
+          >
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="destinationCityFilter">Destination City:</label>
+          <input
+            type="text"
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect">Destination Airport Code:</label>
+          <select
+            id="destinationAirportSelect"
+            data-suggested=""
+            required
+          >
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="flightOptionsSelect">Flight Options:</label>
+          <select name="flight_id" id="flightOptionsSelect" required>
+            <option value="">
+              Select a flight (populate when both origin and destination are selected)
+            </option>
+          </select>
         </div>
 
         <div class="form-group">
@@ -51,23 +93,49 @@
         </div>
 
         <div class="form-group">
-          <label for="customer_segment_distribution"
-            >Segment Distribution:</label
-          >
-          <textarea
-            name="customer_segment_distribution"
-            id="customer_segment_distribution"
-          ></textarea>
+          <label for="economy_segment_sold">Economy Segment Sold:</label>
+          <input
+            type="number"
+            name="economy_segment_sold"
+            id="economy_segment_sold"
+            min="0"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="business_segment_sold">Business Segment Sold:</label>
+          <input
+            type="number"
+            name="business_segment_sold"
+            id="business_segment_sold"
+            min="0"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="first_segment_sold">First Segment Sold:</label>
+          <input
+            type="number"
+            name="first_segment_sold"
+            id="first_segment_sold"
+            min="0"
+            required
+          />
         </div>
 
         <button type="submit">Create</button>
       </form>
 
       <p class="text-center">
-        <a class="back-link" href="/admin/demand-history"
-          >Back to Demand History</a
-        >
+        <a class="back-link" href="/admin/demand-history">Back to Demand History</a>
       </p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+      window.flights = <%- JSON.stringify(flights) %>;
+    </script>
+    <script src="/js/dropdown.js"></script>
+    <script src="/js/flightOptions.js"></script>
   </body>
 </html>

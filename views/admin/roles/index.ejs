@@ -11,7 +11,6 @@
     <main>
       <h1><%= title %></h1>
 
-      <!-- Top Controls: Create Button & Search Form -->
       <div class="top-controls">
         <a href="/admin/roles/new" class="new-item-button">
           <span class="plus-icon">+</span>
@@ -28,7 +27,6 @@
         </form>
       </div>
 
-      <!-- Table -->
       <table>
         <thead>
           <tr>
@@ -61,7 +59,6 @@
         </tbody>
       </table>
 
-      <!-- Pagination -->
       <% if(totalPages > 1) { %>
       <div class="pagination">
         <% for(let p = 1; p <= totalPages; p++) { %> <% if(p === currentPage) {

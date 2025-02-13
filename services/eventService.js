@@ -41,15 +41,6 @@ async function getAllEvents() {
   return await Event.findAll();
 }
 
-/**
- * Retrieve a list of events with pagination and optional search filtering.
- *
- * @param {Object} params - The parameters for pagination/filtering.
- * @param {string} [params.search] - Optional search term for event name, ID, etc.
- * @param {number} [params.limit] - Max number of records to return.
- * @param {number} [params.offset] - How many records to skip.
- * @returns {Promise<{ rows: Event[], count: number }>}
- */
 async function getAllEventsBy({ search = "", limit = 50, offset = 0 } = {}) {
   const whereClause = {};
 

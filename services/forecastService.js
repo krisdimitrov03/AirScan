@@ -3,10 +3,7 @@ const moment = require("moment");
 const { Flight, Pricing, Event, DemandHistory } = require("../models");
 const cityToAirports = require("../config/cityToAirports");
 
-/**
- * Calculates the ticket price for a given day t (days before end of sale)
- * using a combination of logistic and Gaussian functions.
- */
+// using a combination of logistic and Gaussian functions.
 function ticketPrice(
   t,
   {
@@ -33,9 +30,7 @@ function ticketPrice(
   return Math.max(0, price);
 }
 
-/**
- * Estimates daily bookings for day t (before end of sale).
- */
+// Estimates daily bookings for day t (before end of sale).
 function dailyBookings(
   t,
   {
@@ -56,9 +51,7 @@ function dailyBookings(
   return daily * traffic_coeff;
 }
 
-/**
- * Utility: returns a linearly spaced array from start to stop (inclusive).
- */
+// Utility: returns a linearly spaced array from start to stop (inclusive).
 function linspace(start, stop, num) {
   const arr = [];
   const step = (stop - start) / (num - 1);
@@ -68,9 +61,7 @@ function linspace(start, stop, num) {
   return arr;
 }
 
-/**
- * Numerical integration using the trapezoidal rule.
- */
+// Numerical integration using the trapezoidal rule.
 function trapz(x, y) {
   let total = 0;
   for (let i = 1; i < x.length; i++) {
@@ -79,11 +70,6 @@ function trapz(x, y) {
   return total;
 }
 
-/**
- * Given the baseFare, seat configuration, and booking/price parameters,
- * calculates the total expected profit ("wins") over the available days.
- * Here we assume the flight is "on sale" for a fixed number of days.
- */
 function calculateTotalExpectedWins(
   baseFare,
   seats,
@@ -127,10 +113,6 @@ function calculateTotalExpectedWins(
   return totalRevenue * margin;
 }
 
-/**
- * Forecasts the expected profit ("wins") for a flight identified by flightId.
- * Instead of using days until departure, we use a fixed "days in market" period.
- */
 async function forecastFlight(flightId, daysInMarket = 60) {
   // Retrieve the flight record.
   const flight = await Flight.findByPk(flightId);

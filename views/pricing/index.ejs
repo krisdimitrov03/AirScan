@@ -10,6 +10,24 @@
     <%- include('../partials/navbar', { user: user }) %>
     <main>
       <h1>Pricing List</h1>
+
+      <div class="top-controls">
+        <a href="/pricing/new" class="new-item-button">
+          <span class="plus-icon">+</span>
+          Create New Pricing
+        </a>
+
+        <form method="GET" action="/pricing" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search by Flight ID..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+
       <% if (pricings && pricings.length > 0) { %>
       <table>
         <thead>
@@ -28,7 +46,7 @@
           <% pricings.forEach((pricing) => { %>
           <tr>
             <td><%= pricing.pricing_id %></td>
-            <td><%= pricing.flight_id %></td>
+            <td><%= pricing.flight_number %></td>
             <td><%= pricing.effective_date_range_start %></td>
             <td><%= pricing.effective_date_range_end %></td>
             <td><%= pricing.base_price %></td>
@@ -54,13 +72,16 @@
       </table>
       <% } else { %>
       <p>No pricing records found.</p>
-      <% } %>
-      <div class="top-controls">
-        <a href="/pricing/new" class="new-item-button">
-          <span class="plus-icon">+</span>
-          Create New Pricing
-        </a>
+      <% } %> <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
       </div>
+      <% } %>
     </main>
   </body>
 </html>

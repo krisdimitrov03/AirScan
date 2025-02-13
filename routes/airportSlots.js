@@ -9,6 +9,7 @@ const {
   verifyToken,
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
+const cityToAirports = require("../config/cityToAirports");
 
 const roles = require("../constants/roles");
 
@@ -19,15 +20,39 @@ router.use(
 
 router.get("/", async (req, res, next) => {
   try {
-    const airportSlots = await airportSlotService.getAllSlots();
-    res.render("airportSlots/index", { airportSlots, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allSlots = await airportSlotService.getAllSlots();
+
+    if (search) {
+      allSlots = allSlots.filter(
+        (slot) =>
+          slot.airport_code?.includes(search) ||
+          slot.date?.includes(search)
+      );
+    }
+
+    const count = allSlots.length;
+    const paginatedSlots = allSlots.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("airportSlots/index", {
+      airportSlots: paginatedSlots,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     next(error);
   }
 });
 
 router.get("/new", (req, res) => {
-  res.render("airportSlots/new", { user: req.user });
+  res.render("airportSlots/new", { user: req.user, cityToAirports });
 });
 
 router.post("/", async (req, res, next) => {
@@ -90,7 +115,11 @@ router.get("/:id/edit", async (req, res, next) => {
       return res.status(404).send("Slot not found.");
     }
 
-    res.render("airportSlots/edit", { airportSlot, user: req.user });
+    res.render("airportSlots/edit", {
+      airportSlot,
+      user: req.user,
+      cityToAirports,
+    });
   } catch (error) {
     next(error);
   }

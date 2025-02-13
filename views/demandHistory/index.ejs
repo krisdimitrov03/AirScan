@@ -12,8 +12,17 @@
       <div class="top-controls">
         <a href="/demand-history/new" class="new-item-button">
           <span class="plus-icon">+</span>
-          Create New Record
+          Create New Demand History Record
         </a>
+        <form method="GET" action="/demand-history" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search..."
+            value="<%= search %>"
+          />
+          <button type="submit">Search</button>
+        </form>
       </div>
       <table>
         <thead>
@@ -23,7 +32,9 @@
             <th>Date</th>
             <th>Tickets Sold</th>
             <th>Load Factor</th>
-            <th>Segment Distribution</th>
+            <th>Economy</th>
+            <th>First</th>
+            <th>Business</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -31,11 +42,13 @@
           <% demandHistory.forEach(function(record){ %>
           <tr>
             <td><%= record.record_id %></td>
-            <td><%= record.flight_id %></td>
+            <td><%= record.flight_number %></td>
             <td><%= record.date %></td>
             <td><%= record.historical_tickets_sold %></td>
             <td><%= record.historical_load_factor %></td>
-            <td><%= record.customer_segment_distribution %></td>
+            <td><%= record.economy_segment_sold %></td>
+            <td><%= record.first_segment_sold %></td>
+            <td><%= record.business_segment_sold %></td>
             <td>
               <a href="/demand-history/<%= record.record_id %>/edit">Edit</a>
               <form
@@ -54,6 +67,17 @@
           <% }); %>
         </tbody>
       </table>
+
+      <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
+      <% } %>
     </main>
   </body>
 </html>

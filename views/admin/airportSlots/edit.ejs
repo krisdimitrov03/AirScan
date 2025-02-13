@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title><%= title %></title>
+    <meta charset="UTF-8" />
+    <title>Admin - Edit Airport Slot</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/form.css" />
   </head>
@@ -9,35 +10,48 @@
     <%- include('../../partials/navbar', { user: user }) %>
 
     <div class="form-container">
-      <h1 class="text-center"><%= title %></h1>
-
-      <% if (error) { %>
-      <div class="error-message"><%= error %></div>
-      <% } %>
+      <h1 class="text-center">Edit Airport Slot (Admin)</h1>
 
       <form
+        action="/admin/airport-slots/<%= slot.slot_id %>?_method=PUT"
         method="POST"
-        action="/admin/airport-slots/<%= slot.slot_id %>/edit"
       >
         <div class="form-group">
-          <label>Airport Code:</label>
+          <label for="airportCityFilter">Airport City:</label>
           <input
             type="text"
+            id="airportCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="airportSelect">Airport Code:</label>
+          <select
             name="airport_code"
-            value="<%= slot.airport_code %>"
+            id="airportSelect"
+            required
+            data-suggested="<%= slot.airport_code %>"
+          >
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date (YYYY-MM-DD):</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value="<%= slot.date %>"
             required
           />
         </div>
 
         <div class="form-group">
-          <label>Date:</label>
-          <input type="date" name="date" value="<%= slot.date %>" required />
-        </div>
-
-        <div class="form-group">
-          <label>Start Time:</label>
+          <label for="time_slot_start">Start Time (HH:MM:SS):</label>
           <input
             type="time"
+            id="time_slot_start"
             name="time_slot_start"
             value="<%= slot.time_slot_start %>"
             required
@@ -45,9 +59,10 @@
         </div>
 
         <div class="form-group">
-          <label>End Time:</label>
+          <label for="time_slot_end">End Time (HH:MM:SS):</label>
           <input
             type="time"
+            id="time_slot_end"
             name="time_slot_end"
             value="<%= slot.time_slot_end %>"
             required
@@ -55,11 +70,12 @@
         </div>
 
         <div class="form-group">
-          <label>Slot Capacity:</label>
+          <label for="slot_capacity">Slot Capacity:</label>
           <input
             type="number"
+            id="slot_capacity"
             name="slot_capacity"
-            min="1"
+            min="0"
             value="<%= slot.slot_capacity %>"
             required
           />
@@ -69,8 +85,15 @@
       </form>
 
       <p class="text-center">
-        <a class="back-link" href="/admin/airport-slots">Back to Slots</a>
+        <a class="back-link" href="/admin/airport-slots"
+          >Back to Airport Slots</a
+        >
       </p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    <script src="/js/dropdown.js"></script>
   </body>
 </html>

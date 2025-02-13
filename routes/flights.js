@@ -21,6 +21,7 @@ router.get("/", verifyToken, async (req, res, next) => {
     const limit = 50;
     const offset = (page - 1) * limit;
 
+    let allFlights = await flightService.getAllFlights();
 
     if (search) {
       allFlights = allFlights.filter(

@@ -1,6 +1,3 @@
-/* --- Custom Styles for This Page --- */
-
-/* Container for top controls (Create button and Search form) */
 .top-controls {
   display: flex;
   justify-content: space-between;
@@ -8,7 +5,6 @@
   margin-bottom: 1rem;
 }
 
-/* Align search input and button vertically using flex */
 .search-form {
   display: flex;
   align-items: center;
@@ -16,20 +12,18 @@
   margin: 0;
 }
 .search-form input[type="text"] {
-  width: 200px; /* Shorter search box */
+  width: 200px;
   margin-bottom: 0;
 }
 .search-form button {
   padding: 0.63rem 1rem;
 }
 
-/* Ensure all buttons have consistent padding */
 button,
 .btn {
   padding: 0.6rem 1rem;
 }
 
-/* Style for Create New Slot button with plus icon */
 .new-item-button {
   display: inline-block;
   padding: 0.6rem 1rem;
@@ -48,12 +42,10 @@ button,
   margin-right: 0.5rem;
 }
 
-/* Make the table use the full width of its container */
 table {
   width: 100%;
 }
 
-/* Align inline elements in table actions */
 td form {
   display: inline;
 }
@@ -62,7 +54,6 @@ td button {
   vertical-align: middle;
 }
 
-/* Style the Delete button in the table */
 table tbody td form button {
   background-color: darkred;
   color: #ffffff;
