@@ -41,6 +41,9 @@ jobs:
             sleep 3
           done
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Clean and seed database
         run: |
           echo "Dropping the existing database (if it exists)..."
@@ -50,14 +53,10 @@ jobs:
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -e "CREATE DATABASE \`${{ secrets.DB_NAME }}\`;"
           
           echo "Seeding the database..."
-          # Make sure to adjust the path to your seed script if necessary.
           node ./seed/seedDatabase.js
           
           echo "First row of 'flights' table after seeding:"
           mysql -h 127.0.0.1 -u root -p${{ secrets.DB_PASS }} -D ${{ secrets.DB_NAME }} -e "SELECT * FROM flights LIMIT 1;"
-      
-      - name: Install dependencies
-        run: npm install
 
       - name: Run test coverage
         env:
