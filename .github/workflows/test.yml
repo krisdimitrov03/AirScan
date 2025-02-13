@@ -37,7 +37,7 @@ jobs:
           done
 
       - name: WARNING - Destructive Operation
-        run: echo "WARNING - This job is going to drop and recreate your database! Do not run in production environments!"
+        run: echo "WARNING - This job is going to drop and recreate your database. Do not run in production environments!"
 
       - name: Drop and recreate database
         run: |
