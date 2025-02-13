@@ -4,6 +4,22 @@
     <title>Manager - Bulk Import Options</title>
     <link rel="stylesheet" href="/css/styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .button-group {
+        margin-bottom: 20px;
+      }
+      .button-group button {
+        padding: 10px 15px;
+        margin-right: 5px;
+        cursor: pointer;
+        border: none;
+        background-color: #ddd;
+      }
+      .button-group button.active {
+        background-color: #4bc0c0;
+        color: white;
+      }
+    </style>
   </head>
   <body>
     <%- include('../../partials/navbar', { user: user }) %>
@@ -12,28 +28,17 @@
       <h1>Bulk Import Options</h1>
     </header>
     <main>
-      <div class="import-container">
-        <a href="/manager/bulk/airport-slots" class="import-card">
-          <h2>Airport Slots</h2>
-          <p>Bulk import from JSON.</p>
-        </a>
-        <a href="/manager/bulk/demand-history" class="import-card">
-          <h2>Demand History</h2>
-          <p>Bulk import from JSON.</p>
-        </a>
-        <a href="/manager/bulk/events" class="import-card">
-          <h2>Events</h2>
-          <p>Bulk import from JSON.</p>
-        </a>
-        <a href="/manager/bulk/flights" class="import-card">
-          <h2>Flights</h2>
-          <p>Bulk import from JSON.</p>
-        </a>
-        <a href="/manager/bulk/pricing" class="import-card">
-          <h2>Pricing</h2>
-          <p>Bulk import from JSON.</p>
-        </a>
-      </div>
+      <ul>
+        <li>
+          <a href="/manager/bulk/airport-slots">Bulk Import Airport Slots</a>
+        </li>
+        <li>
+          <a href="/manager/bulk/demand-history">Bulk Import Demand History</a>
+        </li>
+        <li><a href="/manager/bulk/events">Bulk Import Events</a></li>
+        <li><a href="/manager/bulk/flights">Bulk Import Flights</a></li>
+        <li><a href="/manager/bulk/pricing">Bulk Import Pricing</a></li>
+      </ul>
 
       <p><a href="/dashboard">Back to Dashboard</a></p>
 
@@ -43,21 +48,37 @@
       <p style="color: green"><%= message %></p>
       <% } %>
 
-      <h2>Expected Earnings by Month (This Year)</h2>
+      <h2>Expected Earnings Forecast</h2>
+      <div class="button-group">
+        <button id="btn7D" class="active">7 D</button>
+        <button id="btn1M">1 M</button>
+        <button id="btn1Y">1 Y</button>
+        <button id="btnAll">All time</button>
+      </div>
       <canvas id="forecastChart" width="800" height="400"></canvas>
 
       <script>
+        const weekLabels  = <%- JSON.stringify(weekLabels) %>;
+        const weekData    = <%- JSON.stringify(weekData) %>;
         const monthLabels = <%- JSON.stringify(monthLabels) %>;
-        const monthlyForecast = <%- JSON.stringify(monthlyForecast) %>;
+        const monthData   = <%- JSON.stringify(monthData) %>;
+        const yearLabels  = <%- JSON.stringify(yearLabels) %>;
+        const yearData    = <%- JSON.stringify(yearData) %>;
+        const allTimeLabels = <%- JSON.stringify(allTimeLabels) %>;
+        const allTimeData   = <%- JSON.stringify(allTimeData) %>;
+
+        let currentLabels = weekLabels;
+        let currentData = weekData;
+        let currentTitle = 'Expected Earnings (7 Days)';
 
         const ctx = document.getElementById('forecastChart').getContext('2d');
-        const chart = new Chart(ctx, {
+        let forecastChart = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: monthLabels,
+            labels: currentLabels,
             datasets: [{
-              label: 'Expected Earnings (Wins)',
-              data: monthlyForecast,
+              label: currentTitle,
+              data: currentData,
               borderColor: 'rgba(75, 192, 192, 1)',
               backgroundColor: 'rgba(75, 192, 192, 0.2)',
               fill: true,
@@ -65,17 +86,52 @@
             }]
           },
           options: {
+            responsive: true,
             scales: {
               y: {
                 beginAtZero: true,
                 ticks: {
                   callback: function(value) {
-                    return '$' + value.toFixed(2);
+                    return '$' + value;
                   }
                 }
               }
             }
           }
+        });
+
+        function updateChart(labels, data, title) {
+          forecastChart.data.labels = labels;
+          forecastChart.data.datasets[0].data = data;
+          forecastChart.data.datasets[0].label = title;
+          forecastChart.update();
+        }
+
+        function clearActive() {
+          document.querySelectorAll('.button-group button').forEach(btn => {
+            btn.classList.remove('active');
+          });
+        }
+
+        document.getElementById('btn7D').addEventListener('click', function() {
+          clearActive();
+          this.classList.add('active');
+          updateChart(weekLabels, weekData, 'Expected Earnings (7 Days)');
+        });
+        document.getElementById('btn1M').addEventListener('click', function() {
+          clearActive();
+          this.classList.add('active');
+          updateChart(monthLabels, monthData, 'Expected Earnings (30 Days)');
+        });
+        document.getElementById('btn1Y').addEventListener('click', function() {
+          clearActive();
+          this.classList.add('active');
+          updateChart(yearLabels, yearData, 'Expected Earnings (365 Days)');
+        });
+        document.getElementById('btnAll').addEventListener('click', function() {
+          clearActive();
+          this.classList.add('active');
+          updateChart(allTimeLabels, allTimeData, 'Expected Earnings (All Time)');
         });
       </script>
     </main>
