@@ -19,8 +19,32 @@ router.use(
 
 router.get("/", async (req, res, next) => {
   try {
-    const airportSlots = await airportSlotService.getAllSlots();
-    res.render("airportSlots/index", { airportSlots, user: req.user });
+    const search = req.query.search || "";
+    const page = parseInt(req.query.page || 1, 10);
+    const limit = 50;
+    const offset = (page - 1) * limit;
+
+    let allSlots = await airportSlotService.getAllSlots();
+
+    if (search) {
+      allSlots = allSlots.filter(
+        (slot) =>
+          slot.airport_code?.includes(search) ||
+          slot.date?.includes(search)
+      );
+    }
+
+    const count = allSlots.length;
+    const paginatedSlots = allSlots.slice(offset, offset + limit);
+    const totalPages = Math.ceil(count / limit);
+
+    res.render("airportSlots/index", {
+      airportSlots: paginatedSlots,
+      user: req.user,
+      search,
+      currentPage: page,
+      totalPages,
+    });
   } catch (error) {
     next(error);
   }

@@ -54,6 +54,17 @@
           <% }); %>
         </tbody>
       </table>
+
+      <% if (totalPages > 1) { %>
+      <div class="pagination">
+        <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)
+        { %>
+        <strong><%= p %></strong>
+        <% } else { %>
+        <a href="?page=<%= p %>&search=<%= search %>"><%= p %></a>
+        <% } %> <% } %>
+      </div>
+      <% } %>
     </main>
   </body>
 </html>

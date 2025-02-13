@@ -2,18 +2,15 @@
 <html>
   <head>
     <title><%= title %></title>
-    <!-- Global + table-specific CSS -->
     <link rel="stylesheet" href="/css/styles.css" />
     <link rel="stylesheet" href="/css/table.css" />
   </head>
   <body>
-    <!-- Include your navbar partial -->
     <%- include('../../partials/navbar', { user: user }) %>
 
     <main>
       <h1><%= title %></h1>
 
-      <!-- Top Controls: Create Button & Search Form -->
       <div class="top-controls">
         <a href="/admin/pricing/new" class="new-item-button">
           <span class="plus-icon">+</span>
@@ -31,7 +28,6 @@
         </form>
       </div>
 
-      <!-- Table -->
       <table>
         <thead>
           <tr>
@@ -56,10 +52,8 @@
             <td><%= record.discounts_offered %></td>
             <td><%= record.peak_season_surcharge %></td>
             <td>
-              <!-- Edit -->
               <a href="/admin/pricing/<%= record.pricing_id %>/edit">Edit</a>
 
-              <!-- Delete -->
               <form
                 method="POST"
                 action="/admin/pricing/<%= record.pricing_id %>/delete"
@@ -77,7 +71,6 @@
         </tbody>
       </table>
 
-      <!-- Pagination -->
       <% if (totalPages > 1) { %>
       <div class="pagination">
         <% for (let p = 1; p <= totalPages; p++) { %> <% if (p === currentPage)

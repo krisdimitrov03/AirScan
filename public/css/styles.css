@@ -21,7 +21,6 @@ body {
   line-height: 1.6;
 }
 
-/* Header & Navigation */
 header {
   background: var(--primary-color);
   color: var(--secondary-color);
@@ -44,7 +43,6 @@ nav a:hover {
   color: var(--accent-color);
 }
 
-/* Main Layout Container */
 main,
 section {
   max-width: 1200px;
@@ -55,7 +53,6 @@ section {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Headings */
 h1,
 h2,
 h3 {
@@ -63,7 +60,6 @@ h3 {
   font-weight: 500;
 }
 
-/* Links */
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -73,7 +69,6 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Forms */
 form {
   margin-top: 1rem;
 }
@@ -100,7 +95,6 @@ textarea {
   border-radius: 4px;
 }
 
-/* Buttons */
 button {
   background-color: var(--primary-color);
   color: var(--secondary-color);
@@ -116,13 +110,11 @@ button:hover {
   background-color: #00306b;
 }
 
-/* Alerts & Errors */
 .alert-error {
   color: red;
   margin-bottom: 1rem;
 }
 
-/* Tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -140,7 +132,6 @@ td {
   text-align: left;
 }
 
-/* Pagination */
 .pagination {
   text-align: center;
   margin-top: 1rem;
@@ -151,15 +142,12 @@ td {
   margin: 0 0.3rem;
 }
 
-/* Utility Classes */
 .text-center {
   text-align: center;
 }
 .mt-1 {
   margin-top: 1rem;
 }
-
-/* NAVBAR */
 
 .navbar {
   display: flex;
@@ -196,7 +184,6 @@ td {
   color: var(--accent-color);
 }
 
-/* Profile / Dropdown (click to show) */
 .profile {
   position: relative;
   cursor: pointer;
@@ -237,7 +224,7 @@ td {
   vertical-align: middle;
 }
 .profile-menu {
-  display: none; /* Hidden by default */
+  display: none;
   position: absolute;
   right: 0;
   top: 2.2rem;
@@ -248,7 +235,6 @@ td {
   min-width: 150px;
   z-index: 99;
 }
-/* We'll toggle this 'show' class via JS */
 .profile-menu.show {
   display: block;
 }
@@ -264,27 +250,72 @@ td {
   background-color: #f2f2f2;
 }
 
-/* Basic responsiveness (optional) */
+.profile-card {
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 400px;
+  text-align: center;
+}
+
+.profile-card h2 {
+  margin-bottom: 1rem;
+}
+
+.profile-actions {
+  margin-top: 1.5rem;
+}
+
+.profile-actions .button {
+  display: inline-block;
+  margin: 0.2rem;
+}
+
+.action-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.action-cards .card {
+  flex: 1 1 200px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #333;
+  padding: 1rem;
+  transition: transform 0.2s;
+}
+
+.action-cards .card:hover {
+  transform: scale(1.02);
+}
+
+.action-cards .card h2 {
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
 @media (max-width: 600px) {
   .nav-links {
-    display: none; /* Typically replaced by a hamburger menu */
+    display: none;
   }
 }
 
-/* Give extra space above/below the heading */
 h1 {
   margin: 2rem 0 1rem;
-  /* optional: text-align: center; */
 }
 
-/* Add margin around the table, ensure border collapse, etc. */
 table {
-  margin: 1.5rem auto; /* center the table horizontally & add vertical margin */
+  margin: 1.5rem auto;
   border-collapse: collapse;
-  width: 90%; /* optional: narrower table, so it doesn't span full width */
+  width: 90%;
 }
 
-/* Default table styling (remove HTML's border=1 quirk, rely on CSS border) */
 table,
 th,
 td {
@@ -296,11 +327,10 @@ td {
   text-align: left;
 }
 
-/* Style the "Create New Event" link as a large green button */
 p > a[href="/events/new"] {
   display: inline-block;
   padding: 0.6rem 1rem;
-  margin-bottom: 1rem; /* space below this button */
+  margin-bottom: 1rem;
   background-color: #28a745;
   color: #ffffff;
   text-decoration: none;
@@ -312,24 +342,22 @@ p > a[href="/events/new"]:hover {
   background-color: #218838;
 }
 
-/* Style the "Edit" link like a blue button; ensure same line-height/size as Delete */
 td a[href*="/edit"] {
   display: inline-block;
   padding: 0.45rem 1.35rem;
-  margin-right: 0.5rem; /* small gap before Delete button */
+  margin-right: 0.5rem;
   background-color: #007bff;
   color: #ffffff;
   text-decoration: none;
   border-radius: 4px;
   font-weight: 500;
-  line-height: 1.2; /* consistent line-height with Delete button */
+  line-height: 1.2;
   transition: background-color 0.3s;
 }
 td a[href*="/edit"]:hover {
   background-color: #0056b3;
 }
 
-/* Style the "Delete" button; match Edit’s height & spacing */
 td form[action*="?_method=DELETE"] button {
   display: inline-block;
   padding: 0.45rem 0.8rem;
@@ -339,7 +367,7 @@ td form[action*="?_method=DELETE"] button {
   border-radius: 4px;
   cursor: pointer;
   font-weight: 500;
-  line-height: 1.2; /* matches the Edit link */
+  line-height: 1.2;
   transition: background-color 0.3s;
 }
 td form[action*="?_method=DELETE"] button:hover {

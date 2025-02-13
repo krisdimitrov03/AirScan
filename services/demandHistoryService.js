@@ -19,7 +19,6 @@ async function getDemandHistoryById(id) {
 
 async function createDemandHistory(data) {
   validateDemandHistoryData(data);
-  // data should now contain economy_segment_sold, business_segment_sold, first_segment_sold
   const flight = await Flight.findByPk(data.flight_id);
   if (!flight) throw new Error("Invalid flight_id — flight does not exist.");
 

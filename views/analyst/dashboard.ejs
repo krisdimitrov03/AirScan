@@ -7,7 +7,29 @@
   <body>
     <%- include('../partials/navbar', { user: user }) %>
     <main>
-      <p>This is your dashboard.</p>
+      <h1>Analyst Dashboard</h1>
+      <p>
+        Welcome, <%= user.username %>! Use these tools to analyze data and plan
+        new flights.
+      </p>
+
+      <div class="action-cards">
+        <a href="/planning/suggest" class="card">
+          <h2>Flight Suggestions</h2>
+          <p>
+            View automatically generated suggestions based on demand, events,
+            etc.
+          </p>
+        </a>
+        <a href="/demand-history" class="card">
+          <h2>Demand History</h2>
+          <p>Analyze historical flight demand data and trends.</p>
+        </a>
+        <a href="/events" class="card">
+          <h2>Event Forecast</h2>
+          <p>Check upcoming events that may impact flight demand.</p>
+        </a>
+      </div>
     </main>
   </body>
 </html>
