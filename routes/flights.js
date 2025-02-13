@@ -5,6 +5,7 @@ const {
   authorizeRoles,
 } = require("../middlewares/authMiddleware");
 const flightService = require("../services/flightService");
+const cityToAirports = require("../config/cityToAirports");
 
 const roles = require("../constants/roles");
 
@@ -44,6 +45,7 @@ router.get("/new", (req, res) => {
       return_option_flag: return_option_flag || "false",
     },
     user: req.user,
+    cityToAirports,
   });
 });
 
@@ -78,7 +80,7 @@ router.get("/:uuid/edit", async (req, res, next) => {
   try {
     const flight = await flightService.getFlightByUUID(req.params.uuid);
     if (!flight) return res.status(404).send("Flight not found.");
-    res.render("flights/edit", { flight, user: req.user });
+    res.render("flights/edit", { flight, user: req.user, cityToAirports });
   } catch (e) {
     next(e);
   }

@@ -102,7 +102,7 @@ router.get("/users/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/users/:id/edit", async (req, res) => {
+router.put("/users/:id", async (req, res) => {
   try {
     const { username, password, email, role_id } = req.body;
 
@@ -216,7 +216,7 @@ router.get("/roles/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/roles/:id/edit", async (req, res) => {
+router.put("/roles/:id", async (req, res) => {
   try {
     const { role_name } = req.body;
     const role = await roleService.updateRole(req.params.id, role_name);
@@ -321,7 +321,7 @@ router.get("/flights/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/flights/:id/edit", async (req, res, next) => {
+router.put("/flights/:id", async (req, res, next) => {
   try {
     const updated = await flightService.updateFlight(req.params.id, req.body);
     if (!updated) return res.status(404).send("Flight update failed.");
@@ -421,7 +421,7 @@ router.get("/airport-slots/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/airport-slots/:id/edit", async (req, res, next) => {
+router.put("/airport-slots/:id", async (req, res, next) => {
   try {
     const slotId = parseInt(req.params.id, 10);
     const {
@@ -508,7 +508,7 @@ router.get("/demand-history/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/demand-history/:id/edit", async (req, res, next) => {
+router.put("/demand-history/:id", async (req, res, next) => {
   try {
     const recordId = parseInt(req.params.id, 10);
     const updated = await demandHistoryService.updateDemandHistory(
@@ -631,7 +631,7 @@ router.get("/pricing/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/pricing/:id/edit", async (req, res) => {
+router.put("/pricing/:id", async (req, res) => {
   try {
     const pricingId = parseInt(req.params.id, 10);
 
@@ -760,7 +760,7 @@ router.get("/events/:id/edit", async (req, res, next) => {
   }
 });
 
-router.post("/events/:id/edit", async (req, res) => {
+router.put("/events/:id", async (req, res) => {
   try {
     const eventId = req.params.id;
     const {

@@ -15,7 +15,7 @@
       <div class="error-message"><%= error %></div>
       <% } %>
 
-      <form method="POST" action="/admin/users/<%= user.user_id %>/edit">
+      <form method="POST" action="/admin/users/<%= user.user_id %>?_method=PUT">
         <div class="form-group">
           <label>Username:</label>
           <input

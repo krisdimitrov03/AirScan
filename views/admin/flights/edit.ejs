@@ -15,7 +15,7 @@
       <div class="error-message"><%= error %></div>
       <% } %>
 
-      <form method="POST" action="/admin/flights/<%= flight.flight_id %>/edit">
+      <form method="POST" action="/admin/flights/<%= flight.flight_id %>?_method=PUT">
         <div class="form-group">
           <label>Origin Airport Code:</label>
           <input

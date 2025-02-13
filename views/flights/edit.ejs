@@ -11,16 +11,43 @@
     <div class="form-container">
       <h1 class="text-center">Edit Flight</h1>
       <form action="/flights/<%= flight.flight_id %>?_method=PUT" method="post">
+        <!-- ORIGIN FIELDS -->
         <div class="form-group">
-          <label>Origin Airport Code:</label>
-          <input type="text" name="origin_airport_code" value="<%= flight.origin_airport_code %>" required>
+          <label for="originCityFilter">Origin City:</label>
+          <!-- This input will be pre-filled via JS based on the flight's origin_airport_code -->
+          <input
+            type="text"
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <!-- The data-suggested attribute holds the current origin code -->
+          <select name="origin_airport_code" id="originAirportSelect" required data-suggested="<%= flight.origin_airport_code %>">
+            <!-- Options will be populated by public/js/dropdown.js -->
+          </select>
         </div>
 
+        <!-- DESTINATION FIELDS -->
         <div class="form-group">
-          <label>Destination Airport Code:</label>
-          <input type="text" name="destination_airport_code" value="<%= flight.destination_airport_code %>" required>
+          <label for="destinationCityFilter">Destination City:</label>
+          <input
+            type="text"
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value=""
+          />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect">Destination Airport Code:</label>
+          <select name="destination_airport_code" id="destinationAirportSelect" required data-suggested="<%= flight.destination_airport_code %>">
+            <!-- Options will be populated by public/js/dropdown.js -->
+          </select>
         </div>
 
+        <!-- OTHER FLIGHT FIELDS -->
         <div class="form-group">
           <label>Flight Type:</label>
           <select name="direct_indirect_flag" required>
@@ -59,5 +86,12 @@
       </form>
       <p class="text-center"><a class="back-link" href="/flights">Back to Flights</a></p>
     </div>
+
+    <!-- Expose the cityToAirports map to front-end JS -->
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    <!-- Include the dropdown functionality -->
+    <script src="/js/dropdown.js"></script>
   </body>
 </html>

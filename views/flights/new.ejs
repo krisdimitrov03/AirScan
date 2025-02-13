@@ -13,23 +13,33 @@
       <% const s = suggested || {}; %>
       <form action="/flights" method="post">
         <div class="form-group">
-          <label>Origin Airport Code:</label>
+          <label for="originCityFilter">Origin City:</label>
           <input
             type="text"
-            name="origin_airport_code"
-            value="<%= s.origin_airport_code %>"
-            required
+            id="originCityFilter"
+            placeholder="Type city name to filter"
+            value=""
           />
+        </div>
+        <div class="form-group">
+          <label for="originAirportSelect">Origin Airport Code:</label>
+          <select name="origin_airport_code" id="originAirportSelect" required data-suggested="<%= s.origin_airport_code %>">
+          </select>
         </div>
 
         <div class="form-group">
-          <label>Destination Airport Code:</label>
+          <label for="destinationCityFilter">Destination City:</label>
           <input
             type="text"
-            name="destination_airport_code"
-            value="<%= s.destination_airport_code %>"
-            required
+            id="destinationCityFilter"
+            placeholder="Type city name to filter"
+            value=""
           />
+        </div>
+        <div class="form-group">
+          <label for="destinationAirportSelect">Destination Airport Code:</label>
+          <select name="destination_airport_code" id="destinationAirportSelect" required data-suggested="<%= s.destination_airport_code %>">
+          </select>
         </div>
 
         <div class="form-group">
@@ -72,5 +82,11 @@
       </form>
       <p class="text-center"><a class="back-link" href="/flights">Back to Flights</a></p>
     </div>
+
+    <script>
+      window.cityToAirports = <%- JSON.stringify(cityToAirports) %>;
+    </script>
+    
+    <script src="/js/dropdown.js"></script>
   </body>
 </html>

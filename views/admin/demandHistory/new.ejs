@@ -52,12 +52,36 @@
 
         <div class="form-group">
           <label for="customer_segment_distribution"
-            >Segment Distribution:</label
+            >Economy segment sold:</label
           >
-          <textarea
-            name="customer_segment_distribution"
-            id="customer_segment_distribution"
-          ></textarea>
+          <input
+            type="number"
+            name="economy_segment_sold"
+            id="economy_segment_sold"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customer_segment_distribution">First segment sold:</label>
+          <input
+            type="number"
+            name="first_segment_sold"
+            id="first_segment_sold"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="customer_segment_distribution"
+            >Business segment sold:</label
+          >
+          <input
+            type="number"
+            name="business_segment_sold"
+            id="business_segment_sold"
+            required
+          />
         </div>
 
         <button type="submit">Create</button>
